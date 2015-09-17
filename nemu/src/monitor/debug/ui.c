@@ -55,6 +55,10 @@ static int cmd_si(char *args) {
 	int N, i;
 	bool status = CMD_STATUS_VALID;
 	char *token, *saveptr;
+	if(args == NULL) {
+		cpu_exec(1);
+		return 0;
+	}
 	token = strtok_r(args, " ", &saveptr);
 	N = atoi(token);
 	// to check the token is a number
@@ -94,15 +98,16 @@ static int cmd_info_r() {
 }
 
 static int cmd_info_w() {
-	printf("coming soon...");
+	printf("coming soon...\n");
 	return 0;
 }
 
 static int cmd_info(char *args) {
 	bool status = CMD_STATUS_VALID;
-	char *token1, *token2, *saveptr;
-	token1 = strtok_r(args, " ", &saveptr);
-	token2 = strtok_r(NULL, "", &saveptr);
+	char *token1 = NULL, *token2 = NULL, *saveptr;
+	if(args == NULL) status = CMD_STATUS_NOT_VALID;
+	if(status) token1 = strtok_r(args, " ", &saveptr);
+	if(status) token2 = strtok_r(NULL, "", &saveptr);
 	if(status && token1 == NULL) status = CMD_STATUS_NOT_VALID;
 	if(status && token2 != NULL) status = CMD_STATUS_NOT_VALID;
 	if(status && (token1[0] != 'r' && token1[0] != 'w')) status = CMD_STATUS_NOT_VALID;
