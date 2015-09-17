@@ -6,6 +6,21 @@
 #include <stdlib.h>
 #include <readline/readline.h>
 #include <readline/history.h>
+#include <cpu/reg.h>
+
+#define KNRM  "\x1B[0m"
+#define KRED  "\x1B[31m"
+#define KGRN  "\x1B[32m"
+#define KYEL  "\x1B[33m"
+#define KBLU  "\x1B[34m"
+#define KMAG  "\x1B[35m"
+#define KCYN  "\x1B[36m"
+#define KWHT  "\x1B[37m"
+#define KRESET "\033[0m"
+
+#define CMD_STATUS_VALID 1
+#define CMD_STATUS_NOT_VALID 0
+
 
 void cpu_exec(uint32_t);
 
@@ -38,7 +53,7 @@ static int cmd_q(char *args) {
 
 static int cmd_si(char *args) {
 	int N, i;
-	bool status = 1; // 1 means ok
+	bool status = CMD_STATUS_VALID;
 	char *token, *saveptr;
 	token = strtok_r(args, " ", &saveptr);
 	N = atoi(token);
@@ -46,12 +61,12 @@ static int cmd_si(char *args) {
 	for(i = 0; token[i]; i++)
 		if(token[i] < '0' || token[i] > '9')
 		{
-			status = 0;
+			status = CMD_STATUS_NOT_VALID;
 			break;
 		}
 	token = strtok_r(NULL, " ", &saveptr);
-	if(token != NULL) status = 0;
-	if(status == 0) {
+	if(token != NULL) status = 1;
+	if(status == CMD_STATUS_NOT_VALID) {
 		printf("args is not valid\nsi [N]\n");
 		return 0;
 	}
@@ -59,6 +74,45 @@ static int cmd_si(char *args) {
 	return 0;
 }
 
+static int cmd_info_r() {
+	static CPU_state last_cpu_state; // to highlight the changed register
+	char R[8][4] = {"EAX", "ECX", "EDX", "EBX", "ESP", "EBP", "ESI", "EDI"};
+	int i;
+	for(i = R_EAX; i <= R_EDI; i++) {
+		printf("%s\t", R[i]);
+		if(last_cpu_state.gpr[i]._32 != cpu.gpr[i]._32) printf(KRED);
+		printf("0x%08X\t", cpu.gpr[i]._32);
+		printf(KRESET);
+		if(i % 4 == 3) printf("\n");
+	}
+	printf("EIP\t");
+	if(last_cpu_state.eip != cpu.eip) printf(KRED);
+	printf("0x%08X\n", cpu.eip);
+	printf(KRESET);
+	last_cpu_state = cpu;
+	return 0;
+}
+
+static int cmd_info_w() {
+	printf("coming soon...");
+	return 0;
+}
+
+static int cmd_info(char *args) {
+	bool status = CMD_STATUS_VALID;
+	char *token1, *token2, *saveptr;
+	token1 = strtok_r(args, " ", &saveptr);
+	token2 = strtok_r(NULL, "", &saveptr);
+	if(status && token1 == NULL) status = CMD_STATUS_NOT_VALID;
+	if(status && token2 != NULL) status = CMD_STATUS_NOT_VALID;
+	if(status && (token1[0] != 'r' && token1[0] != 'w')) status = CMD_STATUS_NOT_VALID;
+	if(status == CMD_STATUS_NOT_VALID) {
+		printf("args is not valid\ninfo [r|w]\n");
+		return 0;
+	}
+	if(token1[0] == 'r') return cmd_info_r();
+	else return cmd_info_w();
+}
 
 static int cmd_help(char *args);
 
@@ -71,6 +125,7 @@ static struct {
 	{ "c", "Continue the execution of the program", cmd_c },
 	{ "q", "Exit NEMU", cmd_q },
 	{ "si", "Step into", cmd_si },
+	{ "info", "Print program status", cmd_info },
 	/* TODO: Add more commands */
 
 };
