@@ -36,6 +36,30 @@ static int cmd_q(char *args) {
 	return -1;
 }
 
+static int cmd_si(char *args) {
+	int N, i;
+	bool status = 1; // 1 means ok
+	char *token, *saveptr;
+	token = strtok_r(args, " ", &saveptr);
+	N = atoi(token);
+	// to check the token is a number
+	for(i = 0; token[i]; i++)
+		if(token[i] < '0' || token[i] > '9')
+		{
+			status = 0;
+			break;
+		}
+	token = strtok_r(NULL, " ", &saveptr);
+	if(token != NULL) status = 0;
+	if(status == 0) {
+		printf("args is not valid\nsi [N]\n");
+		return 0;
+	}
+	cpu_exec((uint32_t) N);
+	return 0;
+}
+
+
 static int cmd_help(char *args);
 
 static struct {
@@ -46,7 +70,7 @@ static struct {
 	{ "help", "Display informations about all supported commands", cmd_help },
 	{ "c", "Continue the execution of the program", cmd_c },
 	{ "q", "Exit NEMU", cmd_q },
-
+	{ "si", "Step into", cmd_si },
 	/* TODO: Add more commands */
 
 };
