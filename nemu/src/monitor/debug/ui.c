@@ -8,6 +8,10 @@
 #include <readline/history.h>
 #include <cpu/reg.h>
 
+
+#define CMD_STATUS_VALID 1
+#define CMD_STATUS_NOT_VALID 0
+
 #define KNRM  "\x1B[0m"
 #define KRED  "\x1B[31m"
 #define KGRN  "\x1B[32m"
@@ -17,10 +21,6 @@
 #define KCYN  "\x1B[36m"
 #define KWHT  "\x1B[37m"
 #define KRESET "\033[0m"
-
-#define CMD_STATUS_VALID 1
-#define CMD_STATUS_NOT_VALID 0
-
 
 void cpu_exec(uint32_t);
 
@@ -119,6 +119,18 @@ static int cmd_info(char *args) {
 	else return cmd_info_w();
 }
 
+static int cmd_p(char *args) {
+	bool success;
+	if(args == NULL)
+	{
+		printf("args can't be empty\np EXPR\n");
+		return 0;
+	}
+	int ans = expr(args, &success);
+	if(success) printf("%s = %d\n", args, ans);
+	return 0;
+}
+
 static int cmd_help(char *args);
 
 static struct {
@@ -131,6 +143,7 @@ static struct {
 	{ "q", "Exit NEMU", cmd_q },
 	{ "si", "Step into", cmd_si },
 	{ "info", "Print program status", cmd_info },
+	{ "p", "Calcuate the Value of EXPR", cmd_p },
 	/* TODO: Add more commands */
 
 };
