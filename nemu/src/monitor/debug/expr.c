@@ -18,7 +18,11 @@
 #define KRESET "\033[0m"
 
 enum {
-	NOTYPE = 256, EQ, NUM
+	NOTYPE = 256, EQ, NUM,
+	UNARY_PLUS = 33, UNARY_MINUS = 34,
+
+	PLUS = 43, MINUS = 45, MULTIPLY = 42, DIVISION = 47, LEFT_PARENTHESES = 40, RIGHT_PARENTHESES = 41,
+
 
 	/* TODO: Add more token types */
 
@@ -35,14 +39,16 @@ static struct rule {
 	 */
 
 	{" +",	NOTYPE, -1},				// spaces
-	{"\\+", '+', 6},					// plus
-	{"-",   '-', 6},					// minus
-	{"\\*", '*', 5},					// multiply
-	{"/",   '/', 5},					// division
-	{"\\(", '(', -1},
-	{"\\)", ')', -1},
+	{"\\+", '+', 6},					// plus  '+' = 75
+	{"-",   '-', 6},					// minus '-' = 77
+	{"\\*", '*', 5},					// multiply '*' = 74
+	{"/",   '/', 5},					// division '/' = 79
+	{"\\(", '(', -1},                   //          '(' = 72
+	{"\\)", ')', -1},                   //          ')' = 73
 	{"[0-9]+", NUM, -1},				// 不知道为什么"\\d+"不行
-	{"==", EQ, 9}						// equal
+	{"==", EQ, 9},						// equal
+	{"[^0-9\\)]-", UNARY_MINUS, 3},
+	{"[^0-9\\)]\\+", UNARY_PLUS,  3},
 };
 
 #define NR_REGEX (sizeof(rules) / sizeof(rules[0]) )
@@ -89,7 +95,7 @@ static bool make_token(char *e) {
 				char *substr_start = e + position;
 				int substr_len = pmatch.rm_eo;
 
-				Log("match rules[%d] = \"%s\" at position %d with len %d: %.*s", i, rules[i].regex, position, substr_len, substr_len, substr_start);
+				//Log("match rules[%d] = \"%s\" at position %d with len %d: %.*s", i, rules[i].regex, position, substr_len, substr_len, substr_start);
 				position += substr_len;
 
 				/* TODO: Now a new token is recognized with rules[i]. Add codes
@@ -118,7 +124,12 @@ static bool make_token(char *e) {
 	}
 	for(i = 0; i < nr_token; i++)
 	{
-		Log("tokens[%d] = %d(%c)(%s)",i,tokens[i].type, tokens[i].type,tokens[i].str);
+		if((tokens[i].type == MINUS || tokens[i].type == PLUS) &&
+				(i == 0 || (tokens[i-1].type != ')' && tokens[i-1].type != NUM) )) {
+			tokens[i].type = tokens[i].type == PLUS ? UNARY_PLUS : UNARY_MINUS;
+			tokens[i].precedence = 3;
+		}
+		//Log("tokens[%d] = %d(%d)(%s)",i,tokens[i].type, tokens[i].type,tokens[i].str);
 	}
 
 	return true; 
@@ -149,39 +160,46 @@ int get_dominant_op(int p,int q) {
 		else if(tokens[i].type == ')') cnt_parentheses --;
 		else if(tokens[i].type == '(') cnt_parentheses ++;
 	}
-	Log("op = %d", tokens[op].type);
+	//Log("op = %d", tokens[op].type);
 	return op;
 }
 
-int eval(int p, int q, bool *success) {
-	Log("EVAL %d %d",p, q);
+uint32_t eval(int p, int q, bool *success) {
+	//Log("EVAL %d %d",p, q);
 	if (p > q) {
-		*success = false;
-		printf("BAD EXPRESSION\n");
+		//*success = false;
+		//printf("BAD EXPRESSION\n");
 		return 0;
 	}
 	else if (p == q) {
-		return atoi(tokens[p].str);
+		return (uint32_t) atol(tokens[p].str);
 	}
 	else if (check_parentheses(p, q)) {
 		return eval(p + 1, q - 1, success);
 	}
 	else {
-		int op, val1, val2;
+		uint32_t val1, val2;
+		int op;
 		op = get_dominant_op(p, q);
-		if(op <= 0) {
+		if(op < 0) {
 			*success = false;
 			printf("BAD EXPRESSION or INNER ERROR\n");
 			return 0;
 		}
 		val1 = eval(p, op - 1, success);
 		val2 = eval(op + 1, q, success);
+		//Log("[%d,%d] val1=%u val2=%u\n", p, q, val1, val2);
 		switch (tokens[op].type) {
+			case UNARY_MINUS: return (uint32_t) -val2;
+			case UNARY_PLUS: return val2;
 			case '+': return val1 + val2;
 			case '-': return val1 - val2;
 			case '*': return val1 * val2;
 			case '/': return val1 / val2;
-			default: assert(0);
+			default:
+				*success = false;
+				printf("BAD EXPRESSION or INNER ERROR\n");
+				return 0;
 		}
 	}
 
@@ -194,7 +212,7 @@ uint32_t expr(char *e, bool *success) {
 	}
 	/* TODO: Insert codes to evaluate the expression. */
 	*success = true;
-	int ret = eval(0, nr_token -1, success);
+	uint32_t ret = (uint32_t) eval(0, nr_token -1, success);
 	return ret;
 }
 
