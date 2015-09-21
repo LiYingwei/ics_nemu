@@ -12,15 +12,6 @@
 #define CMD_STATUS_VALID 1
 #define CMD_STATUS_NOT_VALID 0
 
-#define KNRM  "\x1B[0m"
-#define KRED  "\x1B[31m"
-#define KGRN  "\x1B[32m"
-#define KYEL  "\x1B[33m"
-#define KBLU  "\x1B[34m"
-#define KMAG  "\x1B[35m"
-#define KCYN  "\x1B[36m"
-#define KWHT  "\x1B[37m"
-#define KRESET "\033[0m"
 
 void cpu_exec(uint32_t);
 
@@ -98,7 +89,7 @@ static int cmd_info_r() {
 }
 
 static int cmd_info_w() {
-	printf("coming soon...\n");
+	check_wp(true);
 	return 0;
 }
 
@@ -150,6 +141,18 @@ static int cmd_x(char *args) {
 	return 0;
 }
 
+static int cmd_w(char *args) {
+	new_wp(args);
+	return 0;
+}
+
+static int cmd_d(char *args) {
+	int N;
+	sscanf( args, "%d", &N);
+	free_wp(N);
+	return 0;
+}
+
 static int cmd_help(char *args);
 
 static struct {
@@ -162,8 +165,10 @@ static struct {
 	{ "q", "Exit NEMU", cmd_q },
 	{ "si", "Step into", cmd_si },
 	{ "info", "Print program status", cmd_info },
-	{ "x", "Scan memory", cmd_x },
 	{ "p", "Calcuate the Value of EXPR", cmd_p },
+	{ "x", "Scan memory", cmd_x },
+	{ "w", "Set watch point", cmd_w },
+	{ "d", "Delete watch point", cmd_d },
 	/* TODO: Add more commands */
 
 };
