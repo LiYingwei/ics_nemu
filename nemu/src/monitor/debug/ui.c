@@ -131,6 +131,25 @@ static int cmd_p(char *args) {
 	return 0;
 }
 
+static int cmd_x(char *args) {
+	char *token, *saveptr;
+	bool success;
+	size_t len;
+	swaddr_t addr;
+	int i;
+
+	token = strtok_r(args, " ", &saveptr);
+	sscanf(token, "%lu",&len);
+	addr = expr(saveptr, &success);
+	for(i = 0 ;i < len; i++, addr++) {
+		uint32_t ret;
+
+		ret = swaddr_read(addr, 1);
+		printf("%02X%c", ret, i % 5 == 4 ? '\n' : ' ');
+	}
+	return 0;
+}
+
 static int cmd_help(char *args);
 
 static struct {
@@ -143,6 +162,7 @@ static struct {
 	{ "q", "Exit NEMU", cmd_q },
 	{ "si", "Step into", cmd_si },
 	{ "info", "Print program status", cmd_info },
+	{ "x", "Scan memory", cmd_x },
 	{ "p", "Calcuate the Value of EXPR", cmd_p },
 	/* TODO: Add more commands */
 
