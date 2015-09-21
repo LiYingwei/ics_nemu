@@ -20,14 +20,17 @@
 
 enum {
 	NOTYPE = 256, NUM, HEXNUM, REG,
-	UNARY_PLUS = 33, UNARY_MINUS = 34, LNOT = 35, IND = 38,
+	UNARY_PLUS = 33, UNARY_MINUS = 34, LNOT = 35, BNOT = 36, IND = 38,
 
 	PLUS = 43, MINUS = 45, MULTIPLY = 42, DIVISION = 47, LEFT_PARENTHESES = 40, RIGHT_PARENTHESES = 41,
-
+	MOD = 53,
+	BLSHIFT = 71, BRSHIFT = 72,
+	LESSTHAN = 81 ,LESSOREQ = 82, GREATOREQ = 84, GREATTHAN = 83,
 	EQ = 91, NEQ = 92,
-	LAND = 131, LOR = 141,
-	/* TODO: Add more token types */
+	BITAND = 101, BITOR = 111, BITXOR = 121, LAND = 131, LOR = 141,
 
+	//DIRASS = 161, ASSSUM = 162, ASSDIF = 163, ASSPRO = 164, ASSQUO = 165, ASSREM = 166,
+	//ASSLS = 167, ASSRS = 168,ASSAND = 169, ASSXOR = 170, ASSOR = 171,
 };
 
 static struct rule {
@@ -41,20 +44,50 @@ static struct rule {
 	 */
 
 	{" +",	NOTYPE, -1},				// spaces
-	{"\\+", '+', 6},					// plus  '+' = 75
-	{"-",   '-', 6},					// minus '-' = 77
-	{"\\*", '*', 5},					// multiply '*' = 74
-	{"/",   '/', 5},					// division '/' = 79
-	{"\\(", '(', -1},                   //          '(' = 72
-	{"\\)", ')', -1},                   //          ')' = 73
+
 	{"0x[0-9a-fA-F]+", HEXNUM, -1},
 	{"\\$[a-zA-Z]+", REG, -1},
 	{"[0-9]+", NUM, -1},				// 不知道为什么"\\d+"不行
+
+	//{"<<=", ASSLS, 16},
+	//{">>=", ASSRS, 16},
+
+	{"<<", BLSHIFT, 7},
+	{">>", BRSHIFT, 7},
+	{"<=", LESSOREQ, 8},
+	{">=", GREATOREQ, 8},
 	{"==", EQ, 9},						// equal
 	{"!=",NEQ, 9},
 	{"&&", LAND, 13},
 	{"\\|\\|", LOR,  14},
+
+	/*{"\\+=", ASSSUM, 16},
+	{"-=", ASSDIF, 16},
+	{"*=", ASSPRO, 16},
+	{"/=", ASSQUO, 16},
+	{"%=", ASSREM, 16},
+	{"&=", ASSAND, 16},
+	{"\\^=", ASSXOR, 16},
+	{"\\|=", ASSOR, 16},
+	 */
+
+	{"\\+", '+', 6},					// plus  '+' = 75
+	{"-",   '-', 6},					// minus '-' = 77
 	{"!", LNOT, 3},
+	{"~", BNOT, 3},
+	{"\\*", '*', 5},					// multiply '*' = 74
+	{"/",   '/', 5},					// division '/' = 79
+	{"%", MOD, 5},
+	{">", GREATTHAN, 8},
+	{"<", LESSTHAN, 8},
+	{"\\(", '(', -1},                   //          '(' = 72
+	{"\\)", ')', -1},                   //          ')' = 73
+	{"&", BITAND, 10},
+	{"\\^", BITXOR, 11},
+	{"\\|", BITOR, 12},
+	//{"=", DIRASS, 16},
+
+
 	{"\\*", IND, 3},
 	{"[^0-9\\)]-", UNARY_MINUS, 3},
 	{"[^0-9\\)]\\+", UNARY_PLUS,  3},
@@ -238,13 +271,27 @@ uint32_t eval(int p, int q, bool *success) {
 			case UNARY_PLUS: return val2;
 			case IND: return swaddr_read(val2, 4);
 			case LNOT: return (uint32_t) !val2;
+			case BNOT: return ~val2;
+
 			case EQ: return (uint32_t) (val1 == val2);
-			case LAND: return (uint32_t) (val1 && val2);
 			case NEQ: return (uint32_t) (val1 != val2);
 			case '+': return val1 + val2;
 			case '-': return val1 - val2;
 			case '*': return val1 * val2;
 			case '/': return val1 / val2;
+			case MOD: return val1 % val2;
+			case BLSHIFT: return val1 << val2;
+			case BRSHIFT: return val1 >> val2;
+			case LESSTHAN: return (uint32_t) (val1 < val2);
+			case LESSOREQ: return (uint32_t) (val1 <= val2);
+			case GREATOREQ: return (uint32_t) (val1 >= val2);
+			case GREATTHAN: return (uint32_t) (val1 > val2);
+			case BITAND: return val1 & val2;
+			case BITOR: return val1 | val2;
+			case BITXOR: return val1 ^ val2;
+			case LAND: return (uint32_t) (val1 && val2);
+			case LOR: return (uint32_t) (val1 || val2);
+
 			default:
 				*success = false;
 				printf("BAD EXPRESSION or INNER ERROR\n");
