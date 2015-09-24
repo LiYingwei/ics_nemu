@@ -120,7 +120,7 @@ typedef struct token {
 	int precedence;
 } Token;
 
-Token tokens[32];
+Token tokens[128];
 int nr_token;
 
 static bool make_token(char *e) {

@@ -118,7 +118,7 @@ static int cmd_p(char *args) {
 		return 0;
 	}
 	int ans = expr(args, &success);
-	if(success) printf("%s = %d\n", args, ans);
+	if(success) printf("ans = %08X(%d)\n", ans, ans);
 	return 0;
 }
 
