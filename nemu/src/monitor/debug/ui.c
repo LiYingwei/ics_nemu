@@ -199,22 +199,33 @@ static int cmd_help(char *args) {
 }
 
 void ui_mainloop() {
+	char *last_cmd = NULL, *last_args = NULL;
 	while(1) {
 		char *str = rl_gets();
 		char *str_end = str + strlen(str);
+		char *args = NULL;
 
 		/* extract the first token as the command */
 		char *cmd = strtok(str, " ");
-		if(cmd == NULL) { continue; }
-
-		/* treat the remaining string as the arguments,
-		 * which may need further parsing
-		 */
-		char *args = cmd + strlen(cmd) + 1;
-		if(args >= str_end) {
-			args = NULL;
+		if(cmd == NULL) {
+			if(last_cmd == NULL)continue;
+			cmd = last_cmd;
+			args = last_args;
 		}
-
+		else {
+			/* treat the remaining string as the arguments,
+			 * which may need further parsing
+			 */
+			args = cmd + strlen(cmd) + 1;
+			if (args >= str_end) {
+				args = NULL;
+			}
+			if(last_args != NULL) free(last_args);
+			if(last_cmd != NULL) free(last_cmd);
+			if(args != NULL) last_args = strdup(args);
+			else last_args = NULL;
+			last_cmd = strdup(cmd);
+		}
 #ifdef HAS_DEVICE
 		extern void sdl_clear_event_queue(void);
 		sdl_clear_event_queue();
