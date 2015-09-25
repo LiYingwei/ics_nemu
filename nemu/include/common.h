@@ -23,6 +23,16 @@ typedef uint32_t swaddr_t;
 
 typedef uint16_t ioaddr_t;
 
+#define KNRM  "\x1B[0m"
+#define KRED  "\x1B[31m"
+#define KGRN  "\x1B[32m"
+#define KYEL  "\x1B[33m"
+#define KBLU  "\x1B[34m"
+#define KMAG  "\x1B[35m"
+#define KCYN  "\x1B[36m"
+#define KWHT  "\x1B[37m"
+#define KRESET "\033[0m"
+
 #pragma pack (1)
 typedef union {
 	uint32_t _4;
