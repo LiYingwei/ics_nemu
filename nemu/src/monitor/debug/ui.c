@@ -123,20 +123,34 @@ static int cmd_p(char *args) {
 }
 
 static int cmd_x(char *args) {
-	char *token, *saveptr;
+	char *token, *saveptr, *exprstring;
 	bool success;
 	size_t len;
 	swaddr_t addr;
 	int i;
 
 	token = strtok_r(args, " ", &saveptr);
-	sscanf(token, "%lu",&len);
-	addr = expr(saveptr, &success);
-	for(i = 0 ;i < len; i++, addr++) {
-		uint32_t ret;
+	if (token == NULL) {
+		printf("args is not valid\nx [N] expr\n");
+		return 0;
+	}
 
+	exprstring = strtok_r(NULL, "", &saveptr);
+	if (exprstring == NULL) {
+		printf("args is not valid\nx [N] expr\n");
+		return 0;
+	}
+
+	sscanf(token, "%lu", &len);
+	addr = expr(exprstring, &success);
+	for (i = 0; i < len; i++, addr++) {
+		uint32_t ret;
+		if(addr >= (1 << (10 + 10 + 3 + (27 - 10 - 10 - 3)))) {
+			printf("address is out of boundary, maybe expr's inner error or input error\n");
+			return 0;
+		}
 		ret = swaddr_read(addr, 1);
-		printf("%02X%c", ret, i % 5 == 4 ? '\n' : ' ');
+		printf("%02X%c", ret, (i % 5 == 4 || i == len - 1) ? '\n' : ' ');
 	}
 	return 0;
 }
