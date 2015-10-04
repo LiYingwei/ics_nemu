@@ -130,26 +130,24 @@ static int cmd_x(char *args) {
 	int i;
 
 	token = strtok_r(args, " ", &saveptr);
-	if(token==NULL)
-	{
+	if (token == NULL) {
 		printf("args is not valid\nx [N] expr\n");
 		return 0;
 	}
 
 	exprstring = strtok_r(NULL, "", &saveptr);
-	if(exprstring==NULL)
-	{
+	if (exprstring == NULL) {
 		printf("args is not valid\nx [N] expr\n");
 		return 0;
 	}
-	
-	sscanf(token, "%lu",&len);
+
+	sscanf(token, "%lu", &len);
 	addr = expr(exprstring, &success);
-	for(i = 0 ;i < len; i++, addr++) {
+	for (i = 0; i < len; i++, addr++) {
 		uint32_t ret;
 
 		ret = swaddr_read(addr, 1);
-		printf("%02X%c", ret, i % 5 == 4 ? '\n' : ' ');
+		printf("%02X%c", ret, (i % 5 == 4 || i == len - 1) ? '\n' : ' ');
 	}
 	return 0;
 }
