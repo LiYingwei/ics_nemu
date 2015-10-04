@@ -130,8 +130,19 @@ static int cmd_x(char *args) {
 	int i;
 
 	token = strtok_r(args, " ", &saveptr);
+	if(token==NULL)
+	{
+		printf("args is not valid\nx [N] expr\n");
+		return 0;
+	}
+
 	exprstring = strtok_r(NULL, "", &saveptr);
-	assert(exprstring);
+	if(exprstring==NULL)
+	{
+		printf("args is not valid\nx [N] expr\n");
+		return 0;
+	}
+	
 	sscanf(token, "%lu",&len);
 	addr = expr(exprstring, &success);
 	for(i = 0 ;i < len; i++, addr++) {
