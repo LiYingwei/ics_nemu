@@ -123,16 +123,17 @@ static int cmd_p(char *args) {
 }
 
 static int cmd_x(char *args) {
-	char *token, *saveptr;
+	char *token, *saveptr, *exprstring;
 	bool success;
 	size_t len;
 	swaddr_t addr;
 	int i;
 
 	token = strtok_r(args, " ", &saveptr);
-	assert(saveptr!=NULL);
+	exprstring = strtok_r(NULL, "", &saveptr);
+	assert(exprstring);
 	sscanf(token, "%lu",&len);
-	addr = expr(saveptr, &success);
+	addr = expr(exprstring, &success);
 	for(i = 0 ;i < len; i++, addr++) {
 		uint32_t ret;
 
