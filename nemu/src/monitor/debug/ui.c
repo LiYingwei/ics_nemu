@@ -145,7 +145,7 @@ static int cmd_x(char *args) {
 	addr = expr(exprstring, &success);
 	for (i = 0; i < len; i++, addr++) {
 		uint32_t ret;
-		if(addr < (1 << (10 + 10 + 3 + (27 - 10 - 10 - 3)))) {
+		if(addr >= (1 << (10 + 10 + 3 + (27 - 10 - 10 - 3)))) {
 			printf("address is out of boundary, maybe expr's inner error or input error\n");
 			return 0;
 		}
