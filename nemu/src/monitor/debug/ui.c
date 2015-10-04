@@ -130,6 +130,7 @@ static int cmd_x(char *args) {
 	int i;
 
 	token = strtok_r(args, " ", &saveptr);
+	assert(saveptr!=NULL);
 	sscanf(token, "%lu",&len);
 	addr = expr(saveptr, &success);
 	for(i = 0 ;i < len; i++, addr++) {
