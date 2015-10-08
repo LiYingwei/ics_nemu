@@ -1,3 +1,4 @@
+#include <cpu/reg.h>
 #include "nemu.h"
 
 #define ENTRY_START 0x100000
@@ -86,6 +87,13 @@ void restart() {
 
 	/* Set the initial instruction pointer. */
 	cpu.eip = ENTRY_START;
+
+	/*
+	 * First, the register EFLAGS is set to a predefined value of 0x00000002.
+	 * https://www.freebsd.org/doc/en_US.ISO8859-1/books/arch-handbook/boot-kernel.html
+	 * page174@intel386
+	 */
+	cpu.EFLAGS.eflags = 0x00000002;
 
 	/* Initialize DRAM. */
 	init_ddr3();
