@@ -5,7 +5,6 @@
  */
 #include <sys/types.h>
 #include <regex.h>
-<<<<<<< HEAD
 #include <stdlib.h>
 #include <cpu/reg.h>
 
