@@ -10,11 +10,7 @@ typedef struct {
 	size_t size;
 	union {
 		uint32_t reg;
-<<<<<<< HEAD
-		hwaddr_t addr;
-=======
 		swaddr_t addr;
->>>>>>> 1dd62864fe9b4d0aafd2e0d81070f60c1e34058f
 		uint32_t imm;
 		int32_t simm;
 	};
