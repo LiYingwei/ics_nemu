@@ -183,7 +183,6 @@ static struct {
 	{ "x", "Scan memory", cmd_x },
 	{ "w", "Set watch point", cmd_w },
 	{ "d", "Delete watch point", cmd_d },
-	/* TODO: Add more commands */
 
 };
 

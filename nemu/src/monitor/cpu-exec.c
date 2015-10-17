@@ -1,7 +1,10 @@
 #include "monitor/monitor.h"
 #include "cpu/helper.h"
 #include <setjmp.h>
+<<<<<<< HEAD
 #include <monitor/watchpoint.h>
+=======
+>>>>>>> 1dd62864fe9b4d0aafd2e0d81070f60c1e34058f
 
 /* The assembly code of instructions executed is only output to the screen
  * when the number of instructions executed is less than this value.
