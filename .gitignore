@@ -8,4 +8,7 @@
 !README.md
 !lib-common/newlib/libc.a
 !kernel/src/memory/mm_malloc.o
+<<<<<<< HEAD
 *~
+=======
+>>>>>>> 1dd62864fe9b4d0aafd2e0d81070f60c1e34058f

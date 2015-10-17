@@ -79,6 +79,5 @@ bool check_wp(bool show) {
 	return false;
 }
 
-/* TODO: Implement the functionality of watchpoint */
 
 

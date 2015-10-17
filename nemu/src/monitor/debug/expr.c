@@ -31,6 +31,7 @@ enum {
 
 	//DIRASS = 161, ASSSUM = 162, ASSDIF = 163, ASSPRO = 164, ASSQUO = 165, ASSREM = 166,
 	//ASSLS = 167, ASSRS = 168,ASSAND = 169, ASSXOR = 170, ASSOR = 171,
+
 };
 
 static struct rule {
@@ -109,7 +110,7 @@ void init_regex() {
 		ret = regcomp(&re[i], rules[i].regex, REG_EXTENDED);
 		if(ret != 0) {
 			regerror(ret, &re[i], error_msg, 128);
-			Assert(ret != 0, "regex compilation failed: %s\n%s", error_msg, rules[i].regex);
+			Assert(ret == 0, "regex compilation failed: %s\n%s", error_msg, rules[i].regex);
 		}
 	}
 }
@@ -121,6 +122,7 @@ typedef struct token {
 } Token;
 
 Token tokens[128];
+
 int nr_token;
 
 static bool make_token(char *e) {
