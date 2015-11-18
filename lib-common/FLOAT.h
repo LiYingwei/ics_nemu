@@ -6,13 +6,15 @@
 typedef int FLOAT;
 
 static inline int F2int(FLOAT a) {
-	nemu_assert(0);
-	return 0;
+	return a >> 16;
 }
 
 static inline FLOAT int2F(int a) {
-	nemu_assert(0);
-	return 0;
+	int sign = a & 0x80000000;
+	a <<= 16;
+	a &= 0x7FFFFFFF;
+	a |= sign;
+	return a;
 }
 
 static inline FLOAT F_mul_int(FLOAT a, int b) {
