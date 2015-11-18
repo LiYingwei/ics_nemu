@@ -4,6 +4,7 @@
 #include "data-mov/xchg.h"
 #include "data-mov/leave.h"
 #include "data-mov/cltd.h"
+#include "data-mov/cmovcc.h"
 
 #include "seg-reg/push.h"
 #include "seg-reg/pop.h"
