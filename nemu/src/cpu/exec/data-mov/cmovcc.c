@@ -14,4 +14,5 @@
 
 /* for instruction encoding overloading */
 
-make_helper_v(cmccov);
+make_helper_v(cmovcc);
+

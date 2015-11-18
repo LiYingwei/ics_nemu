@@ -15,7 +15,7 @@
 #define SF cpu.SF
 #define OF cpu.OF
 #define PF cpu.PF
-make_helper(concat(cmccov_,SUFFIX)) {
+make_helper(concat(cmovcc_,SUFFIX)) {
     int instr_len = 1;
     uint8_t cc = instr_fetch(eip , 1);
     instr_len += concat(decode_rm2r_,SUFFIX)(eip+1);
