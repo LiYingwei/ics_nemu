@@ -1,6 +1,6 @@
 #include "trap.h"
 #include<stdlib.h>
-#define N 100
+#define N 2
 int a[N];
 int cmp(const void *a, const void *b)
 {
