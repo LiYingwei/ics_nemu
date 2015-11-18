@@ -9,16 +9,16 @@ int fun20() {
 	return 13;
 }
 int fun19() {
-	return fun20() * fun20();
+	return fun20();
 }
 int fun18() {
-	return fun19() * fun20();
+	return fun19();
 }
 int fun17() {
-	return fun18() * fun18() * fun18();
+	return fun18();
 }
 int fun16() {
-	return fun17() * fun18() * fun19() * fun20();
+	return fun17();
 }
 int fun15() {
 	return fun16();
