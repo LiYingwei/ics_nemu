@@ -93,3 +93,16 @@ uint32_t findsym(char *var) {
     Log("symbol not found");
     return 0;
 }
+
+char *getname(swaddr_t addr) {
+    int i;
+    for(i=0;i<nr_symtab_entry; i++)
+    {
+        if(addr >= symtab[i].st_value && addr < symtab[i].st_value + symtab[i].st_size)
+        {
+            return &strtab[symtab[i].st_name];
+        }
+    }
+    Log("name not found");
+    return 0;
+}

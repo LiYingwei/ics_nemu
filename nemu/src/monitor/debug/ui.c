@@ -167,6 +167,30 @@ static int cmd_d(char *args) {
 	return 0;
 }
 
+typedef struct {
+    swaddr_t prev_ebp;
+    swaddr_t ret_addr;
+    uint32_t args[4];
+} PartOfStackFrame;
+extern char* getname(swaddr_t addr);
+
+static int cmd_bt(char *args) {
+    swaddr_t EBP = cpu.ebp;
+    PartOfStackFrame psf;
+    int index=0;
+    while(EBP)
+    {
+        psf.prev_ebp = swaddr_read(EBP,4);
+        //if(EBP + 4 < HW_MEM_SIZE)psf.ret_addr = swaddr_read(EBP+4,4);
+        //for(i=0;i<4;i++)
+        //    if(EBP + 8 + i * 4 < HW_MEM_SIZE) psf.args[i] = swaddr_read(EBP+8+i*4,4);
+        char* name = getname(EBP);
+        printf("#%d\t0x%x in %s ()\n", index++, EBP, name);
+        EBP = psf.prev_ebp;
+    }
+    return 0;
+}
+
 static int cmd_help(char *args);
 
 static struct {
@@ -183,6 +207,7 @@ static struct {
 	{ "x", "Scan memory", cmd_x },
 	{ "w", "Set watch point", cmd_w },
 	{ "d", "Delete watch point", cmd_d },
+    { "bt", "Print backtrace of all stack frames", cmd_bt},
 
 };
 
