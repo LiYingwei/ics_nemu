@@ -179,13 +179,15 @@ static int cmd_bt(char *args) {
     PartOfStackFrame psf;
     int i,index=0;
     char *name = getname(cpu.eip);
-    printf("#%d\t0x%x in %s ()\n", index++, psf.ret_addr, name);
+    printf("#%d\t0x%x in %s ()\n", index++, cpu.eip, name);
     while(EBP)
     {
         psf.prev_ebp = swaddr_read(EBP,4);
-        if(EBP + 4 < HW_MEM_SIZE)psf.ret_addr = swaddr_read(EBP+4,4);
+        //if(EBP + 4 < HW_MEM_SIZE)
+            psf.ret_addr = swaddr_read(EBP+4,4);
         for(i=0;i<4;i++)
-            if(EBP + 8 + i * 4 < HW_MEM_SIZE) psf.args[i] = swaddr_read(EBP+8+i*4,4);
+            //if(EBP + 8 + i * 4 < HW_MEM_SIZE)
+                psf.args[i] = swaddr_read(EBP+8+i*4,4);
         name = getname(psf.ret_addr);
         printf("#%d\t0x%x in %s ()\n", index++, psf.ret_addr, name);
         EBP = psf.prev_ebp;
