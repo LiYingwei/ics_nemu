@@ -95,9 +95,8 @@ uint32_t findsym(char *var) {
     return 0;
 }
 
-char *getname(uint32_t EBP) {
+char *getname(uint32_t addr) {
     int i;
-    swaddr_t addr = swaddr_read(EBP, 4);
     for(i=0;i<nr_symtab_entry; i++)
     {
         printf("(0x%x,0x%x)", symtab[i].st_value, symtab[i].st_value + symtab[i].st_size);
