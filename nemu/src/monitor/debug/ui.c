@@ -184,9 +184,8 @@ static int cmd_bt(char *args) {
         //if(EBP + 4 < HW_MEM_SIZE)psf.ret_addr = swaddr_read(EBP+4,4);
         //for(i=0;i<4;i++)
         //    if(EBP + 8 + i * 4 < HW_MEM_SIZE) psf.args[i] = swaddr_read(EBP+8+i*4,4);
-        swaddr_t addr = swaddr_read(EBP, 4);
         char* name = getname(EBP);
-        printf("#%d\t0x%x in %s ()\n", index++, addr, name);
+        printf("#%d\t0x%x in %s ()\n", index++, EBP, name);
         EBP = psf.prev_ebp;
     }
     return 0;
