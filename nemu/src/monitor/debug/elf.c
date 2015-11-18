@@ -1,6 +1,7 @@
 #include "common.h"
 #include <stdlib.h>
 #include <elf.h>
+#include <memory/memory.h>
 
 char *exec_file = NULL;
 
@@ -94,8 +95,9 @@ uint32_t findsym(char *var) {
     return 0;
 }
 
-char *getname(swaddr_t addr) {
+char *getname(uint32_t EBP) {
     int i;
+    swaddr_t addr = swaddr_read(EBP, 4);
     for(i=0;i<nr_symtab_entry; i++)
     {
         printf("(0x%x,0x%x)", symtab[i].st_value, symtab[i].st_value + symtab[i].st_size);
