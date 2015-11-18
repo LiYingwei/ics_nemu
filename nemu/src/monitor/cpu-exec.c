@@ -2,6 +2,7 @@
 #include "cpu/helper.h"
 #include <setjmp.h>
 #include <monitor/watchpoint.h>
+#include <cpu/reg.h>
 
 /* The assembly code of instructions executed is only output to the screen
  * when the number of instructions executed is less than this value.
@@ -11,6 +12,8 @@
 #define MAX_INSTR_TO_PRINT 10
 
 int nemu_state = STOP;
+bool DONT_TOUCH_MY_EIP;
+bool CALL_CHANGE_PUSH_LATER = false;
 
 int exec(swaddr_t);
 
@@ -60,9 +63,17 @@ void cpu_exec(volatile uint32_t n) {
 
 		/* Execute one instruction, including instruction fetch,
 		 * instruction decode, and the actual execution. */
+        DONT_TOUCH_MY_EIP = false;
 		int instr_len = exec(cpu.eip);
 
-		cpu.eip += instr_len;
+        if(!DONT_TOUCH_MY_EIP)cpu.eip += instr_len;
+        if(CALL_CHANGE_PUSH_LATER)
+        {
+            uint32_t retaddr = swaddr_read(cpu.esp, 4);
+            retaddr += instr_len;
+            swaddr_write(cpu.esp, 4, retaddr);
+            CALL_CHANGE_PUSH_LATER= false;
+        }
 
 #ifdef DEBUG
 		print_bin_instr(eip_temp, instr_len);

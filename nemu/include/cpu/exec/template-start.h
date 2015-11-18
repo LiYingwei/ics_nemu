@@ -1,3 +1,4 @@
+#include <cpu/reg.h>
 #include "cpu/exec/helper.h"
 
 #if DATA_BYTE == 1
@@ -33,3 +34,64 @@
 #define OPERAND_W(op, src) concat(write_operand_, SUFFIX) (op, src)
 
 #define MSB(n) ((DATA_TYPE)(n) >> ((DATA_BYTE << 3) - 1))
+
+#define EFLAGS_ALU(a, b, S, Cin) \
+({ \
+    int i; \
+    bool A[DATA_BYTE * 8], B[DATA_BYTE * 8], F[DATA_BYTE * 8], C[DATA_BYTE * 8 + 1]; \
+\
+    C[0] = Cin ^ S; \
+    for (i = 0; i < DATA_BYTE * 8; i++) { \
+        A[i] = (a >> i) & true; \
+        B[i] = S ^ ((b >> i) & true); \
+    } \
+\
+    cpu.ZF = 0; \
+\
+    for (i = 0; i < DATA_BYTE * 8; i++) { \
+        F[i] = A[i] ^ B[i] ^ C[i]; \
+        C[i + 1] = (A[i] & B[i]) | (A[i] & C[i]) | (B[i] & C[i]); \
+        cpu.ZF |= F[i]; \
+    } \
+\
+    cpu.ZF = ~cpu.ZF; \
+    cpu.OF = C[DATA_BYTE * 8] ^ C[DATA_BYTE * 8 - 1]; \
+    cpu.SF = F[DATA_BYTE * 8 - 1]; \
+    cpu.CF = S ^ C[DATA_BYTE * 8]; \
+    cpu.PF = true; \
+    for (i = 0; i < 8; i++) cpu.PF ^= F[i]; \
+\
+    DATA_TYPE Sum = 0; \
+    for (i = 0; i < DATA_BYTE * 8; i++) { \
+        Sum ^= F[i] << i; \
+    } \
+    Sum; \
+})
+
+#define INSTR_POP() \
+({ \
+    DATA_TYPE ret = MEM_R(cpu.esp); \
+    cpu.esp += DATA_BYTE; \
+    ret; \
+})
+
+#define INSTR_PUSH(val) \
+do{ \
+    cpu.esp -= DATA_BYTE; \
+    MEM_W(cpu.esp, val); \
+}while(0)
+
+#define EFLAGS_UPDATE_LOGIC(val) \
+do{ \
+    uint8_t low8 = val & 0xFF; \
+    cpu.PF = 1; \
+    while (low8) { \
+        cpu.PF ^= low8 & 1; \
+        low8 >>= 1; \
+    } \
+    cpu.ZF = val == 0 ? true : false; \
+    cpu.SF = (bool) (val >> (DATA_BYTE * 8 - 1)); \
+    cpu.CF = 0; \
+    cpu.OF = 0; \
+}while(0)
+

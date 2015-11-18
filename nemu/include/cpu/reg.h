@@ -6,6 +6,7 @@
 enum { R_EAX, R_ECX, R_EDX, R_EBX, R_ESP, R_EBP, R_ESI, R_EDI };
 enum { R_AX, R_CX, R_DX, R_BX, R_SP, R_BP, R_SI, R_DI };
 enum { R_AL, R_CL, R_DL, R_BL, R_AH, R_CH, R_DH, R_BH };
+enum { E_CF, E_t1, E_PF, E_t2, E_AF, E_t3, E_ZF, E_SF, E_TF, E_IF, E_DF, E_OF, E_IOPL1, E_IOPL2, E_NT, E_t4, E_RF, E_VM};
 
 /* TODO: Re-organize the `CPU_state' structure to match the register
  * encoding scheme in i386 instruction format. For example, if we
@@ -28,7 +29,7 @@ typedef struct {
 	};
 
 	union {
-		uint32_t eflags;
+		uint32_t EFLAGS;
 		struct {
 			uint32_t CF:1;
 			uint32_t t1:1;
@@ -42,13 +43,13 @@ typedef struct {
 			uint32_t IF:1;
 			uint32_t DF:1;
 			uint32_t OF:1;
-			uint32_t IOPL:1;
+			uint32_t IOPL:2;
 			uint32_t NT:1;
 			uint32_t t4:1;
 			uint32_t RF:1;
 			uint32_t VM:1;
 		};
-	}EFLAGS;
+	};
 
 	swaddr_t eip;
 
@@ -68,5 +69,6 @@ static inline int check_reg_index(int index) {
 extern const char* regsl[];
 extern const char* regsw[];
 extern const char* regsb[];
+extern const char* regeflags[];
 
 #endif

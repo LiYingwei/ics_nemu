@@ -28,4 +28,39 @@ make_helper(concat(mov_moffs2a_, SUFFIX)) {
 	return 5;
 }
 
+
+#undef instr
+#define instr movsx
+static void do_execute() {
+    DATA_TYPE_S val = (DATA_TYPE_S) ((int8_t)((uint8_t) op_src->val));
+    OPERAND_W(op_dest, (DATA_TYPE) val);
+    print_asm_template2();
+}
+make_instr_helper(rm2r)
+#undef instr
+#define instr movsxl
+static void do_execute() {
+    DATA_TYPE_S val = (DATA_TYPE_S) ((int16_t)((uint16_t) op_src->val));
+    OPERAND_W(op_dest, (DATA_TYPE)val);
+    print_asm_template2();
+}
+make_instr_helper(rm2r)
+#undef instr
+
+#define instr movzx
+static void do_execute() {
+    uint8_t val = (uint8_t) op_src->val;
+    OPERAND_W(op_dest, (DATA_TYPE) val);
+    print_asm_template2();
+}
+make_instr_helper(rm2r)
+#undef instr
+#define instr movzxl
+static void do_execute() {
+    uint16_t val = (uint16_t) op_src->val;
+    OPERAND_W(op_dest, (DATA_TYPE) val);
+    print_asm_template2();
+}
+make_instr_helper(rm2r)
+#undef instr
 #include "cpu/exec/template-end.h"

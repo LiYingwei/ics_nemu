@@ -17,9 +17,9 @@
 #define KCYN  "\x1B[36m"
 #define KWHT  "\x1B[37m"
 #define KRESET "\033[0m"
-
+extern uint32_t findsym(char* var);
 enum {
-	NOTYPE = 256, NUM, HEXNUM, REG,
+	NOTYPE = 256, NUM, HEXNUM, REG, VAR,
 	UNARY_PLUS = 33, UNARY_MINUS = 34, LNOT = 35, BNOT = 36, IND = 38,
 
 	PLUS = 43, MINUS = 45, MULTIPLY = 42, DIVISION = 47, LEFT_PARENTHESES = 40, RIGHT_PARENTHESES = 41,
@@ -92,6 +92,7 @@ static struct rule {
 	{"\\*", IND, 3},
 	{"[^0-9\\)]-", UNARY_MINUS, 3},
 	{"[^0-9\\)]\\+", UNARY_PLUS,  3},
+    {"[A-Za-z_][A-Za-z0-9_]*", VAR, -1}
 };
 
 #define NR_REGEX (sizeof(rules) / sizeof(rules[0]) )
@@ -149,10 +150,12 @@ static bool make_token(char *e) {
 
 				switch(rules[i].token_type) {
 					case NOTYPE: break;
+                    case VAR :
 					case NUM :
 					case HEXNUM:
 					case REG:
 						assert(substr_len < 32);
+                        memset(tokens[nr_token].str, 0, sizeof(tokens[nr_token]));
 						memcpy(tokens[nr_token].str, substr_start, (size_t) substr_len);
 					default:
 						tokens[nr_token].type = rules[i].token_type;
@@ -172,7 +175,9 @@ static bool make_token(char *e) {
 	{
 		if(tokens[i].type == MINUS || tokens[i].type == PLUS || tokens[i].type == MULTIPLY) // HERE MAY BE HAVE SOME BUG!
 		{
-			if (i == 0 || (tokens[i-1].type != ')' && tokens[i-1].type != NUM) ) {
+			if (i == 0 || (tokens[i-1].type != ')' &&
+                    tokens[i-1].type != NUM && tokens[i-1].type != REG &&
+                    tokens[i-1].type != HEXNUM && tokens[i-1].type != VAR) ) {
 				switch (tokens[i].type) {
 					case PLUS: tokens[i].type = UNARY_PLUS; break;
 					case MINUS:tokens[i].type = UNARY_MINUS;break;
@@ -235,7 +240,10 @@ uint32_t eval(int p, int q, bool *success) {
 			case HEXNUM:
 				sscanf(tokens[p].str, "%X", &ret);
 				return ret;
+            case VAR:
+                return findsym(tokens[p].str);
 			case REG:
+                memset(buf, 0, sizeof(buf));
 				sscanf(tokens[p].str + 1, "%s", buf);
 				for (i = R_EAX; i <= R_EDI; i++) {
 					if (strcmp(buf, regsl[i]) == 0)
@@ -249,8 +257,18 @@ uint32_t eval(int p, int q, bool *success) {
 					if (strcmp(buf, regsb[i]) == 0)
 						return cpu.gpr[i % 4]._8[i / 4];
 				}
+                for(i = E_CF; i <= E_VM; i++)
+                {
+                    if(strcmp(buf, regeflags[i]) == 0)
+                        return cpu.EFLAGS & (1 << i);
+                }
+                if(strcmp(buf, "eip") == 0)
+                    return cpu.eip;
+                if(strcmp(buf, "eflags") == 0)
+                    return cpu.EFLAGS;
+
 			default:
-				assert(0);
+				Assert(0,"tokens[%d].type = %d",p,tokens[p].type);
 		}
 	}
 	else if (check_parentheses(p, q)) {

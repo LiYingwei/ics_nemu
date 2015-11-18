@@ -93,7 +93,7 @@ void restart() {
 	 * https://www.freebsd.org/doc/en_US.ISO8859-1/books/arch-handbook/boot-kernel.html
 	 * page174@intel386
 	 */
-	cpu.EFLAGS.eflags = 0x00000002;
+	cpu.EFLAGS= 0x00000002;
 
 	/* Initialize DRAM. */
 	init_ddr3();

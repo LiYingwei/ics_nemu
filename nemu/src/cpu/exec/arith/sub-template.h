@@ -6,21 +6,8 @@
 
 
 static void do_execute() {
-	DATA_TYPE result = op_dest->val - op_src->val;
-	int bitcount = 0, x = result & 0xFFFF;
-	while(x) {
-		if(x&1)bitcount++;
-		x >>= 1;
-	}
-	OPERAND_W(op_dest, result);
-
-	cpu.EFLAGS.CF = (op_src->val > op_dest->val);
-	//cpu.EFLAGS.PF = (bitcount(result & 0xFFFF) + 1) & 1;
-	cpu.EFLAGS.PF = (bitcount + 1) & 1;
-	cpu.EFLAGS.AF = ((result & 0xFFFF) > (op_dest->val & 0xFFFF));
-	cpu.EFLAGS.ZF = (result == 0);
-	cpu.EFLAGS.SF = ((result & 0x10000000) != 0);
-	cpu.EFLAGS.OF = (result > op_dest->val);
+    DATA_TYPE result = EFLAGS_ALU(op_dest->val, op_src->val, 1, 0);
+    OPERAND_W(op_dest, result);
 
 	print_asm_template2();
 }

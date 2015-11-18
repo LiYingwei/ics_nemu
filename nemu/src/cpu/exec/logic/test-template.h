@@ -7,20 +7,7 @@
 #define instr test
 
 static void do_execute () {
-	DATA_TYPE result = op_dest->val & op_src->val;
-	int bitcount = 0, x = result & 0xFFFF;
-	while(x) {
-		if(x&1)bitcount++;
-		x >>= 1;
-	}
-	cpu.EFLAGS.PF = (bitcount + 1) & 1;
-	cpu.EFLAGS.CF = 0;
-	cpu.EFLAGS.OF = 0;
-	cpu.EFLAGS.ZF = (result == 0);
-	cpu.EFLAGS.SF = ((result & 0x10000000) != 0);
-
-
-
+    EFLAGS_ALU(op_dest->val, op_src->val, 0, 0);
 	print_asm_template2();
 }
 

@@ -2,8 +2,11 @@
 
 #include "data-mov/mov.h"
 #include "data-mov/xchg.h"
+#include "data-mov/leave.h"
+#include "data-mov/cltd.h"
 
 #include "seg-reg/push.h"
+#include "seg-reg/pop.h"
 
 #include "arith/dec.h"
 #include "arith/inc.h"
@@ -14,6 +17,9 @@
 #include "arith/div.h"
 #include "arith/sub.h"
 #include "arith/cmp.h"
+#include "arith/add.h"
+#include "arith/adc.h"
+#include "arith/sbb.h"
 
 #include "logic/and.h"
 #include "logic/or.h"
@@ -24,11 +30,18 @@
 #include "logic/shr.h"
 #include "logic/shrd.h"
 #include "logic/test.h"
+#include "logic/stecc.h"
 
 #include "control/call.h"
-#include "control/je.h"
+#include "control/jmp.h"
+#include "control/jcc.h"
+#include "control/ret.h"
+#include "control/flag-control.h"
 
 #include "string/rep.h"
+#include "string/stos.h"
+#include "string/movs.h"
+#include "string/cmps.h"
 
 #include "misc/misc.h"
 

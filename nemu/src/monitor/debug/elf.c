@@ -81,3 +81,15 @@ void load_elf_tables(int argc, char *argv[]) {
 	fclose(fp);
 }
 
+uint32_t findsym(char *var) {
+    int i;
+    for(i=0;i<nr_symtab_entry; i++)
+    {
+        char* Var = &strtab[symtab[i].st_name];
+        if(strcmp(var,Var) ==0){
+            return symtab[i].st_value;
+        }
+    }
+    Log("symbol not found");
+    return 0;
+}

@@ -8,18 +8,12 @@
 #define instr push
 
 static void do_execute () {
-    DATA_TYPE result;
-    if (op_src->type == OP_TYPE_REG || op_src->type == OP_TYPE_IMM)
-        result = op_src->val;
-    else
-        result = swaddr_read(op_src->addr, op_src->size);
 
 #if DATA_BYTE == 1
     Assert(op_src->type == OP_TYPE_IMM, "call DATA_BYTE number bytes is not valid");
 #endif
 
-    cpu.esp -= op_src->size;
-    swaddr_write(cpu.esp, op_src->size, result);
+    INSTR_PUSH(op_src->val);
 
     print_asm_template1();
 }

@@ -7,7 +7,7 @@ static void do_execute () {
 	OPERAND_W(op_src, result);
 
 	/* TODO: Update EFLAGS. */
-	panic("please implement me");
+    EFLAGS_ALU(op_src->val, 1, 1, 0);
 
 	print_asm_template1();
 }
