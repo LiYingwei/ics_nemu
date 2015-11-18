@@ -99,7 +99,7 @@ char *getname(uint32_t addr) {
     int i;
     for(i=0;i<nr_symtab_entry; i++)
     {
-        printf("(0x%x,0x%x)", symtab[i].st_value, symtab[i].st_value + symtab[i].st_size);
+        //printf("(0x%x,0x%x)", symtab[i].st_value, symtab[i].st_value + symtab[i].st_size);
         if(addr >= symtab[i].st_value && addr < symtab[i].st_value + symtab[i].st_size)
         {
             return &strtab[symtab[i].st_name];
