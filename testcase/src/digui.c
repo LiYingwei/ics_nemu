@@ -67,6 +67,7 @@ int fun1() {
 }
 
 int main() {
+	int ans = fun1();
 	HIT_GOOD_TRAP;
 	return 0;
 }
