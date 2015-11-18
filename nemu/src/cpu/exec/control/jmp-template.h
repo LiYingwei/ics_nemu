@@ -9,7 +9,10 @@
 #define instr jmp
 extern bool DONT_TOUCH_MY_EIP;
 static void do_execute() {
-    if(op_src->type == OP_TYPE_IMM)cpu.eip += op_src->val;
+    if(op_src->type == OP_TYPE_IMM){
+        cpu.eip += op_src->val;
+        Log("val = %d", op_src->val);
+    }
     else if(op_src->type == OP_TYPE_REG)
     {
         DONT_TOUCH_MY_EIP = true;
