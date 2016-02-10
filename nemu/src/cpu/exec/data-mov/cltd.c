@@ -14,6 +14,7 @@ make_helper(cltd) {
     return 1;
 }
 
+<<<<<<< HEAD
 make_helper(cwtl) {
     int16_t ax = cpu.gpr[0]._16;
     int32_t eax = (int32_t) ax;
@@ -21,3 +22,5 @@ make_helper(cwtl) {
     return 1;
 }
 
+=======
+>>>>>>> dev_PA2
