@@ -4,7 +4,7 @@
 
 CC := gcc
 LD := ld
-CFLAGS := -MMD -Wall -Werror -c
+CFLAGS := -MMD -Wall -Werror -c 
 
 LIB_COMMON_DIR := lib-common
 NEWLIBC_DIR := $(LIB_COMMON_DIR)/newlib
@@ -52,7 +52,7 @@ clean: clean-cpp
 
 ##### some convinient rules #####
 
-USERPROG := obj/testcase/add
+USERPROG := obj/testcase/mul-longlong
 ENTRY := $(USERPROG)
 
 entry: $(ENTRY)

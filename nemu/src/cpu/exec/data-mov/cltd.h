@@ -6,5 +6,6 @@
 #define NEMU_CXTX_H
 
 make_helper(cltd);
+make_helper(cwtl);
 
 #endif //NEMU_CXTX_H
