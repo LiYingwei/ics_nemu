@@ -2,6 +2,7 @@
 #include "memory.h"
 #include <string.h>
 #include <elf.h>
+#include <malloc.h>
 
 #define ELF_OFFSET_IN_DISK 0
 
@@ -23,7 +24,6 @@ uint32_t loader() {
 	Elf32_Phdr *ph = NULL;
 
 	uint8_t buf[4096];
-    uint8_t zero[4096];
 
 #ifdef HAS_DEVICE
 	ide_read(buf, ELF_OFFSET_IN_DISK, 4096);
@@ -42,22 +42,18 @@ uint32_t loader() {
 	//panic("please implement me");
 	for(i=0; i < elf->e_phnum; i++) {
 		/* Scan the program header table, load each segment into memory */
-        ph = (void*) buf + elf->e_phoff + i * elf->e_phentsize;
+        ph = (void*) (buf + elf->e_phoff + i * elf->e_phentsize);
 		if(ph->p_type == PT_LOAD) {
 
 			/* TODO: read the content of the segment from the ELF file 
 			 * to the memory region [VirtAddr, VirtAddr + FileSiz)
 			 */
-            ramdisk_write(buf + ph->p_offset,
-                          ph->p_vaddr, ph->p_filesz);
+            ramdisk_write((uint8_t *) (ELF_OFFSET_IN_DISK + ph->p_offset), ph->p_vaddr, ph->p_filesz);
 
-			 
-			 
 			/* TODO: zero the memory region 
 			 * [VirtAddr + FileSiz, VirtAddr + MemSiz)
 			 */
-            ramdisk_write(zero, ph->p_vaddr + ph->p_filesz,
-                          ph->p_memsz - ph->p_filesz);
+            memset((void *) (ph->p_vaddr + ph->p_filesz), 0, ph->p_memsz - ph->p_filesz);
 
 
 #ifdef IA32_PAGE
