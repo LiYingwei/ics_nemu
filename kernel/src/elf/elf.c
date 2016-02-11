@@ -2,7 +2,6 @@
 #include "memory.h"
 #include <string.h>
 #include <elf.h>
-#include <malloc.h>
 
 #define ELF_OFFSET_IN_DISK 0
 
@@ -49,6 +48,7 @@ uint32_t loader() {
 			 * to the memory region [VirtAddr, VirtAddr + FileSiz)
 			 */
             ramdisk_write((uint8_t *) (ELF_OFFSET_IN_DISK + ph->p_offset), ph->p_vaddr, ph->p_filesz);
+
 
 			/* TODO: zero the memory region 
 			 * [VirtAddr + FileSiz, VirtAddr + MemSiz)
