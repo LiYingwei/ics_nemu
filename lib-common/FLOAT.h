@@ -10,11 +10,7 @@ static inline int F2int(FLOAT a) {
 }
 
 static inline FLOAT int2F(int a) {
-	int sign = a & 0x80000000;
-	a <<= 16;
-	a &= 0x7FFFFFFF;
-	a |= sign;
-	return a;
+	return a << 16;
 }
 
 static inline FLOAT F_mul_int(FLOAT a, int b) {
