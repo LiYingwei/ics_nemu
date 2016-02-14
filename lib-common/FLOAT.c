@@ -50,8 +50,8 @@ FLOAT f2F(float a) {
 }
 
 FLOAT Fabs(FLOAT a) {
-	/*return a & 0x7FFFFFFF;*/
-	return a > 0 ? a : -a;
+	return a & 0x7FFFFFFF;/*
+	return a > 0 ? a : -a;*/
 }
 
 FLOAT sqrt(FLOAT x) {
