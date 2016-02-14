@@ -21,7 +21,7 @@ FLOAT F_div_F(FLOAT a, FLOAT b) {
 }
 
 FLOAT f2F(float a) {
-	/*unsigned *A = (unsigned*)&a;
+	unsigned *A = (unsigned*)&a;
 	unsigned sign = ((*A) & 0x80000000) ? -1 : 1;
 	unsigned expo = ((*A) & 0x7F800000) >> 23;
 	unsigned ret = (*A) & 0x7FFFFF;
@@ -32,9 +32,9 @@ FLOAT f2F(float a) {
 		//ret <<= -23 + (expo - 127) + 16; (e.i. ret <<= expo - 134;
 		if(expo >= 134) ret <<= expo - 134;
 		else ret >>= 134 - expo;
-		return (ret & 0x7FFFFFFF) * sign;
-	}*/
-	int ans = 0, mul = 0;
+		return ret * sign;
+	}
+	/*int ans = 0, mul = 0;
     union{
         float x;
         unsigned y;
@@ -46,12 +46,11 @@ FLOAT f2F(float a) {
     if (mul > 0) ans <<= mul;
     else ans >>= mul * - 1;
     ans >>= 7;
-	return ans * (pp.y >> 31 ? - 1 : 1);
+	return ans * (pp.y >> 31 ? - 1 : 1);*/
 }
 
 FLOAT Fabs(FLOAT a) {
-	return a & 0x7FFFFFFF;/*
-	return a > 0 ? a : -a;*/
+	return a > 0 ? a : -a;
 }
 
 FLOAT sqrt(FLOAT x) {
