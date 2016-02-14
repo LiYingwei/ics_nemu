@@ -7,7 +7,8 @@
 #define instr test
 
 static void do_execute () {
-    EFLAGS_ALU(op_dest->val, op_src->val, 0, 0);
+    DATA_TYPE result = op_dest->val & op_src->val;
+    EFLAGS_UPDATE_LOGIC(result);
 	print_asm_template2();
 }
 

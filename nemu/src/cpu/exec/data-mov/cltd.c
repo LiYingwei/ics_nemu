@@ -14,3 +14,9 @@ make_helper(cltd) {
     return 1;
 }
 
+make_helper(cwtl) {
+    int32_t tmp = (int16_t) reg_w(0);
+    cpu.eax = tmp;
+    print_asm("cwtl");
+    return 1;
+}

@@ -1,5 +1,4 @@
 #include "common.h"
-#include "memory.h"
 #include <string.h>
 #include <elf.h>
 
@@ -41,20 +40,17 @@ uint32_t loader() {
 	//panic("please implement me");
 	for(i=0; i < elf->e_phnum; i++) {
 		/* Scan the program header table, load each segment into memory */
-        ph = (void*) (buf + elf->e_phoff + i * elf->e_phentsize);
+        ph = (void *) (buf + elf->e_phoff + i * elf->e_phentsize);
 		if(ph->p_type == PT_LOAD) {
 
 			/* TODO: read the content of the segment from the ELF file 
 			 * to the memory region [VirtAddr, VirtAddr + FileSiz)
 			 */
             ramdisk_write((uint8_t *) (ELF_OFFSET_IN_DISK + ph->p_offset), ph->p_vaddr, ph->p_filesz);
-
-
-			/* TODO: zero the memory region 
+			/* TODO: zero the memory region
 			 * [VirtAddr + FileSiz, VirtAddr + MemSiz)
 			 */
             memset((void *) (ph->p_vaddr + ph->p_filesz), 0, ph->p_memsz - ph->p_filesz);
-
 
 #ifdef IA32_PAGE
 			/* Record the program break for future use. */
