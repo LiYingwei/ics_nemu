@@ -19,7 +19,7 @@ int main() {
 	nemu_assert(strcmp(buf, "1\n") == 0);
 
 	sprintf(buf, "%d\n", 2);
-	nemu_assert(strcmp(buf, "2 + 10 = 12\n") == 0);
+	nemu_assert(strcmp(buf, "2\n") == 0);
 
 	sprintf(buf, "%s", "Hello world!\n");
 	nemu_assert(strcmp(buf, "Hello world!\n") == 0);
