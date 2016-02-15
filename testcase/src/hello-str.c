@@ -18,7 +18,7 @@ int main() {
 	sprintf(buf, "%d\n", 1);
 	nemu_assert(strcmp(buf, "1\n") == 0);
 
-	sprintf(buf, "%d + %d = %d\n", 2, 10, 12);
+	sprintf(buf, "%d\n", 2);
 	nemu_assert(strcmp(buf, "2 + 10 = 12\n") == 0);
 
 	sprintf(buf, "%s", "Hello world!\n");
