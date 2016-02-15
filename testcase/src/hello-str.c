@@ -17,7 +17,7 @@ int main() {
 	/*sprintf(buf, "%s", "Hello world!\n");
 	nemu_assert(strcmp(buf, "Hello world!\n") == 0);*/
 
-	sprintf(buf, "%d +\n", 11);
+	sprintf(buf, "%d +\n", 55);
 	nemu_assert(strcmp(buf, "1 +\n") == 0);
 
 	sprintf(buf, "%d + %d = %d\n", 2, 10, 12);
