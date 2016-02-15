@@ -17,7 +17,7 @@ static void do_execute() {
         DONT_TOUCH_MY_EIP = true;
         cpu.eip = op_src->val;
     }
-    else Log("====================================\n");
+    else Log("type = %d\n", op_src->type);
     //else panic("Has not impleament yet TAT\n");
     print_asm_template1();
 }
