@@ -10,13 +10,13 @@
 extern bool DONT_TOUCH_MY_EIP;
 static void do_execute() {
     if(op_src->type == OP_TYPE_IMM){
-        cpu.eip += op_src->val;
+        cpu.eip += (DATA_TYPE_S) (op_src->val);
     }
     else /* op_src->type == OP_TYPE_REG || op_src->type == OP_TYPE_MEM */
     {
         Assert(swaddr_read(cpu.eip, 1) == 0xff, "0xff != indirect");
         DONT_TOUCH_MY_EIP = true;
-        cpu.eip = op_src->val;
+        cpu.eip = (DATA_TYPE) (op_src->val);
     }
     print_asm_template1();
 }
