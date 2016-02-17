@@ -36,7 +36,10 @@ make_helper(rep) {
                 {
                     if(cpu.ZF == 0) break;
                 }
-                else if(cpu.ZF == 1) break;
+                else 
+                {
+                    if(cpu.ZF == 1) break;
+                }
             }
 		}
 		len = 1;
