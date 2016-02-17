@@ -7,3 +7,7 @@ $(FLOAT): $(FLOAT_OBJ)
 
 # TODO: write a rule for generating $(FLOAT_OBJ)
 
+FLOAT_FLAGS := -m32 -fno-builtin -I$(LIB_COMMON_DIR) -c
+
+$(FLOAT_OBJ):
+	$(call make_command,$(CC), $(FLOAT_FLAGS), FLOAT, lib-common/FLOAT.c)

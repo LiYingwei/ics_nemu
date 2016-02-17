@@ -4,6 +4,7 @@
 #include "data-mov/xchg.h"
 #include "data-mov/leave.h"
 #include "data-mov/cltd.h"
+#include "data-mov/cwtl.h"
 #include "data-mov/cmovcc.h"
 
 #include "seg-reg/push.h"
@@ -28,6 +29,7 @@
 #include "logic/xor.h"
 #include "logic/sar.h"
 #include "logic/shl.h"
+#include "logic/shld.h"
 #include "logic/shr.h"
 #include "logic/shrd.h"
 #include "logic/test.h"

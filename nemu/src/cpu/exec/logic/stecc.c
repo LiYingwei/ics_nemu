@@ -34,7 +34,7 @@ make_helper(setcc) {
         case 0x9C: set(SF!=OF);
         case 0x9D: set(SF==OF);
         case 0x9E: set(ZF|(SF!=OF));
-        case 0x9F: set(ZF&(SF!=OF));
+        case 0x9F: set(!ZF&(SF==OF));
         default: assert(0);
     }
     return instr_len;
