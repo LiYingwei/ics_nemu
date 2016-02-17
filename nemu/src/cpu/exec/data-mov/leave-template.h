@@ -3,9 +3,9 @@
 #define instr leave
 
 make_helper(concat3(instr,_,SUFFIX)) {
-    REG(R_ESP) = REG(R_EBP);
-    REG(R_EBP) = INSTR_POP();
+    cpu.esp = cpu.ebp;
+    cpu.ebp = INSTR_POP();
     print_asm("leave");
-    return 1+(DATA_BYTE == 2);
+    return 1;
 }
 #include "cpu/exec/template-end.h"

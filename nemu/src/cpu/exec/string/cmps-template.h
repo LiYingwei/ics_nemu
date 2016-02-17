@@ -9,11 +9,11 @@
 
 #define instr cmps
 make_helper(concat3(instr,_,SUFFIX)) {
-    EFLAGS_ALU(MEM_R(REG(R_ESI)), MEM_R(REG(R_EDI)), 1, 0);
+    EFLAGS_ALU(MEM_R(cpu.esi), MEM_R(cpu.edi), 1, 0);
     DATA_TYPE_S IncDec = 0;
     if(cpu.DF == 0) IncDec = DATA_BYTE; else IncDec = - DATA_BYTE;
-    REG(R_ESI) += IncDec;
-    REG(R_EDI) += IncDec;
+    cpu.esi += IncDec;
+    cpu.edi += IncDec;
     return 1;
 }
 

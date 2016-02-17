@@ -1,10 +1,9 @@
 //
-// Created by lyw on 15-11-15.
+// Created by lyw on 16-2-16.
 //
 
-#ifndef NEMU_CXTX_H
-#define NEMU_CXTX_H
+#ifndef NEMU_CLTD_H
+#define NEMU_CLTD_H
 
-make_helper(cltd);
-
-#endif //NEMU_CXTX_H
+make_helper(cltd_v);
+#endif //NEMU_CLTD_H

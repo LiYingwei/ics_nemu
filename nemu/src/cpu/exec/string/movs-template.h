@@ -8,11 +8,14 @@
 
 #define instr movs
 make_helper(concat3(instr,_,SUFFIX)) {
-    MEM_W(REG(R_EDI), MEM_R(REG(R_ESI)));
+    MEM_W(cpu.edi, MEM_R(cpu.esi));
+    //MEM_W(REG(R_EDI), MEM_R(REG(R_ESI)));
     DATA_TYPE_S IncDec = 0;
     if(cpu.DF == 0) IncDec = DATA_BYTE; else IncDec = - DATA_BYTE;
-    REG(R_ESI) += IncDec;
-    REG(R_EDI) += IncDec;
+    cpu.edi += IncDec;
+    cpu.esi += IncDec;
+
+    print_asm("movs %%es:(%%edi),%%ds:(%%esi)");
     return 1;
 }
 

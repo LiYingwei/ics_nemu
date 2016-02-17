@@ -1,5 +1,4 @@
 #include "common.h"
-#include "memory.h"
 #include <string.h>
 #include <elf.h>
 
@@ -9,6 +8,7 @@
 void ide_read(uint8_t *, uint32_t, uint32_t);
 #else
 void ramdisk_read(uint8_t *, uint32_t, uint32_t);
+void ramdisk_write(uint8_t *, uint32_t, uint32_t);
 #endif
 
 #define STACK_SIZE (1 << 20)
@@ -17,6 +17,7 @@ void create_video_mapping();
 uint32_t get_ucr3();
 
 uint32_t loader() {
+    int i;
 	Elf32_Ehdr *elf;
 	Elf32_Phdr *ph = NULL;
 
@@ -31,25 +32,25 @@ uint32_t loader() {
 	elf = (void*)buf;
 
 	/* TODO: fix the magic number with the correct one */
-	const uint32_t elf_magic = 0xBadC0de;
+	const uint32_t elf_magic = 0x464c457f;
 	uint32_t *p_magic = (void *)buf;
 	nemu_assert(*p_magic == elf_magic);
 
 	/* Load each program segment */
-	panic("please implement me");
-	for(; true; ) {
+	//panic("please implement me");
+	for(i=0; i < elf->e_phnum; i++) {
 		/* Scan the program header table, load each segment into memory */
+        ph = (void *) (buf + elf->e_phoff + i * elf->e_phentsize);
 		if(ph->p_type == PT_LOAD) {
 
 			/* TODO: read the content of the segment from the ELF file 
 			 * to the memory region [VirtAddr, VirtAddr + FileSiz)
 			 */
-			 
-			 
-			/* TODO: zero the memory region 
+            ramdisk_write((uint8_t *) (ELF_OFFSET_IN_DISK + ph->p_offset), ph->p_vaddr, ph->p_filesz);
+			/* TODO: zero the memory region
 			 * [VirtAddr + FileSiz, VirtAddr + MemSiz)
 			 */
-
+            memset((void *) (ph->p_vaddr + ph->p_filesz), 0, ph->p_memsz - ph->p_filesz);
 
 #ifdef IA32_PAGE
 			/* Record the program break for future use. */
