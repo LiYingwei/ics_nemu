@@ -69,6 +69,7 @@ uint32_t cache_read(hwaddr_t addr, size_t len) {
 
     uint8_t temp[2 * BLOCK_SIZE];
 
+    Log("index = %u, blockid = %u", index, hit_index[0]);
     memcpy(temp, cache.set[index].block[hit_index[0]].data, BLOCK_SIZE);
 
     /*if(offset + len > BLOCK_SIZE) {
