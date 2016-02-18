@@ -37,7 +37,7 @@ int cache_check_hit(uint32_t index, uint32_t tag)
 }
 
 uint32_t cache_read(hwaddr_t addr, size_t len) {
-    Log("addr = %X\n", addr);
+    //Log("addr = %X\n", addr);
     int hit_index[2] = {-1, -1};
     int i;
     uint32_t tag = (addr >> (BLOCK_WIDTH + SET_WIDTH)) & TAG_MASK;
