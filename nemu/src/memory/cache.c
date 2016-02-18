@@ -26,12 +26,13 @@ static int get_block(uint32_t way_index) {
 }
 
 uint32_t cache_read(hwaddr_t addr, size_t len) {
-    Log("cache read %x, len = %u\n", addr, (unsigned)len);
     int hit_index[2] = {-1, -1};
     int i;
     uint32_t tag = addr >> (BLOCK_WIDTH + WAY_WIDTH);
     uint32_t way_index = (addr >> BLOCK_WIDTH) & WAY_MASK;
     uint32_t offset = addr & BLOCK_MASK;
+    Log("cache read %x, len = %u\n", addr, (unsigned)len);
+    Log("tag: %x\tindex: %x\toffset: %x\n", tag, way_index, offset);
     for (i = 0; i < WAY_NUM; i++) {
         if (cache.set[way_index].block[i].valid &&
             cache.set[way_index].block[i].tag == tag) {
