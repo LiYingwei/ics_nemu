@@ -12,6 +12,7 @@
 #define WAY_WIDTH 3
 #define ADDR_WIDTH 32
 #define SET_WIDTH (CACHE_WIDTH - WAY_WIDTH - BLOCK_WIDTH)  //7
+#define TAG_WIDTH (ADDR_WIDTH - SET_WIDTH - BLOCK_WIDTH)
 
 #define BLOCK_SIZE (1 << BLOCK_WIDTH) //64
 #define CACHE_SIZE (1 << CACHE_WIDTH) //64*1024
@@ -21,6 +22,7 @@
 //#define WAY_MASK (WAY_NUM - 1)
 #define BLOCK_MASK (BLOCK_SIZE - 1)
 #define SET_MASK (SET_NUM - 1)
+#define TAG_MASK ((1 << TAG_WIDTH) - 1)
 
 typedef struct {
     bool valid;
