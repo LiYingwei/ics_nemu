@@ -25,28 +25,29 @@ static int get_block(uint32_t index) {
     return rand() % WAY_NUM;
 }
 
+static int cache_check_hit(uint32_t index, uint32_t tag)
+{
+    int i;
+    for(i = 0; i < WAY_NUM; i++) {
+        if (cache.set[index].block[i].valid &&
+            cache.set[index].block[i].tag == tag)
+            return i;
+    }
+    return -1;
+}
+
 uint32_t cache_read(hwaddr_t addr, size_t len) {
     int hit_index[2] = {-1, -1};
     int i;
     uint32_t tag = (addr >> (BLOCK_WIDTH + SET_WIDTH)) & TAG_MASK;
     uint32_t index = (addr >> BLOCK_WIDTH) & SET_MASK;
     uint32_t offset = addr & BLOCK_MASK;
-    for (i = 0; i < WAY_NUM; i++) {
-        if (cache.set[index].block[i].valid &&
-            cache.set[index].block[i].tag == tag) {
-            hit_index[0] = i;
-            break;
-        }
 
-        if (offset + len <= BLOCK_SIZE) continue;
+    hit_index[0] = cache_check_hit(index, tag);
+    if(offset + len > BLOCK_SIZE)
+        hit_index[1] = cache_check_hit((index + 1) % SET_NUM, tag);
 
-        if (cache.set[(index + 1) % SET_NUM].block[i].valid &&
-            cache.set[(index + 1) % SET_NUM].block[i].tag == tag) {
-            hit_index[1] = i;
-        }
-    }
-
-    if (1 || hit_index[0] == -1) {
+    if (hit_index[0] == -1) {
         hit_index[0] = get_block(index);
         for (i = 0; i < BLOCK_SIZE; i++)
             cache.set[index].block[hit_index[0]].data[i] =
@@ -54,7 +55,7 @@ uint32_t cache_read(hwaddr_t addr, size_t len) {
         cache.set[index].block[hit_index[0]].valid = true;
         cache.set[index].block[hit_index[0]].tag = tag;
     }
-    if (offset + len > BLOCK_SIZE && (1 || hit_index[1] == -1)) {
+    if (offset + len > BLOCK_SIZE && hit_index[1] == -1) {
         hit_index[1] = get_block((index + 1) % SET_NUM);
         for (i = 0; i < BLOCK_SIZE; i++)
             cache.set[(index + 1) % SET_NUM].block[hit_index[1]].data[i] =
@@ -66,8 +67,36 @@ uint32_t cache_read(hwaddr_t addr, size_t len) {
     uint8_t temp[2 * BLOCK_SIZE];
 
     memcpy(temp, cache.set[index].block[hit_index[0]].data, BLOCK_SIZE);
-    if(offset + len > BLOCK_SIZE) {
+    if (offset + len > BLOCK_SIZE) {
         memcpy(temp + BLOCK_SIZE, cache.set[(index + 1) % SET_NUM].block[hit_index[1]].data, BLOCK_SIZE);
     }
     return unalign_rw(temp + offset, 4);
+}
+
+void cache_write(hwaddr_t addr, size_t len, uint32_t data) {
+    int hit_index[2] = {-1, -1};
+    int i;
+    uint32_t tag = (addr >> (BLOCK_WIDTH + SET_WIDTH)) & TAG_MASK;
+    uint32_t index = (addr >> BLOCK_WIDTH) & SET_MASK;
+    uint32_t offset = addr & BLOCK_MASK;
+
+    hit_index[0] = cache_check_hit(index, tag);
+    if (offset + len > BLOCK_SIZE)
+        hit_index[1] = cache_check_hit((index + 1) % SET_NUM, tag);
+
+    if(hit_index[0] != -1) {
+        for (i = 0; i < len; i++)
+            if (offset + i < BLOCK_SIZE)
+                cache.set[index].block[hit_index[0]].data[offset + i]
+                        = (data >> (i * 8)) & 0xFF;
+    }
+
+    if(offset + len > BLOCK_SIZE && hit_index[1] != -1) {
+        for (i = 0; i < len; i++)
+            if (i + offset >= BLOCK_SIZE)
+                cache.set[(index + 1) % SET_NUM].block[hit_index[1]].data[i + offset - BLOCK_SIZE]
+                        = (data >> (i * 8)) & 0xFF;
+    }
+
+    dram_write(addr, len, data);
 }
