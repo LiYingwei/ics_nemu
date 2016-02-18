@@ -48,7 +48,7 @@ uint32_t cache_read(hwaddr_t addr, size_t len) {
         }*/
     }
 
-    if (hit_index[0] == -1) {
+    if (true || hit_index[0] == -1) {
         hit_index[0] = get_block(index);
         for (i = 0; i < BLOCK_SIZE; i++)
             cache.set[index].block[hit_index[0]].data[i] =
