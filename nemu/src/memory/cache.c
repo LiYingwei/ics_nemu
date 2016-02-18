@@ -48,16 +48,18 @@ uint32_t cache_read(hwaddr_t addr, size_t len) {
     if (hit_index[0] == -1) {
         hit_index[0] = get_block(way_index);
         for (i = 0; i < BLOCK_SIZE; i++)
-            cache.set[way_index].block[hit_index[0]].data[i] =
-                    dram_read(addr - offset + i, 1) & (~0u >> 27);
+            cache.set[way_index].block[hit_index[0]].data[i] = 0;
+                    //dram_read(addr - offset + i, 1) & 0xFF;
         cache.set[way_index].block[hit_index[0]].valid = true;
+        cache.set[way_index].block[hit_index[0]].tag = tag;
     }
     if (offset + len > BLOCK_SIZE && hit_index[1] == -1) {
         hit_index[1] = get_block((way_index + 1) % SET_NUM);
         for (i = 0; i < BLOCK_SIZE; i++)
-            cache.set[(way_index + 1) % SET_NUM].block[hit_index[1]].data[i] =
-                    dram_read(addr - offset + BLOCK_SIZE + i, 1) & (~0u >> 27);
+            cache.set[(way_index + 1) % SET_NUM].block[hit_index[1]].data[i] = 0;
+                    //dram_read(addr - offset + BLOCK_SIZE + i, 1) & 0xFF;
         cache.set[way_index].block[hit_index[1]].valid = true;
+        cache.set[way_index].block[hit_index[1]].tag = tag;
     }
 
     uint8_t temp[2 * BLOCK_SIZE];
