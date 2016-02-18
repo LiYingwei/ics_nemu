@@ -31,13 +31,14 @@ uint32_t cache_read(hwaddr_t addr, size_t len) {
     uint32_t tag = addr >> (BLOCK_WIDTH + WAY_WIDTH);
     uint32_t index = (addr >> BLOCK_WIDTH) & SET_MASK;
     uint32_t offset = addr & BLOCK_MASK;
-    Log("cache read %x, len = %u", addr, (unsigned)len);
-    Log("tag: %u\tindex: %u\toffset: %x", tag, index, offset);
+    //Log("cache read %x, len = %u", addr, (unsigned)len);
+    //Log("tag: %u\tindex: %u\toffset: %x", tag, index, offset);
     for (i = 0; i < WAY_NUM; i++) {
         if (cache.set[index].block[i].valid &&
             cache.set[index].block[i].tag == tag) {
             hit_index[0] = i;
-            Log("hit, blockid = %u", hit_index[0]);
+            break;
+            //Log("hit, blockid = %u", hit_index[0]);
         }
 
         /*if (offset + len <= BLOCK_SIZE) continue;
@@ -55,7 +56,7 @@ uint32_t cache_read(hwaddr_t addr, size_t len) {
                     dram_read(addr - offset + i, 1) & 0xFF;
         cache.set[index].block[hit_index[0]].valid = true;
         cache.set[index].block[hit_index[0]].tag = tag;
-        Log("miss, blockid = %u==============================", hit_index[0]);
+        //Log("miss, blockid = %u==============================", hit_index[0]);
     }
     /*if (offset + len > BLOCK_SIZE && hit_index[1] == -1) {
         hit_index[1] = get_block((index + 1) % SET_NUM);
