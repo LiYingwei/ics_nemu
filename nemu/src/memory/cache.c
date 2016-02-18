@@ -31,13 +31,13 @@ uint32_t cache_read(hwaddr_t addr, size_t len) {
     uint32_t tag = (addr >> (BLOCK_WIDTH + SET_WIDTH)) & TAG_MASK;
     uint32_t index = (addr >> BLOCK_WIDTH) & SET_MASK;
     uint32_t offset = addr & BLOCK_MASK;
-    Log("cache read %x, len = %u", addr, (unsigned)len);
-    Log("tag: %u\tindex: %u\toffset: %x", tag, index, offset);
+    //Log("cache read %x, len = %u", addr, (unsigned)len);
+    //Log("tag: %u\tindex: %u\toffset: %x", tag, index, offset);
     for (i = 0; i < WAY_NUM; i++) {
         if (cache.set[index].block[i].valid &&
             cache.set[index].block[i].tag == tag) {
             hit_index[0] = i;
-            Log("hit, blockid = %u", hit_index[0]);
+            //Log("hit, blockid = %u", hit_index[0]);
             break;
         }
 
@@ -58,24 +58,23 @@ uint32_t cache_read(hwaddr_t addr, size_t len) {
         cache.set[index].block[hit_index[0]].tag = tag;
         //Log("miss, blockid = %u==============================", hit_index[0]);
     }
-    /*if (offset + len > BLOCK_SIZE && hit_index[1] == -1) {
+    if (1 || (offset + len > BLOCK_SIZE && hit_index[1] == -1)) {
         hit_index[1] = get_block((index + 1) % SET_NUM);
         for (i = 0; i < BLOCK_SIZE; i++)
             cache.set[(index + 1) % SET_NUM].block[hit_index[1]].data[i] =
                     dram_read(addr - offset + BLOCK_SIZE + i, 1) & 0xFF;
         cache.set[index].block[hit_index[1]].valid = true;
         cache.set[index].block[hit_index[1]].tag = tag;
-    }*/
+    }
 
     uint8_t temp[2 * BLOCK_SIZE];
 
     //Log("index = %u, blockid = %u", index, hit_index[0]);
     memcpy(temp, cache.set[index].block[hit_index[0]].data, BLOCK_SIZE);
-    for(i = 0; i < BLOCK_SIZE; i++)printf("%02x", cache.set[index].block[hit_index[0]].data[i]);
-    printf("\n");
-    /*if(offset + len > BLOCK_SIZE) {
+    /*for(i = 0; i < BLOCK_SIZE; i++)printf("%02x", cache.set[index].block[hit_index[0]].data[i]);
+    printf("\n");*/
+    if(offset + len > BLOCK_SIZE) {
         memcpy(temp + BLOCK_SIZE, cache.set[index].block[hit_index[1]].data, BLOCK_SIZE);
-    }*/
-
+    }
     return unalign_rw(temp + offset, 4);
 }
