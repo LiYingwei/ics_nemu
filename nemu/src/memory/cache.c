@@ -28,7 +28,7 @@ static int get_block(uint32_t index) {
 uint32_t cache_read(hwaddr_t addr, size_t len) {
     int hit_index[2] = {-1, -1};
     int i;
-    uint32_t tag = (addr >> (BLOCK_WIDTH + WAY_WIDTH)) & TAG_MASK;
+    uint32_t tag = (addr >> (BLOCK_WIDTH + SET_WIDTH)) & TAG_MASK;
     uint32_t index = (addr >> BLOCK_WIDTH) & SET_MASK;
     uint32_t offset = addr & BLOCK_MASK;
     Log("cache read %x, len = %u", addr, (unsigned)len);
