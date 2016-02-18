@@ -56,7 +56,7 @@ uint32_t cache_read(hwaddr_t addr, size_t len) {
                     dram_read(addr - offset + i, 1) & 0xFF;
         cache.set[index].block[hit_index[0]].valid = true;
         cache.set[index].block[hit_index[0]].tag = tag;
-        //Log("miss, blockid = %u==============================", hit_index[0]);
+        Log("miss, blockid = %u==============================", hit_index[0]);
     }
     /*if (offset + len > BLOCK_SIZE && hit_index[1] == -1) {
         hit_index[1] = get_block((index + 1) % SET_NUM);
