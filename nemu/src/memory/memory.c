@@ -9,7 +9,7 @@ uint32_t cache_read(hwaddr_t, size_t);
 uint32_t hwaddr_read(hwaddr_t addr, size_t len) {
 	uint32_t ret = dram_read(addr, len) & (~0u >> ((4 - len) << 3));
     uint32_t test= cache_read(addr, len) & (~0u >> ((4 - len) << 3));
-    printf("%u\n", ret);
+    printf("%02x\n", ret);
     Assert(ret == test ,"%u, %u", ret, test);
     return ret;
 }
