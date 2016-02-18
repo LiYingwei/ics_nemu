@@ -39,4 +39,5 @@ typedef struct {
 }cache_type;
 
 void init_cache();
+int cache_check_hit(uint32_t, uint32_t);
 #endif //NEMU_CACHE_H

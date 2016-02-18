@@ -7,6 +7,7 @@
 #include <readline/readline.h>
 #include <readline/history.h>
 #include <cpu/reg.h>
+#include <memory/cache.h>
 
 
 #define CMD_STATUS_VALID 1
@@ -197,6 +198,26 @@ static int cmd_bt(char *args) {
 
 static int cmd_help(char *args);
 
+extern cache_type cache;
+static int cmd_cache(char *args)
+{
+    uint32_t addr;
+    sscanf(args, "%x", &addr);
+    uint32_t tag = (addr >> (BLOCK_WIDTH + SET_WIDTH)) & TAG_MASK;
+    uint32_t index = (addr >> BLOCK_WIDTH) & SET_MASK;
+    uint32_t offset = addr & BLOCK_MASK;
+    int hit = cache_check_hit(index, tag);
+    if(hit == -1)
+    {
+        printf("not hit\n");
+        return 0;
+    }
+    printf("hit!\n");
+    printf("tag = %0X\nindex = %X\noffset = %X\n", tag, index, offset);
+    printf("blockid = %u\n", hit);
+    printf("datum: %X\n", cache.set[index].block[hit].data[offset]);
+    return 0;
+}
 static struct {
 	char *name;
 	char *description;
@@ -212,7 +233,7 @@ static struct {
 	{ "w", "Set watch point", cmd_w },
 	{ "d", "Delete watch point", cmd_d },
     { "bt", "Print backtrace of all stack frames", cmd_bt},
-
+    { "cache", "Search cache by ADDR", cmd_cache}
 };
 
 #define NR_CMD (sizeof(cmd_table) / sizeof(cmd_table[0]))

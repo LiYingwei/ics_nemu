@@ -25,7 +25,7 @@ static int get_block(uint32_t index) {
     return rand() % WAY_NUM;
 }
 
-static int cache_check_hit(uint32_t index, uint32_t tag)
+int cache_check_hit(uint32_t index, uint32_t tag)
 {
     int i;
     for(i = 0; i < WAY_NUM; i++) {
