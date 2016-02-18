@@ -18,8 +18,9 @@
 #define WAY_NUM (1 << WAY_WIDTH)
 #define SET_NUM (CACHE_SIZE / BLOCK_SIZE / WAY_NUM)
 
-#define WAY_MASK (WAY_NUM - 1)
+//#define WAY_MASK (WAY_NUM - 1)
 #define BLOCK_MASK (BLOCK_SIZE - 1)
+#define SET_MASK (SET_NUM - 1)
 
 typedef struct {
     bool valid;

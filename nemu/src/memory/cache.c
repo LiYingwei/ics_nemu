@@ -17,10 +17,10 @@ void init_cache()
             cache.set[i].block[j].valid = false;
 }
 
-static int get_block(uint32_t way_index) {
+static int get_block(uint32_t index) {
     int i;
     for (i = 0; i < WAY_NUM; i++)
-        if (cache.set[way_index].block[i].valid == 0)
+        if (cache.set[index].block[i].valid == 0)
             return i;
     return rand() % WAY_NUM;
 }
@@ -29,47 +29,47 @@ uint32_t cache_read(hwaddr_t addr, size_t len) {
     int hit_index[2] = {-1, -1};
     int i;
     uint32_t tag = addr >> (BLOCK_WIDTH + WAY_WIDTH);
-    uint32_t way_index = (addr >> BLOCK_WIDTH) & WAY_MASK;
+    uint32_t index = (addr >> BLOCK_WIDTH) & SET_MASK;
     uint32_t offset = addr & BLOCK_MASK;
     Log("cache read %x, len = %u\n", addr, (unsigned)len);
-    Log("tag: %x\tindex: %x\toffset: %x\n", tag, way_index, offset);
+    Log("tag: %x\tindex: %x\toffset: %x\n", tag, index, offset);
     for (i = 0; i < WAY_NUM; i++) {
-        if (cache.set[way_index].block[i].valid &&
-            cache.set[way_index].block[i].tag == tag) {
+        if (cache.set[index].block[i].valid &&
+            cache.set[index].block[i].tag == tag) {
             hit_index[0] = i;
         }
 
         if (offset + len <= BLOCK_SIZE) continue;
 
-        if (cache.set[(way_index + 1) % SET_NUM].block[i].valid &&
-            cache.set[(way_index + 1) % SET_NUM].block[i].tag == tag) {
+        if (cache.set[(index + 1) % SET_NUM].block[i].valid &&
+            cache.set[(index + 1) % SET_NUM].block[i].tag == tag) {
             hit_index[1] = i;
         }
     }
 
     if (hit_index[0] == -1) {
-        hit_index[0] = get_block(way_index);
+        hit_index[0] = get_block(index);
         for (i = 0; i < BLOCK_SIZE; i++)
-            cache.set[way_index].block[hit_index[0]].data[i] =
+            cache.set[index].block[hit_index[0]].data[i] =
                     dram_read(addr - offset + i, 1) & 0xFF;
-        cache.set[way_index].block[hit_index[0]].valid = true;
-        cache.set[way_index].block[hit_index[0]].tag = tag;
+        cache.set[index].block[hit_index[0]].valid = true;
+        cache.set[index].block[hit_index[0]].tag = tag;
     }
     if (offset + len > BLOCK_SIZE && hit_index[1] == -1) {
-        hit_index[1] = get_block((way_index + 1) % SET_NUM);
+        hit_index[1] = get_block((index + 1) % SET_NUM);
         for (i = 0; i < BLOCK_SIZE; i++)
-            cache.set[(way_index + 1) % SET_NUM].block[hit_index[1]].data[i] =
+            cache.set[(index + 1) % SET_NUM].block[hit_index[1]].data[i] =
                     dram_read(addr - offset + BLOCK_SIZE + i, 1) & 0xFF;
-        cache.set[way_index].block[hit_index[1]].valid = true;
-        cache.set[way_index].block[hit_index[1]].tag = tag;
+        cache.set[index].block[hit_index[1]].valid = true;
+        cache.set[index].block[hit_index[1]].tag = tag;
     }
 
     uint8_t temp[2 * BLOCK_SIZE];
 
-    memcpy(temp, cache.set[way_index].block[hit_index[0]].data, BLOCK_SIZE);
+    memcpy(temp, cache.set[index].block[hit_index[0]].data, BLOCK_SIZE);
 
     if(offset + len > BLOCK_SIZE) {
-        memcpy(temp + BLOCK_SIZE, cache.set[way_index].block[hit_index[1]].data, BLOCK_SIZE);
+        memcpy(temp + BLOCK_SIZE, cache.set[index].block[hit_index[1]].data, BLOCK_SIZE);
     }
 
     return unalign_rw(temp + offset, 4);
