@@ -32,7 +32,7 @@ uint32_t cache_read(hwaddr_t addr, size_t len) {
     uint32_t index = (addr >> BLOCK_WIDTH) & SET_MASK;
     uint32_t offset = addr & BLOCK_MASK;
     Log("cache read %x, len = %u\n", addr, (unsigned)len);
-    Log("tag: %x\tindex: %x\toffset: %x\n", tag, index, offset);
+    Log("tag: %u\tindex: %u\toffset: %x\n", tag, index, offset);
     for (i = 0; i < WAY_NUM; i++) {
         if (cache.set[index].block[i].valid &&
             cache.set[index].block[i].tag == tag) {
