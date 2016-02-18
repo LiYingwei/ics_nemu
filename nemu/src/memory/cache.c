@@ -48,6 +48,7 @@ uint32_t cache_read(hwaddr_t addr, size_t len) {
     }
 
     if (hit_index[0] == -1) {
+        Log("miss");
         hit_index[0] = get_block(index);
         for (i = 0; i < BLOCK_SIZE; i++)
             cache.set[index].block[hit_index[0]].data[i] =
