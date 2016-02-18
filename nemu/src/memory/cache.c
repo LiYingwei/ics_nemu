@@ -37,6 +37,7 @@ uint32_t cache_read(hwaddr_t addr, size_t len) {
         if (cache.set[index].block[i].valid &&
             cache.set[index].block[i].tag == tag) {
             hit_index[0] = i;
+            Log("hit, blockid = %u", hit_index[0]);
         }
 
         /*if (offset + len <= BLOCK_SIZE) continue;
@@ -48,13 +49,13 @@ uint32_t cache_read(hwaddr_t addr, size_t len) {
     }
 
     if (hit_index[0] == -1) {
-        Log("miss=========================================");
         hit_index[0] = get_block(index);
         for (i = 0; i < BLOCK_SIZE; i++)
             cache.set[index].block[hit_index[0]].data[i] =
                     dram_read(addr - offset + i, 1) & 0xFF;
         cache.set[index].block[hit_index[0]].valid = true;
         cache.set[index].block[hit_index[0]].tag = tag;
+        Log("miss, blockid = %u", hit_index[0]);
     }
     /*if (offset + len > BLOCK_SIZE && hit_index[1] == -1) {
         hit_index[1] = get_block((index + 1) % SET_NUM);
