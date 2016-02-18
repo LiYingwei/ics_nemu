@@ -58,7 +58,7 @@ uint32_t cache_read(hwaddr_t addr, size_t len) {
         cache.set[index].block[hit_index[0]].tag = tag;
         //Log("miss, blockid = %u==============================", hit_index[0]);
     }
-    if (offset + len > BLOCK_SIZE && (1 || hit_index[1] == -1)) {
+    if (offset + len >= BLOCK_SIZE && (1 || hit_index[1] == -1)) {
         hit_index[1] = get_block((index + 1) % SET_NUM);
         for (i = 0; i < BLOCK_SIZE; i++)
             cache.set[(index + 1) % SET_NUM].block[hit_index[1]].data[i] =
@@ -73,8 +73,8 @@ uint32_t cache_read(hwaddr_t addr, size_t len) {
     memcpy(temp, cache.set[index].block[hit_index[0]].data, BLOCK_SIZE);
     /*for(i = 0; i < BLOCK_SIZE; i++)printf("%02x", cache.set[index].block[hit_index[0]].data[i]);
     printf("\n");*/
-    //if(offset + len > BLOCK_SIZE) {
+    if(offset + len >= BLOCK_SIZE) {
         memcpy(temp + BLOCK_SIZE, cache.set[index].block[hit_index[1]].data, BLOCK_SIZE);
-    //}
+    }
     return unalign_rw(temp + offset, 4);
 }
