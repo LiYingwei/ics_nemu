@@ -11,6 +11,7 @@ void load_elf_tables(int, char *[]);
 void init_regex();
 void init_wp_list();
 void init_ddr3();
+void init_cache();
 
 FILE *log_fp = NULL;
 
@@ -95,6 +96,7 @@ void restart() {
 	 */
 	cpu.EFLAGS= 0x00000002;
 
+    init_cache();
 	/* Initialize DRAM. */
 	init_ddr3();
 }

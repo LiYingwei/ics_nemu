@@ -1,3 +1,4 @@
+#include <memory/cache.h>
 #include "common.h"
 #include "memory/cache.h"
 #include "memory/memory.h"
@@ -5,21 +6,16 @@
 uint32_t dram_read(hwaddr_t, size_t);
 void dram_write(hwaddr_t, size_t, uint32_t);
 
-typedef struct {
-    bool valid;
-    uint32_t tag : (ADDR_WIDTH - (CACHE_WIDTH - BLOCK_WIDTH - WAY_WIDTH));
-    uint8_t data[BLOCK_SIZE];
-}cache_block;
-
-typedef struct {
-    cache_block block[WAY_NUM];
-}cache_set;
-
-typedef struct {
-    cache_set set[SET_NUM];
-}cache_type;
 
 cache_type cache;
+
+void init_cache()
+{
+    int i,j;
+    for(i = 0; i < SET_NUM; i++)
+        for(j = 0; j < WAY_NUM; j++)
+            cache.set[i].block[j].valid = false;
+}
 
 static int get_block(uint32_t way_index) {
     int i;
