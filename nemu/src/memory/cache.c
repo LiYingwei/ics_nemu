@@ -37,7 +37,7 @@ uint32_t cache_read(hwaddr_t addr, size_t len) {
         if (cache.set[index].block[i].valid &&
             cache.set[index].block[i].tag == tag) {
             hit_index[0] = i;
-            Log("hit, blockid = %u==========================", hit_index[0]);
+            Log("hit, blockid = %u", hit_index[0]);
         }
 
         /*if (offset + len <= BLOCK_SIZE) continue;
