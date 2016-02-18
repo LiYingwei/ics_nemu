@@ -71,7 +71,8 @@ uint32_t cache_read(hwaddr_t addr, size_t len) {
 
     Log("index = %u, blockid = %u", index, hit_index[0]);
     memcpy(temp, cache.set[index].block[hit_index[0]].data, BLOCK_SIZE);
-
+    for(i = 0; i < BLOCK_SIZE; i++)printf("%d", cache.set[index].block[hit_index[0]].data[i]);
+    printf("\n");
     /*if(offset + len > BLOCK_SIZE) {
         memcpy(temp + BLOCK_SIZE, cache.set[index].block[hit_index[1]].data, BLOCK_SIZE);
     }*/
