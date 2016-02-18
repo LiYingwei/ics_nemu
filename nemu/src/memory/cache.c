@@ -26,6 +26,7 @@ static int get_block(uint32_t way_index) {
 }
 
 uint32_t cache_read(hwaddr_t addr, size_t len) {
+    Log("cache read %x, len = %u\n", addr, (unsigned)len);
     int hit_index[2] = {-1, -1};
     int i;
     uint32_t tag = addr >> (BLOCK_WIDTH + WAY_WIDTH);
@@ -48,16 +49,16 @@ uint32_t cache_read(hwaddr_t addr, size_t len) {
     if (hit_index[0] == -1) {
         hit_index[0] = get_block(way_index);
         for (i = 0; i < BLOCK_SIZE; i++)
-            cache.set[way_index].block[hit_index[0]].data[i] = 0;
-                    //dram_read(addr - offset + i, 1) & 0xFF;
+            cache.set[way_index].block[hit_index[0]].data[i] =
+                    dram_read(addr - offset + i, 1) & 0xFF;
         cache.set[way_index].block[hit_index[0]].valid = true;
         cache.set[way_index].block[hit_index[0]].tag = tag;
     }
     if (offset + len > BLOCK_SIZE && hit_index[1] == -1) {
         hit_index[1] = get_block((way_index + 1) % SET_NUM);
         for (i = 0; i < BLOCK_SIZE; i++)
-            cache.set[(way_index + 1) % SET_NUM].block[hit_index[1]].data[i] = 0;
-                    //dram_read(addr - offset + BLOCK_SIZE + i, 1) & 0xFF;
+            cache.set[(way_index + 1) % SET_NUM].block[hit_index[1]].data[i] =
+                    dram_read(addr - offset + BLOCK_SIZE + i, 1) & 0xFF;
         cache.set[way_index].block[hit_index[1]].valid = true;
         cache.set[way_index].block[hit_index[1]].tag = tag;
     }
