@@ -1,4 +1,3 @@
-#include <memory/cache2.h>
 #include "common.h"
 #include "memory/cache2.h"
 #include "memory/memory.h"
