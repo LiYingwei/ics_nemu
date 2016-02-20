@@ -32,7 +32,7 @@ make_helper(rep) {
             || ops_decoded.opcode == 0xae   // scasb
             || ops_decoded.opcode == 0xaf)  // scasw
             {
-                if(swaddr_read(eip, 1) == 0xf3)
+                if(instr_fetch(eip, 1) == 0xf3)
                 {
                     if(cpu.ZF == 0) break;
                 }

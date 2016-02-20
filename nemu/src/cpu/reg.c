@@ -10,6 +10,7 @@ const char *regsw[] = {"ax", "cx", "dx", "bx", "sp", "bp", "si", "di"};
 const char *regsb[] = {"al", "cl", "dl", "bl", "ah", "ch", "dh", "bh"};
 const char *regeflags[] = {"cf", "ef_t1", "pf", "ef_t2", "af", "ef_t3", "zf",
                            "sf", "tf", "if", "df", "of", "ipol1", "ipol2", "nt", "ef_t4", "rf", "vm"};
+const char *segsw[] = {"es", "cs", "ss", "ds", "fs", "gs"};
 
 void reg_test() {
 	srand(time(0));

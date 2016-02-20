@@ -150,7 +150,7 @@ static int cmd_x(char *args) {
 			printf("address is out of boundary, maybe expr's inner error or input error\n");
 			return 0;
 		}
-		ret = swaddr_read(addr, 1);
+		ret = swaddr_read(addr, 1, R_DS);
 		printf("%02X%c", ret, (i % 5 == 4 || i == len - 1) ? '\n' : ' ');
 	}
 	return 0;
@@ -183,12 +183,12 @@ static int cmd_bt(char *args) {
     printf("#%d\t0x%x in %s ()\n", index++, cpu.eip, name);
     while(EBP)
     {
-        psf.prev_ebp = swaddr_read(EBP,4);
+        psf.prev_ebp = swaddr_read(EBP,4, R_SS);
         //if(EBP + 4 < HW_MEM_SIZE)
-            psf.ret_addr = swaddr_read(EBP+4,4);
+            psf.ret_addr = swaddr_read(EBP+4,4, R_SS);
         for(i=0;i<4;i++)
             //if(EBP + 8 + i * 4 < HW_MEM_SIZE)
-                psf.args[i] = swaddr_read(EBP+8+i*4,4);
+                psf.args[i] = swaddr_read(EBP+8+i*4,4, R_SS);
         name = getname(psf.ret_addr);
         EBP = psf.prev_ebp;
         if(EBP)printf("#%d\t0x%x in %s ()\n", index++, psf.ret_addr, name);

@@ -262,10 +262,16 @@ uint32_t eval(int p, int q, bool *success) {
                     if(strcmp(buf, regeflags[i]) == 0)
                         return cpu.EFLAGS & (1 << i);
                 }
+                for(i = R_ES; i <= R_GS; i++) {
+                    if(strcmp(buf, segsw[i]) == 0)
+                        return seg_w(i);
+                }
                 if(strcmp(buf, "eip") == 0)
                     return cpu.eip;
                 if(strcmp(buf, "eflags") == 0)
                     return cpu.EFLAGS;
+                if(strcmp(buf, "cro") == 0)
+                    return cpu.CR0;
 
 			default:
 				Assert(0,"tokens[%d].type = %d",p,tokens[p].type);
@@ -289,7 +295,7 @@ uint32_t eval(int p, int q, bool *success) {
 		switch (tokens[op].type) {
 			case UNARY_MINUS: return (uint32_t) -val2;
 			case UNARY_PLUS: return val2;
-			case IND: return swaddr_read(val2, 4);
+			case IND: return swaddr_read(val2, 4, R_DS);
 			case LNOT: return (uint32_t) !val2;
 			case BNOT: return ~val2;
 

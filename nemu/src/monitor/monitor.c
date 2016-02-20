@@ -96,6 +96,13 @@ void restart() {
 	 */
 	cpu.EFLAGS= 0x00000002;
 
+    cpu.CR0 = 0;
+
+    uint32_t descripter_high = 0x000F0000;
+    uint32_t descripter_low = 0x0000FFFF;
+    lnaddr_write((uint32_t)(cpu.GDTR >> 16) + (cpu.cs >> 3) * 8, 4, descripter_low);
+    lnaddr_write((uint32_t)(cpu.GDTR >> 16) + (cpu.cs >> 3) * 8 + 4, 4, descripter_high);
+
     init_cache();
 	/* Initialize DRAM. */
 	init_ddr3();

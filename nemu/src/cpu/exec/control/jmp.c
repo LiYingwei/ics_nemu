@@ -2,6 +2,8 @@
 // Created by lyw on 15-10-21.
 //
 
+#include <cpu/decode/operand.h>
+#include <cpu/reg.h>
 #include "cpu/exec/helper.h"
 
 #define DATA_BYTE 1
@@ -20,3 +22,15 @@
 
 make_helper_v(jmp_si);
 make_helper_v(jmp_rm);
+
+make_helper(ljmp)
+{
+    int len = 1;
+    len += decode_i_l(eip + 1);
+    cpu.eip = op_src->val;
+    len += decode_i_w(eip + len);
+    cpu.cs = op_src->val;
+    DONT_TOUCH_MY_EIP = true;
+    print_asm("ljmp %04x:%08x", cpu.cs, cpu.eip);
+    return len;
+}

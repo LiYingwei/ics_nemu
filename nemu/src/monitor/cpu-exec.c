@@ -69,9 +69,9 @@ void cpu_exec(volatile uint32_t n) {
         if(!DONT_TOUCH_MY_EIP)cpu.eip += instr_len;
         if(CALL_CHANGE_PUSH_LATER)
         {
-            uint32_t retaddr = swaddr_read(cpu.esp, 4);
+            uint32_t retaddr = swaddr_read(cpu.esp, 4, R_SS);
             retaddr += instr_len;
-            swaddr_write(cpu.esp, 4, retaddr);
+            swaddr_write(cpu.esp, 4, retaddr, R_SS);
             CALL_CHANGE_PUSH_LATER= false;
         }
 

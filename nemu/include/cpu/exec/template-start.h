@@ -28,8 +28,8 @@
 #define REG(index) concat(reg_, SUFFIX) (index)
 #define REG_NAME(index) concat(regs, SUFFIX) [index]
 
-#define MEM_R(addr) swaddr_read(addr, DATA_BYTE)
-#define MEM_W(addr, data) swaddr_write(addr, DATA_BYTE, data)
+#define MEM_R(addr, sreg) swaddr_read(addr, DATA_BYTE, sreg)
+#define MEM_W(addr, data, sreg) swaddr_write(addr, DATA_BYTE, data, sreg)
 
 #define OPERAND_W(op, src) concat(write_operand_, SUFFIX) (op, src)
 
@@ -70,7 +70,7 @@
 
 #define INSTR_POP() \
 ({ \
-    DATA_TYPE ret = MEM_R(cpu.esp); \
+    DATA_TYPE ret = MEM_R(cpu.esp, R_SS); \
     cpu.esp += DATA_BYTE; \
     ret; \
 })
@@ -78,7 +78,7 @@
 #define INSTR_PUSH(val) \
 do{ \
     cpu.esp -= DATA_BYTE; \
-    MEM_W(cpu.esp, val); \
+    MEM_W(cpu.esp, val, R_SS); \
 }while(0)
 
 #define EFLAGS_UPDATE_LOGIC(val) \

@@ -1,3 +1,5 @@
+#include <cpu/reg.h>
+#include <cpu/decode/operand.h>
 #include "cpu/exec/helper.h"
 
 #define DATA_BYTE 1
@@ -22,3 +24,27 @@ make_helper_v(mov_a2moffs)
 make_helper_v(mov_moffs2a)
 make_helper_v(movsx_rm2r)
 make_helper_v(movzx_rm2r)
+
+make_helper(mov_cr2r)
+{
+    int len = decode_rm_l(eip + 1);
+    reg_l(op_src->reg) = cpu.CR0;
+    print_asm("mov cr0, %s", op_src->str);
+    return len + 1;
+}
+
+make_helper(mov_r2cr)
+{
+    int len = decode_rm_l(eip + 1);
+    cpu.CR0 = reg_l(op_src->reg);
+    print_asm("mov %s, cr0", op_src->str);
+    return len + 1;
+}
+
+make_helper(mov_rm2sreg)
+{
+    int len = decode_rm2r_w(eip + 1);
+    seg_w(op_dest->reg) = (uint16_t) op_src->val;
+    print_asm("movw %s, %%%s", op_src->str, segsw[op_dest->reg]);
+    return len + 1;
+}
