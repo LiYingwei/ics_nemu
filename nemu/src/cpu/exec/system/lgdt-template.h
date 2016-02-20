@@ -19,6 +19,7 @@ static void do_execute() {
 #endif
     //print_asm("lgdt 0x%012lx", (uint64_t)cpu.GDTR);
     print_asm_template1();
+    Log("gdtr = %lu", (uint64_t) cpu.GDTR);
 }
 
 make_instr_helper(rm)
