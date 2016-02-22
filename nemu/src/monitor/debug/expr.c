@@ -272,6 +272,8 @@ uint32_t eval(int p, int q, bool *success) {
                     return cpu.EFLAGS;
                 if(strcmp(buf, "cro") == 0)
                     return cpu.CR0;
+                if(strcmp(buf, "crE") == 0)
+                    return cpu.CR3;
 
 			default:
 				Assert(0,"tokens[%d].type = %d",p,tokens[p].type);

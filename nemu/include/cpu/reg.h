@@ -74,16 +74,28 @@ typedef struct {
             uint32_t task_switched       : 1;
             uint32_t extension_type      : 1;
             uint32_t numeric_error       : 1;
-            uint32_t pad0                : 10;
+            uint32_t CR0_pad0            : 10;
             uint32_t write_protect       : 1;
-            uint32_t pad1                : 1;
+            uint32_t CR0_pad1            : 1;
             uint32_t alignment_mask      : 1;
-            uint32_t pad2                : 10;
+            uint32_t CR0_pad2            : 10;
             uint32_t no_write_through    : 1;
             uint32_t cache_disable       : 1;
             uint32_t paging              : 1;
         };
         uint32_t CR0;
+    };
+
+    /* the Control Register 3 (physical address of page directory) */
+    union {
+        struct {
+            uint32_t CR3_pad0            : 3;
+            uint32_t page_write_through  : 1;
+            uint32_t page_cache_disable  : 1;
+            uint32_t CR3_pad1            : 7;
+            uint32_t page_directory_base : 20;
+        };
+        uint32_t CR3;
     };
 
 } CPU_state;
