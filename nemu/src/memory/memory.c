@@ -1,4 +1,5 @@
 #include <cpu/reg.h>
+#include "cpu/mmu.h"
 #include "common.h"
 
 uint32_t dram_read(hwaddr_t, size_t);
@@ -21,12 +22,42 @@ void hwaddr_write(hwaddr_t addr, size_t len, uint32_t data) {
     cache_write(addr, len, data);
 }
 
+hwaddr_t page_translate(lnaddr_t addr)
+{
+    //if(cpu.paging == 1 || cpu.protect_enable != 1) printf("PE = %d, PG = %d\n", cpu.protect_enable, cpu.paging);
+    if(cpu.protect_enable != 1 || cpu.paging !=1) return addr;
+    PDE dir_entry;
+    dir_entry.val = hwaddr_read(((uint32_t)cpu.page_directory_base << 12) + (addr >> 22) * 4, 4);
+    assert(dir_entry.present);
+    PTE page_entry;
+    page_entry.val = hwaddr_read(((uint32_t)dir_entry.page_frame << 12) + ((addr >> 12) & 0x3FF) * 4, 4);
+    assert(page_entry.present);
+    hwaddr_t ret = ((uint32_t)page_entry.page_frame << 12) + (addr & 0xFFF);
+    return ret;
+}
+
 uint32_t lnaddr_read(lnaddr_t addr, size_t len) {
-	return hwaddr_read(addr, len);
+    assert(len == 1 || len == 2 || len == 4);
+    if ((addr & 0xFFF) + len > 0xFFF + 1) { /*data cross the page boundary*/
+        /* this is a special case, you can handle it later. */
+        assert(0);
+    }
+    else {
+        hwaddr_t hwaddr = page_translate(addr);
+        return hwaddr_read(hwaddr, len);
+    }
 }
 
 void lnaddr_write(lnaddr_t addr, size_t len, uint32_t data) {
-	hwaddr_write(addr, len, data);
+    assert(len == 1 || len == 2 || len == 4);
+    if ((addr & 0xFFF) + len > 0xFFF + 1) { /*data cross the page boundary*/
+        /* this is a special case, you can handle it later. */
+        assert(0);
+    }
+    else {
+        hwaddr_t hwaddr = page_translate(addr);
+        hwaddr_write(hwaddr, len, data);
+    }
 }
 
 static lnaddr_t seg_translate(swaddr_t addr, size_t len, uint8_t sreg)

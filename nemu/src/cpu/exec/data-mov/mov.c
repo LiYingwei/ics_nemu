@@ -1,6 +1,8 @@
 #include <cpu/reg.h>
 #include <cpu/decode/operand.h>
+#include <cpu/decode/modrm.h>
 #include "cpu/exec/helper.h"
+#include "cpu/decode/modrm.h"
 
 #define DATA_BYTE 1
 #include "mov-template.h"
@@ -27,17 +29,39 @@ make_helper_v(movzx_rm2r)
 
 make_helper(mov_cr2r)
 {
-    int len = decode_rm_l(eip + 1);
-    reg_l(op_src->reg) = cpu.CR0;
-    print_asm("mov cr0, %s", op_src->str);
+    op_dest->size = 4;
+    int len = read_ModR_M(eip + 1, op_dest, op_src);
+    if(op_src->reg == 0)
+    {
+        reg_l(op_dest->reg) = cpu.CR0;
+        strcpy(op_src->str, "%cr0");
+    }
+    else
+    {
+        assert(op_src->reg == 3);
+        reg_l(op_dest->reg) = cpu.CR3;
+        strcpy(op_src->str, "%cr3");
+    }
+    print_asm("mov %s, %s", op_src->str, regsl[op_dest->reg]);
     return len + 1;
 }
 
 make_helper(mov_r2cr)
 {
-    int len = decode_rm_l(eip + 1);
-    cpu.CR0 = reg_l(op_src->reg);
-    print_asm("mov %s, cr0", op_src->str);
+    op_src->size = 4;
+    int len = read_ModR_M(eip + 1, op_src, op_dest);
+    if(op_dest->reg == 0)
+    {
+        cpu.CR0 = op_src->val;
+        strcpy(op_dest->str, "%cr0");
+    }
+    else // op_dest->reg == 3
+    {
+        assert(op_dest->reg == 3);
+        cpu.CR3 = op_src->val;
+        strcpy(op_dest->str, "%cr3");
+    }
+    print_asm("mov %s, %s", op_src->str, op_dest->str);
     return len + 1;
 }
 
