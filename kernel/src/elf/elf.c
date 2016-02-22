@@ -48,12 +48,12 @@ uint32_t loader() {
 			/* TODO: read the content of the segment from the ELF file 
 			 * to the memory region [VirtAddr, VirtAddr + FileSiz)
 			 */
-            //ramdisk_write((uint8_t *) (ELF_OFFSET_IN_DISK + ph->p_offset), ph->p_vaddr, ph->p_filesz);
-            ramdisk_write((uint8_t *) (ELF_OFFSET_IN_DISK + ph->p_offset), p_hwaddr, ph->p_filesz);
+            ramdisk_write((uint8_t *) (ELF_OFFSET_IN_DISK + ph->p_offset), ph->p_vaddr, ph->p_filesz);
+            //ramdisk_write((uint8_t *) (ELF_OFFSET_IN_DISK + ph->p_offset), p_hwaddr, ph->p_filesz);
 			/* TODO: zero the memory region
 			 * [VirtAddr + FileSiz, VirtAddr + MemSiz)
 			 */
-            memset((void *) (p_hwaddr + ph->p_filesz), 0, ph->p_memsz - ph->p_filesz);
+            memset((void *) (ph->p_vaddr + ph->p_filesz), 0, ph->p_memsz - ph->p_filesz);
 
 #ifdef IA32_PAGE
 			/* Record the program break for future use. */
