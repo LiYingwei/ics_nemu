@@ -47,7 +47,10 @@ make_helper(mov_rm2sreg)
     seg_w(op_dest->reg) = (uint16_t) op_src->val;
     uint32_t descriptor_low = lnaddr_read((op_dest->reg>>3) * 8 + (uint32_t)(cpu.GDTR >> 16), 4);
     uint32_t descriptor_high = lnaddr_read((op_dest->reg>>3) * 8 + (uint32_t)(cpu.GDTR >> 16) + 4, 4);
-    cpu.spr[op_dest->reg]._64 = ((uint64_t)descriptor_high << 32ULL) + descriptor_low;
+    cpu.spr[op_dest->reg]._32[0] = (descriptor_low >> 16)
+                                   + ((descriptor_high & 0xFF) << 16)
+                                   + (descriptor_high & 0xFF000000);
+    cpu.spr[op_dest->reg]._32[1] = (((descriptor_low & 0xFFFF) + (descriptor_high & 0xF0000)) << 12) | 0xFFF;
     print_asm("movw %s, %%%s", op_src->str, segsw[op_dest->reg]);
     return len + 1;
 }
