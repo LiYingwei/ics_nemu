@@ -38,7 +38,7 @@ uint32_t loader() {
 
 	/* Load each program segment */
 	//panic("please implement me");
-	nemu_assert(elf->e_phnum ==3);
+	nemu_assert(elf->e_phnum ==2);
 	for(i=0; i < elf->e_phnum; i++) {
 		
 		/* Scan the program header table, load each segment into memory */
