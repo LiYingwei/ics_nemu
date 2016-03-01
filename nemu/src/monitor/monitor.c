@@ -89,6 +89,8 @@ void restart() {
 	/* Set the initial instruction pointer. */
 	cpu.eip = ENTRY_START;
 
+    cpu.cs_cache = 0x000F00000000FFFFULL;
+
 	/*
 	 * First, the register EFLAGS is set to a predefined value of 0x00000002.
 	 * https://www.freebsd.org/doc/en_US.ISO8859-1/books/arch-handbook/boot-kernel.html

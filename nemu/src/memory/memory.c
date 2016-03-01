@@ -38,11 +38,11 @@ static lnaddr_t seg_translate(swaddr_t addr, size_t len, uint8_t sreg)
     }*/
     uint16_t SR = seg_w(sreg);
     Assert((SR >> 3) * 8 < (cpu.GDTR & 0xFFFF), "段选择符索引越界");
-    uint32_t descriptor_low = lnaddr_read((SR>>3) * 8 + (uint32_t)(cpu.GDTR >> 16), 4);
-    uint32_t descriptor_high = lnaddr_read((SR>>3) * 8 + (uint32_t)(cpu.GDTR >> 16) + 4, 4);
-    uint32_t base_addr = (descriptor_low >> 16)
-                         + ((descriptor_high & 0xFF) << 16)
-                         + (descriptor_high & 0xFF000000);
+    //uint32_t descriptor_low = lnaddr_read((SR>>3) * 8 + (uint32_t)(cpu.GDTR >> 16), 4);
+    //uint32_t descriptor_high = lnaddr_read((SR>>3) * 8 + (uint32_t)(cpu.GDTR >> 16) + 4, 4);
+    uint64_t SR_cache = cpu.spr[sreg]._64;
+    uint32_t base_addr = (uint32_t)(((SR_cache >> 16)& 0xFFFFFF)
+                         + ((SR_cache >> 32) & 0xFF000000));
     //uint32_t limit = (descriptor_low & 0xFFFF) + (descriptor_high & 0xF0000);
     //printf("base_addr = 0x%u, addr = 0x%u, rseg = %s\n", base_addr, addr, segsw[sreg]);
     return base_addr + addr;

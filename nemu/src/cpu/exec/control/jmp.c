@@ -30,6 +30,10 @@ make_helper(ljmp)
     cpu.eip = op_src->val;
     len += decode_i_w(eip + len);
     cpu.cs = op_src->val;
+    uint16_t SR = R_CS;
+    uint32_t descriptor_low = lnaddr_read((SR>>3) * 8 + (uint32_t)(cpu.GDTR >> 16), 4);
+    uint32_t descriptor_high = lnaddr_read((SR>>3) * 8 + (uint32_t)(cpu.GDTR >> 16) + 4, 4);
+    cpu.cs_cache = ((uint64_t)descriptor_high << 32ULL) + descriptor_low;
     DONT_TOUCH_MY_EIP = true;
     print_asm("ljmp %04x:%08x", cpu.cs, cpu.eip);
     return len;

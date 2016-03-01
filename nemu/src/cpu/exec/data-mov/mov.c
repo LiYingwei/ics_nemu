@@ -45,6 +45,9 @@ make_helper(mov_rm2sreg)
 {
     int len = decode_rm2r_w(eip + 1);
     seg_w(op_dest->reg) = (uint16_t) op_src->val;
+    uint32_t descriptor_low = lnaddr_read((op_dest->reg>>3) * 8 + (uint32_t)(cpu.GDTR >> 16), 4);
+    uint32_t descriptor_high = lnaddr_read((op_dest->reg>>3) * 8 + (uint32_t)(cpu.GDTR >> 16) + 4, 4);
+    cpu.spr[op_dest->reg]._64 = ((uint64_t)descriptor_high << 32ULL) + descriptor_low;
     print_asm("movw %s, %%%s", op_src->str, segsw[op_dest->reg]);
     return len + 1;
 }
