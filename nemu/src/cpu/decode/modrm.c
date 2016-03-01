@@ -2,27 +2,6 @@
 #include "cpu/decode/modrm.h"
 #include "cpu/helper.h"
 
-static int get_disp_size(swaddr_t eip, ModR_M *m) {
-    int disp_size = 4;
-    int base_reg;
-
-    if(m->R_M == R_ESP) {
-        SIB s;
-        s.val = instr_fetch(eip + 1, 1);
-        base_reg = s.base;
-    }
-    else {
-        /* no SIB */
-        base_reg = m->R_M;
-    }
-
-    if(m->mod == 0) {
-        if(base_reg != R_EBP) { disp_size = 0; }
-    }
-    else if(m->mod == 1) { disp_size = 1; }
-    return disp_size;
-}
-
 int load_addr(swaddr_t eip, ModR_M *m, Operand *rm) {
 	assert(m->mod != 3);
 
@@ -64,6 +43,9 @@ int load_addr(swaddr_t eip, ModR_M *m, Operand *rm) {
 
 	if(base_reg != -1) {
 		addr += reg_l(base_reg);
+        if(base_reg == R_EBP || base_reg == R_ESP)
+            rm->sreg = R_SS;
+        else rm->sreg = R_DS;
 	}
 
 	if(index_reg != -1) {
@@ -130,9 +112,7 @@ int read_ModR_M(swaddr_t eip, Operand *rm, Operand *reg) {
 		return 1;
 	}
 	else {
-        int disp_size = get_disp_size(eip, &m);
         int instr_len = load_addr(eip, &m, rm);
-        rm->sreg = disp_size == 0 ? R_SS : R_DS;
         rm->val = swaddr_read(rm->addr, rm->size, rm->sreg);
         return instr_len;
     }
