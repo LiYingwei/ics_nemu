@@ -32,11 +32,15 @@ typedef struct {
     };
 
     union {
-        union {
+        struct {
             uint16_t _16;
+            uint32_t _32[2];
         }spr[6];
         struct {
-            uint16_t es, cs, ss, ds, fs, gs;
+            uint16_t es; uint32_t es_cache_base; uint32_t es_cache_limit;
+            uint16_t cs; uint32_t cs_cache_base; uint32_t cs_cache_limit;
+            uint16_t ss; uint32_t ss_cache_base; uint32_t ss_cache_limit;
+            uint16_t ds; uint32_t ds_cache_base; uint32_t ds_cache_limit;
         };
     };
 
