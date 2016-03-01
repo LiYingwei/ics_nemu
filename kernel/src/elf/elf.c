@@ -62,7 +62,7 @@ uint32_t loader() {
 			if(brk < new_brk) { brk = new_brk; }
 #endif
 		}
-	}set_bp();
+	}//set_bp();
 
 	volatile uint32_t entry = elf->e_entry;
 
