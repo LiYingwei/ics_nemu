@@ -10,12 +10,12 @@ void cache_write(hwaddr_t, size_t, uint32_t);
 /* Memory accessing interfaces */
 
 uint32_t hwaddr_read(hwaddr_t addr, size_t len) {
-	uint32_t ret = dram_read(addr, len) & (~0u >> ((4 - len) << 3));
-    uint32_t test= cache_read(addr, len) & (~0u >> ((4 - len) << 3));
+	//uint32_t ret = dram_read(addr, len) & (~0u >> ((4 - len) << 3));
+    //uint32_t test= cache_read(addr, len) & (~0u >> ((4 - len) << 3));
     //printf("%02x\n", ret);
-    Assert(ret == test ,"%u, %u(addr = %08x)", ret, test, addr);
-    return ret;
-    //return cache_read(addr, len) & (~0u >> ((4 - len) << 3));
+    //Assert(ret == test ,"%u, %u(addr = %08x)", ret, test, addr);
+    //return ret;
+    return cache_read(addr, len) & (~0u >> ((4 - len) << 3));
 }
 
 void hwaddr_write(hwaddr_t addr, size_t len, uint32_t data) {
