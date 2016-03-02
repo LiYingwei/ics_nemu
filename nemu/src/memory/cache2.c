@@ -18,6 +18,7 @@ void init_cache2()
 
 static void write_back(uint32_t index, uint32_t blockid)
 {
+    assert(0);
     int offset;
     for(offset = 0; offset < BLOCK2_SIZE; offset += 4) {
         uint32_t tag = cache2.set[index].block[blockid].tag;
@@ -34,6 +35,7 @@ static void write_back(uint32_t index, uint32_t blockid)
 }
 
 static int get_block(uint32_t index) {
+    assert(0);
     int i;
     for (i = 0; i < WAY2_NUM; i++)
         if (cache2.set[index].block[i].valid == 0)
@@ -48,6 +50,7 @@ static int get_block(uint32_t index) {
 
 int cache2_check_hit(uint32_t index, uint32_t tag)
 {
+    assert(0);
     int i;
     for(i = 0; i < WAY2_NUM; i++) {
         if (cache2.set[index].block[i].valid &&
@@ -58,6 +61,7 @@ int cache2_check_hit(uint32_t index, uint32_t tag)
 }
 
 uint32_t cache2_read(hwaddr_t addr, size_t len) {
+    assert(0);
     //Log("addr = %X\n", addr);
     int hit_index[2] = {-1, -1};
     int i;
@@ -98,6 +102,7 @@ uint32_t cache2_read(hwaddr_t addr, size_t len) {
 }
 
 void cache2_write(hwaddr_t addr, size_t len, uint32_t data) {
+    assert(0);
     int hit_index[2] = {-1, -1};
     int i;
     uint32_t tag = (addr >> (BLOCK2_WIDTH + SET2_WIDTH)) & TAG2_MASK;
