@@ -48,7 +48,6 @@ static int get_block(uint32_t index) {
 
 int cache2_check_hit(uint32_t index, uint32_t tag)
 {
-    assert(0);
     int i;
     for(i = 0; i < WAY2_NUM; i++) {
         if (cache2.set[index].block[i].valid &&
