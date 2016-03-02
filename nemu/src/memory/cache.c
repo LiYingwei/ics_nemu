@@ -1,11 +1,11 @@
 #include "common.h"
 #include "memory/cache.h"
-//#include "memory/cache2.h"
+#include "memory/cache2.h"
 #include "memory/memory.h"
 
 cache_type cache;
-uint32_t dram_read(hwaddr_t, size_t);
-void dram_write(hwaddr_t, size_t, uint32_t);
+//uint32_t dram_read(hwaddr_t, size_t);
+//void dram_write(hwaddr_t, size_t, uint32_t);
 
 void init_cache()
 {
@@ -50,7 +50,7 @@ uint32_t cache_read(hwaddr_t addr, size_t len) {
         hit_index[0] = get_block(index);
         for (i = 0; i < BLOCK_SIZE; i++)
             cache.set[index].block[hit_index[0]].data[i] =
-                    dram_read(addr - offset + i, 1) & 0xFF;
+                    cache2_read(addr - offset + i, 1) & 0xFF;
         cache.set[index].block[hit_index[0]].valid = true;
         cache.set[index].block[hit_index[0]].tag = tag;
     }
@@ -59,7 +59,7 @@ uint32_t cache_read(hwaddr_t addr, size_t len) {
         hit_index[1] = get_block((index + 1) % SET_NUM);
         for (i = 0; i < BLOCK_SIZE; i++)
             cache.set[(index + 1) % SET_NUM].block[hit_index[1]].data[i] =
-                    dram_read(addr - offset + BLOCK_SIZE + i, 1) & 0xFF;
+                    cache2_read(addr - offset + BLOCK_SIZE + i, 1) & 0xFF;
         cache.set[(index + 1) % SET_NUM].block[hit_index[1]].valid = true;
         cache.set[(index + 1) % SET_NUM].block[hit_index[1]].tag = tag;
     }
@@ -100,5 +100,5 @@ void cache_write(hwaddr_t addr, size_t len, uint32_t data) {
 
     //Log("addr = %X, tag = %d index = %d offset = %X", addr, tag, index, offset);
     //Log("blockid = %d", hit_index[0]);
-    dram_write(addr, len, data);
+    cache2_write(addr, len, data);
 }

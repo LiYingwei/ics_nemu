@@ -18,7 +18,6 @@ void init_cache2()
 
 static void write_back(uint32_t index, uint32_t blockid)
 {
-    assert(0);
     int offset;
     for(offset = 0; offset < BLOCK2_SIZE; offset += 4) {
         uint32_t tag = cache2.set[index].block[blockid].tag;
@@ -35,7 +34,6 @@ static void write_back(uint32_t index, uint32_t blockid)
 }
 
 static int get_block(uint32_t index) {
-    assert(0);
     int i;
     for (i = 0; i < WAY2_NUM; i++)
         if (cache2.set[index].block[i].valid == 0)
@@ -61,7 +59,6 @@ int cache2_check_hit(uint32_t index, uint32_t tag)
 }
 
 uint32_t cache2_read(hwaddr_t addr, size_t len) {
-    assert(0);
     //Log("addr = %X\n", addr);
     int hit_index[2] = {-1, -1};
     int i;
@@ -87,9 +84,9 @@ uint32_t cache2_read(hwaddr_t addr, size_t len) {
         for (i = 0; i < BLOCK2_SIZE; i++)
             cache2.set[(index + 1) % SET2_NUM].block[hit_index[1]].data[i] =
                     dram_read(addr - offset + BLOCK2_SIZE + i, 1) & 0xFF;
-        cache2.set[index].block[hit_index[1]].valid = true;
-        cache2.set[index].block[hit_index[1]].tag = tag;
-        cache2.set[index].block[hit_index[1]].dirty = false;
+        cache2.set[(index + 1) % SET_NUM].block[hit_index[1]].valid = true;
+        cache2.set[(index + 1) % SET_NUM].block[hit_index[1]].tag = tag;
+        cache2.set[(index + 1) % SET_NUM].block[hit_index[1]].dirty = false;
     }
 
     uint8_t temp[2 * BLOCK2_SIZE];
@@ -102,7 +99,6 @@ uint32_t cache2_read(hwaddr_t addr, size_t len) {
 }
 
 void cache2_write(hwaddr_t addr, size_t len, uint32_t data) {
-    assert(0);
     int hit_index[2] = {-1, -1};
     int i;
     uint32_t tag = (addr >> (BLOCK2_WIDTH + SET2_WIDTH)) & TAG2_MASK;
