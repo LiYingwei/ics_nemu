@@ -98,7 +98,7 @@ void cache_write(hwaddr_t addr, size_t len, uint32_t data) {
                         = (data >> (i * 8)) & 0xFF;
     }
 
-    Log("addr = %X, tag = %d index = %d offset = %X", addr, tag, index, offset);
-    Log("blockid = %d", hit_index[0]);
+    //Log("addr = %X, tag = %d index = %d offset = %X", addr, tag, index, offset);
+    //Log("blockid = %d", hit_index[0]);
     dram_write(addr, len, data);
 }
