@@ -54,7 +54,7 @@ uint32_t cache_read(hwaddr_t addr, size_t len) {
         cache.set[index].block[hit_index[0]].valid = true;
         cache.set[index].block[hit_index[0]].tag = tag;
     }
-    Log("blockid = %d", hit_index[0]);
+    else Log("blockid = %d", hit_index[0]);
     if (offset + len > BLOCK_SIZE && hit_index[1] == -1) {
         hit_index[1] = get_block((index + 1) % SET_NUM);
         for (i = 0; i < BLOCK_SIZE; i++)
