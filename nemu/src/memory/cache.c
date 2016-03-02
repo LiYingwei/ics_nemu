@@ -35,7 +35,7 @@ int cache_check_hit(uint32_t index, uint32_t tag)
 }
 
 uint32_t cache_read(hwaddr_t addr, size_t len) {
-    Log("addr = %X\n", addr);
+    Log("addr = %X", addr);
     int hit_index[2] = {-1, -1};
     int i;
     uint32_t tag = (addr >> (BLOCK_WIDTH + SET_WIDTH)) & TAG_MASK;
@@ -54,7 +54,7 @@ uint32_t cache_read(hwaddr_t addr, size_t len) {
         cache.set[index].block[hit_index[0]].valid = true;
         cache.set[index].block[hit_index[0]].tag = tag;
     }
-    Log("blockid = %d\n", hit_index[0]);
+    Log("blockid = %d", hit_index[0]);
     if (offset + len > BLOCK_SIZE && hit_index[1] == -1) {
         hit_index[1] = get_block((index + 1) % SET_NUM);
         for (i = 0; i < BLOCK_SIZE; i++)
