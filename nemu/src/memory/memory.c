@@ -28,13 +28,12 @@ hwaddr_t page_translate(lnaddr_t addr)
     if(cpu.protect_enable != 1 || cpu.paging !=1) return addr;
     PDE dir_entry;
     dir_entry.val = hwaddr_read(((uint32_t)cpu.page_directory_base << 12) + (addr >> 22) * 4, 4);
-    Log("addr = %08x", addr);
     Assert(dir_entry.present, "addr = %08x", addr);
     PTE page_entry;
     page_entry.val = hwaddr_read(((uint32_t)dir_entry.page_frame << 12) + ((addr >> 12) & 0x3FF) * 4, 4);
     assert(page_entry.present);
     hwaddr_t ret = ((uint32_t)page_entry.page_frame << 12) + (addr & 0xFFF);
-    //Log("lnaddr_t: %08X, hwaddr_t: %08X", addr, ret);
+    Log("lnaddr_t: %08X, hwaddr_t: %08X", addr, ret);
     return ret;
 }
 
