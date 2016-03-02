@@ -40,7 +40,7 @@ uint32_t cache_read(hwaddr_t addr, size_t len) {
     uint32_t tag = (addr >> (BLOCK_WIDTH + SET_WIDTH)) & TAG_MASK;
     uint32_t index = (addr >> BLOCK_WIDTH) & SET_MASK;
     uint32_t offset = addr & BLOCK_MASK;
-    Log("addr = %X, tag = %d index = %d offset = %X\n", addr, tag, index, offset);
+    Log("addr = %X, tag = %d index = %d offset = %X", addr, tag, index, offset);
 
     hit_index[0] = cache_check_hit(index, tag);
     if(offset + len > BLOCK_SIZE)
