@@ -21,7 +21,7 @@ void create_video_mapping() {
     int i;
     for(i = 0; i < (SCR_SIZE / PAGE_SIZE) + (SCR_SIZE % PAGE_SIZE != 0); i++)
     {
-        updir->val = make_pde(&video[i] - KOFFSET);
+        updir->val = make_pde(va_to_pa(&video[i]));
         video[i].val = make_pte(VMEM_ADDR + i * PAGE_SIZE);
         updir++;
     }
