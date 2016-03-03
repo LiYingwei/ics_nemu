@@ -30,6 +30,8 @@ jmp_buf jbuf;
 make_helper(int_i_b) {
     int len = decode_i_b(eip + 1);
     raise_intr((uint8_t)op_src->val);
+    printf("hehe\n");
     setjmp(jbuf);
+    printf("hah\n");
     return len + 1;
 }
