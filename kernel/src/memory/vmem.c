@@ -19,11 +19,10 @@ void create_video_mapping() {
 	 */
     PDE* updir = get_updir() + (VMEM_ADDR >> 20);
     int i;
+    updir->val = make_pde(va_to_pa(&video[0]));
     for(i = 0; i < (SCR_SIZE / PAGE_SIZE) + (SCR_SIZE % PAGE_SIZE != 0); i++)
     {
-        updir->val = make_pde(va_to_pa(&video[0]));
         video[i].val = make_pte(VMEM_ADDR + i * PAGE_SIZE);
-        updir++;
     }
 	//panic("please implement me");
 }
