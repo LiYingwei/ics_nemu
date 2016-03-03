@@ -26,10 +26,9 @@ make_helper(lea) {
 	print_asm("leal %s,%%%s", op_src->str, regsl[m.reg]);
 	return 1 + len;
 }
-jmp_buf jbuf;
 make_helper(int_i_b) {
+    printf("ha");
     int len = decode_i_b(eip + 1);
-    int val = setjmp(jbuf);
-    if(val == 0)raise_intr((uint8_t)op_src->val);
+    raise_intr((uint8_t)op_src->val);
     return len + 1;
 }
