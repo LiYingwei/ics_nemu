@@ -69,6 +69,7 @@ typedef struct {
 
 	swaddr_t eip;
     uint64_t GDTR:48;
+    lnaddr_t IDTR;
 
     union {
         struct {
@@ -101,6 +102,7 @@ typedef struct {
         };
         uint32_t CR3;
     };
+
 
 } CPU_state;
 
