@@ -25,8 +25,7 @@ void raise_intr(uint8_t NO) {
     push(cpu.eip);
 
     uint32_t gds[2];
-    Log("No = %d\n", NO);
-    gds[0] = lnaddr_read((cpu.IDTR >> 16) + 0, 4); Log();
+    gds[0] = lnaddr_read((cpu.IDTR >> 16) + NO * sizeof(GateDesc), 4); Log();
     gds[1] = lnaddr_read((cpu.IDTR >> 16) + NO * sizeof(GateDesc) + 4, 4); Log();
     GateDesc * gd = (GateDesc *)gds; Log();
     cpu.cs = gd->segment; Log();

@@ -70,7 +70,7 @@ typedef struct {
 
 	swaddr_t eip;
     uint64_t GDTR:48;
-    lnaddr_t IDTR;
+    uint64_t IDTR:48;
 
     union {
         struct {
