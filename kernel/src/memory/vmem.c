@@ -25,7 +25,7 @@ void create_video_mapping() {
         video[i].val = make_pte(VMEM_ADDR + i * PAGE_SIZE);
         updir++;
     }
-	//panic("please implement me");
+	panic("please implement me");
 }
 
 void video_mapping_write_test() {
