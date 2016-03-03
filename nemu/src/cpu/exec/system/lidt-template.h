@@ -8,14 +8,14 @@
 #define instr lidt
 
 static void do_execute() {
-    //Log("%x", op_src->addr);
+    Log("lidt %x", op_src->addr);
 #if DATA_BYTE == 4
-    cpu.IDTR = ((uint64_t)swaddr_read(op_src->addr, 4, 7))
-            + ((uint64_t)swaddr_read(op_src->addr + 4, 2, 7) << 32);
+    cpu.IDTR = ((uint64_t)swaddr_read(op_src->addr, 4, 6))
+            + ((uint64_t)swaddr_read(op_src->addr + 4, 2, 6) << 32);
 #else
-    cpu.IDTR = ((uint64_t)swaddr_read(op_src->addr, 2, 7) ) //6 means nothing, because pe=0
-            + ((uint64_t)swaddr_read(op_src->addr + 2, 1, 7) << 16)
-            + ((uint64_t)swaddr_read(op_src->addr + 3, 2, 7) << 24);
+    cpu.IDTR = ((uint64_t)swaddr_read(op_src->addr, 2, 6) ) //6 means nothing, because pe=0
+            + ((uint64_t)swaddr_read(op_src->addr + 2, 1, 6) << 16)
+            + ((uint64_t)swaddr_read(op_src->addr + 3, 2, 6) << 24);
 #endif
     //print_asm("lidt 0x%012lx", (uint64_t)cpu.GDTR);
     print_asm_template1();
