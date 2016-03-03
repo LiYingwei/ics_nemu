@@ -25,11 +25,11 @@ void raise_intr(uint8_t NO) {
     push(cpu.eip);
 
     uint32_t gds[2];
-    gds[0] = lnaddr_read((cpu.IDTR >> 16) + NO * sizeof(GateDesc), 4); Log();
-    gds[1] = lnaddr_read((cpu.IDTR >> 16) + NO * sizeof(GateDesc) + 4, 4); Log();
-    GateDesc * gd = (GateDesc *)gds; Log();
-    cpu.cs = gd->segment; Log();
-    load_segment_cache(R_CS); Log();
+    gds[0] = lnaddr_read((cpu.IDTR >> 16) + NO * sizeof(GateDesc), 4);
+    gds[1] = lnaddr_read((cpu.IDTR >> 16) + NO * sizeof(GateDesc) + 4, 4);
+    GateDesc * gd = (GateDesc *)gds;
+    cpu.cs = gd->segment;
+    load_segment_cache(R_CS);
 
     cpu.eip = cpu.cs_cache_base + gd->offset_15_0 + (gd->offset_31_16 << 16);
     DONT_TOUCH_MY_EIP = true;
