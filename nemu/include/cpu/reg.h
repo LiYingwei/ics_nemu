@@ -116,6 +116,18 @@ static inline int check_seg_index(int index) {
     return index;
 }
 
+uint32_t lnaddr_read(lnaddr_t addr, size_t len);
+
+static inline void load_segment_cache(uint8_t sreg)
+{
+    uint32_t descriptor_low = lnaddr_read((sreg>>3) * 8 + (uint32_t)(cpu.GDTR >> 16), 4);
+    uint32_t descriptor_high = lnaddr_read((sreg>>3) * 8 + (uint32_t)(cpu.GDTR >> 16) + 4, 4);
+    cpu.spr[sreg]._32[0] = (descriptor_low >> 16)
+                           + ((descriptor_high & 0xFF) << 16)
+                           + (descriptor_high & 0xFF000000);
+    cpu.spr[sreg]._32[1] = (((descriptor_low & 0xFFFF) + (descriptor_high & 0xF0000)) << 12) | 0xFFF;
+}
+
 #define reg_l(index) (cpu.gpr[check_reg_index(index)]._32)
 #define reg_w(index) (cpu.gpr[check_reg_index(index)]._16)
 #define reg_b(index) (cpu.gpr[check_reg_index(index) & 0x3]._8[index >> 2])
