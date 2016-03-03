@@ -14,10 +14,10 @@ void init_tlb() {
 hwaddr_t tlb_translate(lnaddr_t addr) {
     uint32_t tag = addr >> 12;
     uint32_t offset = addr & 0xFFF;
-    int i;
-    for (i = 0; i < TLB_NUM; i++)
-        if (tlb.block[i].valid && tlb.block[i].tag == tag)
-            return ((uint32_t) tlb.block[i].data << 12) + offset;
+//    int i;
+//    for (i = 0; i < TLB_NUM; i++)
+//        if (tlb.block[i].valid && tlb.block[i].tag == tag)
+//            return ((uint32_t) tlb.block[i].data << 12) + offset;
 
     int index = rand() % TLB_NUM;
     tlb.block[index].valid = true;
