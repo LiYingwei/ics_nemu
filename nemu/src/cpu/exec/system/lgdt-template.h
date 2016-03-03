@@ -19,8 +19,8 @@ static void do_execute() {
 #endif
     //print_asm("lgdt 0x%012lx", (uint64_t)cpu.GDTR);
     print_asm_template1();
-    Log("[GDTR]base = %08x, limit = %04x",
-        (uint32_t)(cpu.GDTR >> 16), (uint16_t)(cpu.GDTR & 0xFFFF));
+    /*Log("[GDTR]base = %08x, limit = %04x",
+        (uint32_t)(cpu.GDTR >> 16), (uint16_t)(cpu.GDTR & 0xFFFF));*/
 }
 
 make_instr_helper(rm)
