@@ -9,6 +9,7 @@ enum { R_AL, R_CL, R_DL, R_BL, R_AH, R_CH, R_DH, R_BH };
 enum { E_CF, E_t1, E_PF, E_t2, E_AF, E_t3, E_ZF, E_SF, E_TF, E_IF, E_DF, E_OF, E_IOPL1, E_IOPL2, E_NT, E_t4, E_RF, E_VM};
 enum { R_ES, R_CS, R_SS, R_DS, R_FS, R_GS };
 
+
 /* TODO: Re-organize the `CPU_state' structure to match the register
  * encoding scheme in i386 instruction format. For example, if we
  * access cpu.gpr[3]._16, we will get the `bx' register; if we access
@@ -107,6 +108,17 @@ typedef struct {
 } CPU_state;
 
 extern CPU_state cpu;
+
+uint32_t lnaddr_read(lnaddr_t addr, size_t len);
+static inline void load_segment_cache(uint8_t sreg)
+{
+    uint32_t descriptor_low = lnaddr_read((sreg>>3) * 8 + (uint32_t)(cpu.GDTR >> 16), 4);
+    uint32_t descriptor_high = lnaddr_read((sreg>>3) * 8 + (uint32_t)(cpu.GDTR >> 16) + 4, 4);
+    cpu.spr[sreg]._32[0] = (descriptor_low >> 16)
+                                   + ((descriptor_high & 0xFF) << 16)
+                                   + (descriptor_high & 0xFF000000);
+    cpu.spr[sreg]._32[1] = (((descriptor_low & 0xFFFF) + (descriptor_high & 0xF0000)) << 12) | 0xFFF;
+}
 
 static inline int check_reg_index(int index) {
 	assert(index >= 0 && index < 8);

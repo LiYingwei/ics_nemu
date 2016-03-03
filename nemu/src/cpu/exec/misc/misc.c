@@ -28,7 +28,7 @@ make_helper(lea) {
 }
 make_helper(int_i_b) {
     int len = decode_i_b(eip + 1);
-    cpu.eip += len + 1;
     raise_intr((uint8_t)op_src->val);
     panic("shouldn't reach here");
+    return len + 1;
 }
