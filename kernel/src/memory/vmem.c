@@ -20,12 +20,11 @@ void create_video_mapping() {
     int i;
     for(i = 0; i < 16; i++)
     {
-        updir->val = make_pde(video+i);
+        updir->val = make_pde(&video[i]);
         video[i].val = make_pte(VMEM_ADDR + i * 4 * 1024);
         updir++;
-
     }
-	panic("please implement me");
+	//panic("please implement me");
 }
 
 void video_mapping_write_test() {

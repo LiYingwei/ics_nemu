@@ -85,11 +85,11 @@ void init_cond() {
 	/* Read data in the video memory to check whether 
 	 * the test data is written sucessfully.
 	 */
-#endif
 	video_mapping_read_test();
 
 	/* Clear the test data we just written in the video memory. */
 	video_mapping_clear();
+#endif
 
 #ifdef IA32_PAGE
 	/* Set the %esp for user program, which is one of the
