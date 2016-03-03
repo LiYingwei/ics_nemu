@@ -8,7 +8,7 @@
 #define instr lidt
 
 static void do_execute() {
-    Log("lidt %x", op_src->addr);
+    //Log("%x", op_src->addr);
 #if DATA_BYTE == 4
     cpu.IDTR = ((uint64_t)swaddr_read(op_src->addr, 4, 6))
             + ((uint64_t)swaddr_read(op_src->addr + 4, 2, 6) << 32);
