@@ -60,6 +60,7 @@ make_helper(mov_r2cr)
         assert(op_dest->reg == 3);
         cpu.CR3 = op_src->val;
         strcpy(op_dest->str, "%cr3");
+        init_tlb();
     }
     print_asm("mov %s, %s", op_src->str, op_dest->str);
     return len + 1;

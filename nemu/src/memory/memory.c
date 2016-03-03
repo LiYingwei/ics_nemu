@@ -1,5 +1,6 @@
 #include <cpu/reg.h>
 #include "cpu/mmu.h"
+#include "memory/tlb.h"
 #include "common.h"
 
 uint32_t dram_read(hwaddr_t, size_t);
@@ -27,7 +28,8 @@ hwaddr_t page_translate(lnaddr_t addr)
 {
     //if(cpu.paging == 1 || cpu.protect_enable != 1) printf("PE = %d, PG = %d\n", cpu.protect_enable, cpu.paging);
     if(cpu.protect_enable != 1 || cpu.paging !=1) return addr;
-    PDE dir_entry;
+    return tlb_translate(addr);
+    /*PDE dir_entry;
     dir_entry.val = hwaddr_read(((uint32_t)cpu.page_directory_base << 12) + (addr >> 22) * 4, 4);
     Assert(dir_entry.present, "addr = %08x", addr);
     PTE page_entry;
@@ -35,7 +37,7 @@ hwaddr_t page_translate(lnaddr_t addr)
     assert(page_entry.present);
     hwaddr_t ret = ((uint32_t)page_entry.page_frame << 12) + (addr & 0xFFF);
     //Log("lnaddr_t: %08X, hwaddr_t: %08X", addr, ret);
-    return ret;
+    return ret;*/
 }
 
 uint32_t lnaddr_read(lnaddr_t addr, size_t len) {

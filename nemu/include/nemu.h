@@ -5,5 +5,6 @@
 #include "memory/memory.h"
 #include "memory/cache.h"
 #include "cpu/reg.h"
+#include "memory/tlb.h"
 
 #endif

@@ -107,6 +107,7 @@ void restart() {
     lnaddr_write((uint32_t)(cpu.GDTR >> 16) + (cpu.cs >> 3) * 8 + 4, 4, descripter_high);*/
 
     init_cache();
+    init_tlb();
 	/* Initialize DRAM. */
 	init_ddr3();
 }
