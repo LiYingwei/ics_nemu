@@ -20,11 +20,12 @@ void raise_intr(uint8_t NO) {
     /* TODO: Trigger an interrupt/exception with ``NO''.
      * That is, use ``NO'' to index the IDT.
      */
-    push(cpu.EFLAGS); Log();
-    push(cpu.cs); Log();
-    push(cpu.eip); Log();
+    push(cpu.EFLAGS);
+    push(cpu.cs);
+    push(cpu.eip);
 
-    uint32_t gds[2]; Log();
+    uint32_t gds[2];
+    Log("No = %d\n", NO);
     gds[0] = lnaddr_read((cpu.IDTR >> 16) + NO * sizeof(GateDesc), 4); Log();
     gds[1] = lnaddr_read((cpu.IDTR >> 16) + NO * sizeof(GateDesc) + 4, 4); Log();
     GateDesc * gd = (GateDesc *)gds; Log();
