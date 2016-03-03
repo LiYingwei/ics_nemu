@@ -10,8 +10,8 @@
 static void do_execute() {
     //Log("%x", op_src->addr);
 #if DATA_BYTE == 4
-    cpu.GDTR = ((uint64_t)swaddr_read(op_src->addr, 4, 6))
-            + ((uint64_t)swaddr_read(op_src->addr + 4, 2, 6) << 32);
+    cpu.IDTR = ((uint64_t)swaddr_read(op_src->addr, 4, 7))
+            + ((uint64_t)swaddr_read(op_src->addr + 4, 2, 7) << 32);
 #else
     cpu.IDTR = ((uint64_t)swaddr_read(op_src->addr, 2, 6) ) //6 means nothing, because pe=0
             + ((uint64_t)swaddr_read(op_src->addr + 2, 1, 6) << 16)
