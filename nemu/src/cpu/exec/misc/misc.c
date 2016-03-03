@@ -1,4 +1,5 @@
 #include <cpu/decode/operand.h>
+#include <setjmp.h>
 #include "cpu/exec/helper.h"
 #include "cpu/decode/modrm.h"
 
@@ -25,9 +26,10 @@ make_helper(lea) {
 	print_asm("leal %s,%%%s", op_src->str, regsl[m.reg]);
 	return 1 + len;
 }
-
+jmp_buf jbuf;
 make_helper(int_i_b) {
     int len = decode_i_b(eip + 1);
     raise_intr((uint8_t)op_src->val);
+    setjmp(jbuf);
     return len + 1;
 }
