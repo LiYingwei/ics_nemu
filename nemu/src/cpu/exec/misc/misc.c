@@ -29,7 +29,7 @@ make_helper(lea) {
 jmp_buf jbuf;
 make_helper(int_i_b) {
     int len = decode_i_b(eip + 1);
-    setjmp(jbuf);
-    raise_intr((uint8_t)op_src->val);
+    int val = setjmp(jbuf);
+    if(val == 0)raise_intr((uint8_t)op_src->val);
     return len + 1;
 }
