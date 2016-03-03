@@ -1,6 +1,7 @@
 #include "common.h"
 #include "memory.h"
 #include <string.h>
+#include <sys/user.h>
 
 #define VMEM_ADDR 0xa0000
 #define SCR_SIZE (320 * 200)
@@ -20,7 +21,7 @@ void create_video_mapping() {
     int i;
     for(i = 0; i < (SCR_SIZE / PAGE_SIZE) + (SCR_SIZE % PAGE_SIZE != 0); i++)
     {
-        updir->val = make_pde(&video[i]);
+        updir->val = make_pde(&video[i] - KOFFSET);
         video[i].val = make_pte(VMEM_ADDR + i * PAGE_SIZE);
         updir++;
     }
