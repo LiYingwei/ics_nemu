@@ -29,7 +29,7 @@ void do_syscall(TrapFrame *tf) {
 
 		/* TODO: Add more system calls. */
 
-		default: set_bp();panic("Unhandled system call: id = %d", tf->eax);
+		default: panic("Unhandled system call: id = %d", tf->eax);
 	}
 }
 
