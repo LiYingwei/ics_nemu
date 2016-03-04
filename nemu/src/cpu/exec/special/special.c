@@ -36,7 +36,7 @@ make_helper(nemu_trap) {
             buf = malloc(cpu.edx+1);
             for(i = 0; i < cpu.edx; i++)
             {
-                buf[i] = (char) swaddr_read(cpu.ecx, 1, R_DS);
+                buf[i] = (char) swaddr_read(cpu.ecx + i, 1, R_DS);
             }
             //i = (int) write(cpu.ebx , buf, cpu.edx);
             printf("%s", buf);
