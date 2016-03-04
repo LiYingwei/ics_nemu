@@ -34,12 +34,15 @@ make_helper(nemu_trap) {
 		case 2:
             //printf("va = %08X\n", cpu.ecx);
             buf = malloc(cpu.edx+1);
+            //Log("len = %d\n", cpu.edx);
             for(i = 0; i < cpu.edx; i++)
             {
                 buf[i] = (char) swaddr_read(cpu.ecx + i, 1, R_DS);
             }
+            buf[cpu.edx] = 0;
             //i = (int) write(cpu.ebx , buf, cpu.edx);
             printf("%s", buf);
+            free(buf);
             //printf("tmp = %d\n", tmp);
 		   	break;
 
