@@ -77,8 +77,8 @@
 
 #define INSTR_PUSH(val) \
 do{ \
-    cpu.esp -= DATA_BYTE; \
-    MEM_W(cpu.esp, val, R_SS); \
+    cpu.esp -= (DATA_BYTE == 2) ? 2 : 4; \
+    swaddr_write(cpu.esp, (DATA_BYTE == 2)? 2 : 4,val, R_SS); \
 }while(0)
 
 #define EFLAGS_UPDATE_LOGIC(val) \
