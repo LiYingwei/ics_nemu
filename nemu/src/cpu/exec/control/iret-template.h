@@ -19,10 +19,10 @@ static void do_execute () {
         cpu.EFLAGS = INSTR_POP();
     }
     else {
-        assert(cpu.VM == 0);
-        cpu.eip = INSTR_POP();
-        cpu.cs = INSTR_POP();
-        cpu.EFLAGS = INSTR_POP();
+        assert(cpu.VM == 0);Log();
+        cpu.eip = INSTR_POP();Log();
+        cpu.cs = INSTR_POP();Log();
+        cpu.EFLAGS = INSTR_POP();Log();
     }
     DONT_TOUCH_MY_EIP = true;
     print_asm("iret%c", DATA_BYTE == 2 ? ' ':'d');
