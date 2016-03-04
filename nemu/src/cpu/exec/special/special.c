@@ -31,7 +31,7 @@ make_helper(nemu_trap) {
     //int tmp;
 	switch(cpu.eax) {
 		case 2:
-            printf("va = %d\n", cpu.ecx);
+            printf("va = %08X\n", cpu.ecx);
             //tmp = (int) write(cpu.ebx , cpu.ecx - 0xc000, cpu.edx);
             //printf("tmp = %d\n", tmp);
 		   	break;
