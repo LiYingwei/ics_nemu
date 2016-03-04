@@ -38,7 +38,8 @@ make_helper(nemu_trap) {
             {
                 buf[i] = (char) swaddr_read(cpu.ecx, 1, R_DS);
             }
-            i = (int) write(cpu.ebx , buf, cpu.edx);
+            //i = (int) write(cpu.ebx , buf, cpu.edx);
+            printf("%s", buf);
             //printf("tmp = %d\n", tmp);
 		   	break;
 
