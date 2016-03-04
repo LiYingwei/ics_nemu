@@ -8,9 +8,12 @@
  * code to use the trap frame correctly.
  */
 
-typedef struct TrapFrame {
+/*typedef struct TrapFrame {
 	uint32_t esi, ebx, eax, eip, edx, error_code, eflags, ecx, cs, old_esp, edi, ebp;
 	int32_t irq;
+} TrapFrame;*/
+typedef struct TrapFrame {
+	uint32_t edi, esi, ebp, old_esp, ebx, edx, ecx, eax, error_code, eip, cs, eflags;
+	int32_t irq;
 } TrapFrame;
-
 #endif
