@@ -8,6 +8,7 @@
 #include "data-mov/cmovcc.h"
 
 #include "seg-reg/push.h"
+#include "seg-reg/pusha.h"
 #include "seg-reg/pop.h"
 
 #include "arith/dec.h"
