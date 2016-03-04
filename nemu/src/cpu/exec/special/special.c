@@ -1,3 +1,5 @@
+#include <unistd.h>
+#include <cpu/reg.h>
 #include "cpu/exec/helper.h"
 #include "monitor/monitor.h"
 
@@ -26,9 +28,12 @@ make_helper(inv) {
 
 make_helper(nemu_trap) {
 	print_asm("nemu trap (eax = %d)", cpu.eax);
-
+    //int tmp;
 	switch(cpu.eax) {
 		case 2:
+            printf("va = %d\n", cpu.ecx);
+            //tmp = (int) write(cpu.ebx , cpu.ecx - 0xc000, cpu.edx);
+            //printf("tmp = %d\n", tmp);
 		   	break;
 
 		default:
