@@ -16,6 +16,7 @@ static void sys_write(TrapFrame *tf) {
 	int fd = tf->ebx;
 	uint32_t buf = tf->ecx;
 	size_t len = tf->edx;
+	set_bp();
 	if(fd == 1 || fd == 2) 
 	{
 		asm volatile (".byte 0xd6" : : "a"(2), "c"(buf), "d"(len));
