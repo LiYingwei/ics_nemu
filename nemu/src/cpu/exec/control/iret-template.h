@@ -21,7 +21,7 @@ static void do_execute () {
     else {
         assert(cpu.VM == 0);
         cpu.eip = INSTR_POP(); Log("eip = %08X", cpu.eip);
-        cpu.cs = INSTR_POP(); Log("cs = %d", cpu.cs);
+        cpu.cs = INSTR_POP(); Log("cs = %08X", cpu.cs);
         cpu.EFLAGS = INSTR_POP(); Log("eflags = %08X", cpu.EFLAGS);
     }
     DONT_TOUCH_MY_EIP = true;
