@@ -14,12 +14,13 @@ static void sys_brk(TrapFrame *tf) {
 
 static void sys_write(TrapFrame *tf) {
 	int fd = tf->ebx;
-	const void *buf = tf->ecx;
-	size_t count = tf->edx;
-	if(tf->ebx == 1 || tf->ebx == 2) 
+	uint32_t buf = tf->ecx;
+	size_t len = tf->edx;
+	if(fd == 1 || fd == 2) 
 	{
 		asm volatile (".byte 0xd6" : : "a"(2), "c"(buf), "d"(len));
 	}
+}
 		
 
 void do_syscall(TrapFrame *tf) {
