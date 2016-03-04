@@ -18,7 +18,6 @@ void do_syscall(TrapFrame *);
 
 void
 add_irq_handle(int irq, void (*func)(void) ) {
-set_bp();
 	assert(irq < NR_HARD_INTR);
 	assert(handle_count <= NR_IRQ_HANDLE);
 
@@ -27,10 +26,9 @@ set_bp();
 	ptr->routine = func;
 	ptr->next = handles[irq]; /* insert into the linked list */
 	handles[irq] = ptr;
-	set_bp();
 }
 
-void irq_handle(TrapFrame *tf) {
+void irq_handle(TrapFrame *tf) {set_bp();
 	/* TODO: Re-organize the ``TrapFrame'' structure in `include/irq.h'
 	 * to match the trap frame built during ``do_irq.S''. Remove the 
 	 * following line after you are done.
