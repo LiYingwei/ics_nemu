@@ -31,12 +31,14 @@
 
 asm_do_irq:
 	pushal
-
+	int3
+	
 	pushl %esp		# ???
 	call irq_handle
 	
 	addl $4, %esp
 	popal
-	addl $8, %esp
 	int3
+	
+	addl $8, %esp
 	iret
