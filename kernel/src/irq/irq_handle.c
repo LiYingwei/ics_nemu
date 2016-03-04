@@ -18,6 +18,7 @@ void do_syscall(TrapFrame *);
 
 void
 add_irq_handle(int irq, void (*func)(void) ) {
+set_bp();
 	assert(irq < NR_HARD_INTR);
 	assert(handle_count <= NR_IRQ_HANDLE);
 
@@ -26,6 +27,7 @@ add_irq_handle(int irq, void (*func)(void) ) {
 	ptr->routine = func;
 	ptr->next = handles[irq]; /* insert into the linked list */
 	handles[irq] = ptr;
+	set_bp();
 }
 
 void irq_handle(TrapFrame *tf) {
