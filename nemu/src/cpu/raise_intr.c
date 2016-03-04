@@ -32,7 +32,6 @@ void raise_intr(uint8_t NO) {
     load_segment_cache(R_CS);
 
     cpu.eip = cpu.cs_cache_base + gd->offset_15_0 + (gd->offset_31_16 << 16);
-    DONT_TOUCH_MY_EIP = true;
     /* Jump back to cpu_exec() */
     longjmp(jbuf, 1);
 }
