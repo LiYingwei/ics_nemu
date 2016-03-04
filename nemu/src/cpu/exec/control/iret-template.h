@@ -24,8 +24,8 @@ static void do_execute () {
         cpu.cs = INSTR_POP();Log();
         cpu.EFLAGS = INSTR_POP();Log();
     }
-    DONT_TOUCH_MY_EIP = true;
-    print_asm("iret%c", DATA_BYTE == 2 ? ' ':'d');
+    DONT_TOUCH_MY_EIP = true;Log();
+    print_asm("iret%c", DATA_BYTE == 2 ? ' ':'d');Log();
 }
 
 make_helper(concat3(instr,_,SUFFIX))
