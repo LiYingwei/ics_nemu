@@ -28,11 +28,17 @@ make_helper(inv) {
 
 make_helper(nemu_trap) {
 	print_asm("nemu trap (eax = %d)", cpu.eax);
-    //int tmp;
+    int i;
+    char* buf;
 	switch(cpu.eax) {
 		case 2:
-            printf("va = %08X\n", cpu.ecx);
-            //tmp = (int) write(cpu.ebx , cpu.ecx - 0xc000, cpu.edx);
+            //printf("va = %08X\n", cpu.ecx);
+            buf = malloc(cpu.edx+1);
+            for(i = 0; i < cpu.edx; i++)
+            {
+                buf[i] = (char) swaddr_read(cpu.ecx, 1, R_DS);
+            }
+            i = (int) write(cpu.ebx , buf, cpu.edx);
             //printf("tmp = %d\n", tmp);
 		   	break;
 
