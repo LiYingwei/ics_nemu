@@ -41,6 +41,7 @@
 #include "control/jmp.h"
 #include "control/jcc.h"
 #include "control/ret.h"
+#include "control/iret.h"
 #include "control/flag-control.h"
 
 #include "string/rep.h"
