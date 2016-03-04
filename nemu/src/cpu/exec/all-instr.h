@@ -10,6 +10,7 @@
 #include "seg-reg/push.h"
 #include "seg-reg/pusha.h"
 #include "seg-reg/pop.h"
+#include "seg-reg/popa.h"
 
 #include "arith/dec.h"
 #include "arith/inc.h"

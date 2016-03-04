@@ -10,5 +10,6 @@ make_helper(clc);
 make_helper(cmc);
 make_helper(cld);
 make_helper(std);
+make_helper(cli);
 
 #endif //NEMU_FLAG_CONTROL_H
