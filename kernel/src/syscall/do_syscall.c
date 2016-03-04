@@ -20,6 +20,8 @@ static void sys_write(TrapFrame *tf) {
 	{
 		asm volatile (".byte 0xd6" : : "a"(2), "c"(buf), "d"(len));
 	}
+	if((fd == 1 || fd == 2) && (len == 0)) tf->eax = -1;
+	else tf->eax = 0;
 }
 		
 
