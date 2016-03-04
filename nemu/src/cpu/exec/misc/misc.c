@@ -27,6 +27,7 @@ make_helper(lea) {
 	return 1 + len;
 }
 make_helper(int_i_b) {
+    print_asm("int %d", op_src->val);
     int len = decode_i_b(eip + 1);
     raise_intr((uint8_t)op_src->val);
     panic("shouldn't reach here");
