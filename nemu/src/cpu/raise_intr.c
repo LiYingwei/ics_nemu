@@ -22,7 +22,7 @@ void raise_intr(uint8_t NO) {
      */
     push(cpu.EFLAGS);
     push(cpu.cs);
-    push(cpu.eip);
+    push(cpu.eip + 2);
 
     uint32_t gds[2];
     gds[0] = lnaddr_read((cpu.IDTR >> 16) + NO * sizeof(GateDesc), 4);
