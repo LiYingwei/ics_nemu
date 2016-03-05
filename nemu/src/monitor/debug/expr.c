@@ -260,7 +260,7 @@ uint32_t eval(int p, int q, bool *success) {
                 for(i = E_CF; i <= E_VM; i++)
                 {
                     if(strcmp(buf, regeflags[i]) == 0)
-                        return cpu.EFLAGS & (1 << i);
+                        return (cpu.EFLAGS & (1 << i)) >> i;
                 }
                 for(i = R_ES; i <= R_GS; i++) {
                     if(strcmp(buf, segsw[i]) == 0)
