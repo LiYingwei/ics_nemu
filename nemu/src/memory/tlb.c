@@ -28,7 +28,7 @@ hwaddr_t tlb_translate(lnaddr_t addr) {
     Assert(dir_entry.present, "addr = %08x", addr);
     PTE page_entry;
     page_entry.val = hwaddr_read(((uint32_t) dir_entry.page_frame << 12) + ((addr >> 12) & 0x3FF) * 4, 4);
-    Assert(page_entry.present, "addr = %08x", addr);
+    //Assert(page_entry.present, "addr = %08x", addr);
     tlb.block[index].data = page_entry.page_frame;
 
     return ((uint32_t) tlb.block[index].data << 12) + offset;
