@@ -47,26 +47,25 @@ void init_cond() {
 	 */
 	init_idt();
 #endif
-    set_bp();
+
 #ifdef HAS_DEVICE
 	/* Initialize the intel 8259 PIC (Programmable interrupt controller). */
 	init_i8259();
-    set_bp();
+
 	/* Initialize the serial port. After that, you can use printk() to output messages. */
 	init_serial();
-    set_bp();
+
 	/* Initialize the IDE driver. */
 	init_ide();
-    set_bp();
+
 	/* Enable interrupts. */
 	sti();
 #endif
-    set_bp();
+
 #ifdef IA32_PAGE
 	/* Initialize the memory manager. */
 	init_mm();
 #endif
-set_bp();
 	/* Output a welcome message.
 	 * Note that the output is actually performed only when
 	 * the serial port is available in NEMU.
@@ -76,8 +75,9 @@ set_bp();
 #if defined(IA32_PAGE) && defined(HAS_DEVICE)
 	/* Write some test data to the video memory. */
 #endif
+    set_bp();
     video_mapping_write_test();
-
+    set_bp();
 	/* Load the program. */
 	uint32_t eip = loader();
 set_bp();
