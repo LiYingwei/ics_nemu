@@ -42,7 +42,15 @@ uint32_t lnaddr_read(lnaddr_t addr, size_t len) {
     assert(len == 1 || len == 2 || len == 4);
     if ((addr & 0xFFF) + len > 0xFFF + 1) { /*data cross the page boundary*/
         /* this is a special case, you can handle it later. */
-        assert(0);
+        /*hwaddr_t hwaddr1 = page_translate(addr);
+        hwaddr_t hwaddr2 = page_translate((addr + (lnaddr_t)len) & 0xFFFFF000U);
+        size_t len1 = hwaddr2 - hwaddr1;*/
+        uint32_t ret = 0;
+        int i;
+        for(i = 0; i < len; i++)
+            ret = (ret << 8) + hwaddr_read(page_translate(addr + i), 1);
+        return ret;
+        //assert(0);
     }
     else {
         hwaddr_t hwaddr = page_translate(addr);
