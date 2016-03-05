@@ -152,11 +152,11 @@ helper_fun opcode_table [256] = {
 /* 0xd8 */	inv, inv, inv, inv,
 /* 0xdc */	inv, inv, inv, inv,
 /* 0xe0 */	inv, inv, inv, jcxz_i_v,
-/* 0xe4 */	inv, inv, inv, inv,
+/* 0xe4 */	in_i2a_b, in_i2a_v, out_i2a_b, out_i2a_v,
 /* 0xe8 */	call_i_v, jmp_si_v, ljmp, jmp_si_b,
-/* 0xec */	inv, inv, inv, inv,
+/* 0xec */	in_d2a_b, in_d2a_v, out_d2a_b, out_d2a_v,
 /* 0xf0 */	inv, inv, rep, rep,
-/* 0xf4 */	inv, cmc, group3_b, group3_v,
+/* 0xf4 */	hlt, cmc, group3_b, group3_v,
 /* 0xf8 */	clc, stc, cli, inv,
 /* 0xfc */	cld, std, group4, group5
 };
@@ -219,11 +219,11 @@ helper_fun _2byte_opcode_table [256] = {
 /* 0xd8 */	inv, inv, inv, inv,
 /* 0xdc */	inv, inv, inv, inv,
 /* 0xe0 */	inv, inv, inv, inv,
-/* 0xe4 */	in_i2a_b, in_i2a_v, out_i2a_b, out_i2a_v,
+/* 0xe4 */	inv, inv, inv, inv,
 /* 0xe8 */	inv, inv, inv, inv,
-/* 0xec */	in_d2a_b, in_d2a_v, out_d2a_b, out_d2a_v,
+/* 0xec */	inv, inv, inv, inv,
 /* 0xf0 */	inv, inv, inv, inv,
-/* 0xf4 */	hlt, inv, inv, inv,
+/* 0xf4 */	inv, inv, inv, inv,
 /* 0xf8 */	inv, inv, inv, inv,
 /* 0xfc */	inv, inv, inv, inv
 };
