@@ -31,7 +31,7 @@ void video_mapping_write_test() {
 	int i;
 	uint32_t *buf = (void *)VMEM_ADDR;
 	for(i = 0; i < SCR_SIZE / 4; i ++) {
-		buf[i] = i;
+		buf[i] = i;set_bp();
 	}
 }
 
@@ -39,7 +39,7 @@ void video_mapping_read_test() {
 	int i;
 	uint32_t *buf = (void *)VMEM_ADDR;
 	for(i = 0; i < SCR_SIZE / 4; i ++) {
-		assert(buf[i] == i);
+		assert(buf[i] == i);set_bp();
 	}
 }
 
