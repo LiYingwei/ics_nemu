@@ -24,20 +24,46 @@ SOFTWARE.
 */
 
 #include "trap.h"
-#include <stdlib.h>
-int cmp(const void *a, const void *b)
-{
-    return *(int *)a - *(int *)b;
-}
+
+
+/* use this file to test if 'rm->sreg' set properly */
+/* use 'si' to single step through this file */
+
+
+#define OP "leal "
+//#define OP "movl "
+
 int main()
 {
-    int i;
-    int n = 8;
-    int a[] = {5, 2, 7, 4, 1, 3, 8, 6};
-    qsort(a, n, sizeof(int), cmp);
-    for (i = 0; i < n; i++)
-        nemu_assert(a[i] == i + 1);
+    
+    /*__asm__ __volatile__ (
+        "int3\n\t"
+        // DS
+        OP "%%ds:(%%eax), %%eax\n\t"
+        OP "%%ds:(%%ecx), %%eax\n\t"
+        OP "%%ds:(%%edx), %%eax\n\t"
+        OP "%%ds:(%%ebx), %%eax\n\t"
+        OP "%%ds:(%%esi), %%eax\n\t"
+        OP "%%ds:(%%edi), %%eax\n\t"
+        OP "%%ds:(,%%eax,4), %%eax\n\t"
+        OP "%%ds:(%%eax,%%ebp), %%eax\n\t"
+        OP "%%ds:5(%%ebx,%%eax,8), %%eax\n\t"
+        
+        "nop\n\t"
+        "nop\n\t"
+        "nop\n\t"
+        
+        // SS
+        OP "%%ss:(%%esp), %%eax\n\t"
+        OP "%%ss:(%%ebp), %%eax\n\t"
+        OP "%%ss:20(%%esp), %%eax\n\t"
+        OP "%%ss:(%%esp), %%eax\n\t"
+        OP "%%ss:(%%ebp), %%eax\n\t"
+        OP "%%ss:(%%ebp,%%ebp), %%eax\n\t"
+        OP "%%ss:(%%esp,%%ebp), %%eax\n\t"
+        
+    :::"eax");
+    */
     HIT_GOOD_TRAP;
     return 0;
 }
-
