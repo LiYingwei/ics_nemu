@@ -10,7 +10,7 @@
 
 make_helper(concat5(instr,_,i2a,_,SUFFIX))
 {
-    int len = decode_i_b(eip);
+    int len = decode_i_b(eip + 1);
     REG(R_EAX) = pio_read(op_src->val, DATA_BYTE);
     print_asm(str(instr) str(SUFFIX) " $%d, %%eax", op_src->val);
     return len + 1;
