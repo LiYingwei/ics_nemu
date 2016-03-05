@@ -45,12 +45,12 @@ uint32_t lnaddr_read(lnaddr_t addr, size_t len) {
         /*hwaddr_t hwaddr1 = page_translate(addr);
         hwaddr_t hwaddr2 = page_translate((addr + (lnaddr_t)len) & 0xFFFFF000U);
         size_t len1 = hwaddr2 - hwaddr1;*/
-        uint32_t ret = 0;
+        /*uint32_t ret = 0;
         int i;
         for(i = 0; i < len; i++)
             ret = (ret << 8) + hwaddr_read(page_translate(addr + i), 1);
-        return ret;
-        //assert(0);
+        return ret;*/
+        assert(0);
     }
     else {
         hwaddr_t hwaddr = page_translate(addr);
