@@ -18,10 +18,10 @@ make_helper(concat5(instr,_,i2a,_,SUFFIX))
 
 make_helper(concat5(instr,_,d2a,_,SUFFIX))
 {
-    REG(R_EAX) = pio_read(REG(R_EDX), DATA_BYTE);
+    REG(R_EAX) = pio_read(reg_w(R_DX), DATA_BYTE);
     print_asm(str(instr) str(SUFFIX) " %%edx, %%eax");
-    Log(str(instr) str(SUFFIX) " %%edx, %%eax");
-    Log("port = %x", REG(R_EDX));
+    //Log(str(instr) str(SUFFIX) " %%edx, %%eax");
+    //Log("port = %x", REG(R_EDX));
     return 1;
 }
 
