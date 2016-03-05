@@ -12,6 +12,8 @@ void init_regex();
 void init_wp_list();
 void init_ddr3();
 void init_cache();
+void init_device();
+void init_sdl();
 
 FILE *log_fp = NULL;
 
@@ -39,6 +41,10 @@ void init_monitor(int argc, char *argv[]) {
 
 	/* Initialize the watchpoint link list. */
 	init_wp_list();
+
+    init_device();
+
+    init_sdl();
 
 	/* Display welcome message. */
 	welcome();
