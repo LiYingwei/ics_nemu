@@ -20,7 +20,6 @@ make_helper(concat5(instr,_,d2a,_,SUFFIX))
 {
     REG(R_EAX) = pio_read(op_src->val, DATA_BYTE);
     print_asm(str(instr) str(SUFFIX) " %%edx, %%eax");
-    printf("edx = %08x eax = %08x", cpu.edx, cpu.eax);
     return 1;
 }
 
