@@ -11,7 +11,7 @@ static void sys_brk(TrapFrame *tf) {
 #endif
 	tf->eax = 0;
 }
-serial_printc(char ch);
+void serial_printc(char ch);
 static void sys_write(TrapFrame *tf) {
     int i;
 	int fd = tf->ebx;
