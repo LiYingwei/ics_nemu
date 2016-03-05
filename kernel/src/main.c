@@ -47,7 +47,7 @@ void init_cond() {
 	 */
 	init_idt();
 #endif
-set_bp();
+
 #ifdef HAS_DEVICE
 	/* Initialize the intel 8259 PIC (Programmable interrupt controller). */
 	init_i8259();
@@ -61,7 +61,7 @@ set_bp();
 	/* Enable interrupts. */
 	sti();
 #endif
-set_bp();
+
 #ifdef IA32_PAGE
 	/* Initialize the memory manager. */
 	init_mm();
@@ -72,7 +72,7 @@ set_bp();
 	 * the serial port is available in NEMU.
 	 */
 	Log("Hello, NEMU world!");
-
+set_bp();
 #if defined(IA32_PAGE) && defined(HAS_DEVICE)
 	/* Write some test data to the video memory. */
 #endif
@@ -80,7 +80,7 @@ set_bp();
 
 	/* Load the program. */
 	uint32_t eip = loader();
-
+set_bp();
 #if defined(IA32_PAGE) && defined(HAS_DEVICE)
 	/* Read data in the video memory to check whether 
 	 * the test data is written sucessfully.
