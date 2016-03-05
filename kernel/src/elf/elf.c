@@ -39,7 +39,7 @@ uint32_t loader() {
 	/* Load each program segment */
 	//panic("please implement me");
 	//nemu_assert(elf->e_phnum == 3);
-	for(i=0; i < elf->e_phnum; i++) {
+	for(i=0; i < elf->e_phnum; i++) {set_bp();
 		
 		/* Scan the program header table, load each segment into memory */
         ph = (void *) (buf + elf->e_phoff + i * elf->e_phentsize);
