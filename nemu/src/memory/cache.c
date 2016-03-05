@@ -61,8 +61,8 @@ uint32_t cache_read(hwaddr_t addr, size_t len) {
         for (i = 0; i < BLOCK_SIZE; i++)
             cache.set[(index + 1) % SET_NUM].block[hit_index[1]].data[i] =
                     dram_read(addr - offset + BLOCK_SIZE + i, 1) & 0xFF;
-        cache.set[index].block[hit_index[1]].valid = true;
-        cache.set[index].block[hit_index[1]].tag = tag;
+        cache.set[(index + 1) % SET_NUM].block[hit_index[1]].valid = true;
+        cache.set[(index + 1) % SET_NUM].block[hit_index[1]].tag = tag;
     }
 
     uint8_t temp[2 * BLOCK_SIZE];
