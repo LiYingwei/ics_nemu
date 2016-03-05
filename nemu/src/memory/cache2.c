@@ -1,3 +1,4 @@
+#include <memory/cache2.h>
 #include "common.h"
 #include "memory/cache2.h"
 #include "memory/memory.h"
@@ -83,9 +84,9 @@ uint32_t cache2_read(hwaddr_t addr, size_t len) {
         for (i = 0; i < BLOCK2_SIZE; i++)
             cache2.set[(index + 1) % SET2_NUM].block[hit_index[1]].data[i] =
                     dram_read(addr - offset + BLOCK2_SIZE + i, 1) & 0xFF;
-        cache2.set[(index + 1) % SET_NUM].block[hit_index[1]].valid = true;
-        cache2.set[(index + 1) % SET_NUM].block[hit_index[1]].tag = tag;
-        cache2.set[(index + 1) % SET_NUM].block[hit_index[1]].dirty = false;
+        cache2.set[(index + 1) % SET2_NUM].block[hit_index[1]].valid = true;
+        cache2.set[(index + 1) % SET2_NUM].block[hit_index[1]].tag = tag;
+        cache2.set[(index + 1) % SET2_NUM].block[hit_index[1]].dirty = false;
     }
 
     uint8_t temp[2 * BLOCK2_SIZE];
@@ -124,15 +125,17 @@ void cache2_write(hwaddr_t addr, size_t len, uint32_t data) {
         for (i = 0; i < BLOCK2_SIZE; i++)
             cache2.set[(index + 1) % SET2_NUM].block[hit_index[1]].data[i] =
                     dram_read(addr - offset + BLOCK2_SIZE + i, 1) & 0xFF;
-        cache2.set[index].block[hit_index[1]].valid = true;
-        cache2.set[index].block[hit_index[1]].tag = tag;
-        cache2.set[index].block[hit_index[1]].dirty = false;
+        cache2.set[(index + 1) % SET_NUM].block[hit_index[1]].valid = true;
+        cache2.set[(index + 1) % SET_NUM].block[hit_index[1]].tag = tag;
+        cache2.set[(index + 1) % SET_NUM].block[hit_index[1]].dirty = false;
     }
 
-    for (i = 0; i < len; i++)
+    for (i = 0; i < len; i++) {
         if (offset + i < BLOCK2_SIZE)
             cache2.set[index].block[hit_index[0]].data[offset + i]
                     = (data >> (i * 8)) & 0xFF;
+        cache2.set[index].block[hit_index[0]].dirty = true;
+    }
 
     if(offset + len > BLOCK2_SIZE) {
         for (i = 0; i < len; i++)
@@ -140,6 +143,7 @@ void cache2_write(hwaddr_t addr, size_t len, uint32_t data) {
                 cache2.set[(index + 1) % SET2_NUM].block[hit_index[1]]
                         .data[i + offset - BLOCK2_SIZE]
                         = (data >> (i * 8)) & 0xFF;
+        cache2.set[(index + 1) % SET2_NUM].block[hit_index[1]]
+                .dirty = true;
     }
-
 }

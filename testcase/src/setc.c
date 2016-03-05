@@ -24,20 +24,28 @@ SOFTWARE.
 */
 
 #include "trap.h"
-#include <stdlib.h>
-int cmp(const void *a, const void *b)
-{
-    return *(int *)a - *(int *)b;
-}
 int main()
 {
-    int i;
-    int n = 8;
-    int a[] = {5, 2, 7, 4, 1, 3, 8, 6};
-    qsort(a, n, sizeof(int), cmp);
-    for (i = 0; i < n; i++)
-        nemu_assert(a[i] == i + 1);
+    int x, y;
+    __asm__ __volatile__ (
+        "mov $0x1a2b3c4d, %%eax\n\t"
+        "clc\n\t"
+        "mov $0xdeadbeef, %%edx\n\t"
+        "setc %%al\n\t"
+        "mov %%eax, %0\n\t"
+        
+        "mov $0x1a2b3c4d, %%eax\n\t"
+        "stc\n\t"
+        "mov $0xdeadbeef, %%edx\n\t"
+        "setc %%al\n\t"
+        "mov %%eax, %1\n\t"
+        :"=m"(x), "=m"(y)
+        :
+        :"eax", "edx");
+        
+    nemu_assert(x == 0x1a2b3c00);
+    nemu_assert(y == 0x1a2b3c01);
+    
     HIT_GOOD_TRAP;
     return 0;
 }
-
