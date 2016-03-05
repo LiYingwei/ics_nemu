@@ -45,7 +45,7 @@ uint32_t lnaddr_read(lnaddr_t addr, size_t len) {
         /*hwaddr_t hwaddr1 = page_translate(addr);
         hwaddr_t hwaddr2 = page_translate((addr + (lnaddr_t)len) & 0xFFFFF000U);
         size_t len1 = hwaddr2 - hwaddr1;*/
-        printf("addr = %08x len = %d\n", addr, (int)len);
+        printf("addr = %08x len = %d eip = %08x\n", addr, (int)len, cpu.eip);
         uint32_t ret = 0;
         int i;
         for(i = 0; i < len; i++)
