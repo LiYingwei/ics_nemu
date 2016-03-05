@@ -16,6 +16,7 @@ init_serial(void) {
 
 static inline int
 serial_idle(void) {
+    set_bp();
 	return (in_byte(SERIAL_PORT + 5) & 0x20) != 0;
 }
 
