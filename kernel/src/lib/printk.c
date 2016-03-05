@@ -12,8 +12,8 @@ printk(const char *ctl, ...) {
 	static char buf[256];
 	void *args = (void **)&ctl + 1;
 	int len = vsnprintf(buf, 256, ctl, args);
-	int i;set_bp();
-	for(i = 0; i < len; i ++) {
+	int i;
+	for(i = 0; i < len; i ++) {set_bp();
 		serial_printc(buf[i]);
 	}
 }
