@@ -18,7 +18,7 @@ make_helper(concat5(instr,_,i2a,_,SUFFIX))
 
 make_helper(concat5(instr,_,d2a,_,SUFFIX))
 {
-    REG(R_EAX) = pio_read(op_src->val, DATA_BYTE);
+    REG(R_EAX) = pio_read(REG(R_EDX), DATA_BYTE);
     print_asm(str(instr) str(SUFFIX) " %%edx, %%eax");
     return 1;
 }
