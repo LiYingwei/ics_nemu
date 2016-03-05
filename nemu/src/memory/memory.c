@@ -19,8 +19,8 @@ uint32_t hwaddr_read(hwaddr_t addr, size_t len) {
     //return ret;
     int map_NO = is_mmio(addr);
     if(map_NO != -1) {
-        Log("map_NO = %d", map_NO);
-        return mmio_read(addr, len, map_NO);
+        //Log("map_NO = %d", map_NO);
+        return mmio_read(addr, len, map_NO) & (~0u >> ((4 - len) << 3));
     }
     return cache_read(addr, len) & (~0u >> ((4 - len) << 3));
 }
@@ -30,7 +30,7 @@ void hwaddr_write(hwaddr_t addr, size_t len, uint32_t data) {
     int map_NO = is_mmio(addr);
     if(map_NO != -1)
     {
-        Log("map_NO = %d", map_NO);
+        //Log("map_NO = %d", map_NO);
         mmio_write(addr, len, data, map_NO);
         return;
     }
