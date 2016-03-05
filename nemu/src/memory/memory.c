@@ -49,7 +49,7 @@ uint32_t lnaddr_read(lnaddr_t addr, size_t len) {
         uint32_t ret = 0;
         int i;
         for(i = 0; i < len; i++)
-            ret = (ret << 8) + hwaddr_read(page_translate(addr + i), 1);
+            ret = ret + (hwaddr_read(page_translate(addr + i), 1) << (i * 8));
         return ret;
     }
     else {
