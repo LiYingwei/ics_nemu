@@ -83,9 +83,9 @@ uint32_t cache2_read(hwaddr_t addr, size_t len) {
         for (i = 0; i < BLOCK2_SIZE; i++)
             cache2.set[(index + 1) % SET2_NUM].block[hit_index[1]].data[i] =
                     dram_read(addr - offset + BLOCK2_SIZE + i, 1) & 0xFF;
-        cache2.set[index].block[hit_index[1]].valid = true;
-        cache2.set[index].block[hit_index[1]].tag = tag;
-        cache2.set[index].block[hit_index[1]].dirty = false;
+        cache2.set[(index + 1) % SET2_NUM].block[hit_index[1]].valid = true;
+        cache2.set[(index + 1) % SET2_NUM].block[hit_index[1]].tag = tag;
+        cache2.set[(index + 1) % SET2_NUM].block[hit_index[1]].dirty = false;
     }
 
     uint8_t temp[2 * BLOCK2_SIZE];
@@ -124,9 +124,9 @@ void cache2_write(hwaddr_t addr, size_t len, uint32_t data) {
         for (i = 0; i < BLOCK2_SIZE; i++)
             cache2.set[(index + 1) % SET2_NUM].block[hit_index[1]].data[i] =
                     dram_read(addr - offset + BLOCK2_SIZE + i, 1) & 0xFF;
-        cache2.set[index].block[hit_index[1]].valid = true;
-        cache2.set[index].block[hit_index[1]].tag = tag;
-        cache2.set[index].block[hit_index[1]].dirty = false;
+        cache2.set[(index + 1) % SET_NUM].block[hit_index[1]].valid = true;
+        cache2.set[(index + 1) % SET_NUM].block[hit_index[1]].tag = tag;
+        cache2.set[(index + 1) % SET_NUM].block[hit_index[1]].dirty = false;
     }
 
     for (i = 0; i < len; i++)
