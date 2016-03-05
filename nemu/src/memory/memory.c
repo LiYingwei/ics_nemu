@@ -18,7 +18,10 @@ uint32_t hwaddr_read(hwaddr_t addr, size_t len) {
     //Assert(ret == test ,"%u, %u(addr = %08x)", ret, test, addr);
     //return ret;
     int map_NO = is_mmio(addr);
-    if(map_NO != -1) return mmio_read(addr, len, map_NO);
+    if(map_NO != -1) {
+        Log("map_NO = %d", map_NO);
+        return mmio_read(addr, len, map_NO);
+    }
     return cache_read(addr, len) & (~0u >> ((4 - len) << 3));
 }
 
