@@ -27,6 +27,7 @@ void hwaddr_write(hwaddr_t addr, size_t len, uint32_t data) {
     int map_NO = is_mmio(addr);
     if(map_NO != -1)
     {
+        Log("map_NO = %d", map_NO);
         mmio_write(addr, len, data, map_NO);
         return;
     }
