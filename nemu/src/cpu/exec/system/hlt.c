@@ -6,6 +6,6 @@
 #include "cpu/exec/helper.h"
 
 make_helper(hlt) {
-    while (cpu.INTR == 0);
+    while (cpu.INTR == 0) { Log("hlt");}
     return 1;
 }
