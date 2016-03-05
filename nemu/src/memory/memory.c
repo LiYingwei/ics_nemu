@@ -1,4 +1,5 @@
 #include <cpu/reg.h>
+#include <device/mmio.h>
 #include "cpu/mmu.h"
 #include "memory/tlb.h"
 #include "common.h"
@@ -16,11 +17,19 @@ uint32_t hwaddr_read(hwaddr_t addr, size_t len) {
     //printf("%02x\n", ret);
     //Assert(ret == test ,"%u, %u(addr = %08x)", ret, test, addr);
     //return ret;
+    int map_NO = is_mmio(addr);
+    if(map_NO != -1) return mmio_read(addr, len, map_NO);
     return cache_read(addr, len) & (~0u >> ((4 - len) << 3));
 }
 
 void hwaddr_write(hwaddr_t addr, size_t len, uint32_t data) {
     //dram_write(addr, len, data);
+    int map_NO = is_mmio(addr);
+    if(map_NO != -1)
+    {
+        mmio_write(addr, len, data, map_NO);
+        return;
+    }
     cache_write(addr, len, data);
 }
 

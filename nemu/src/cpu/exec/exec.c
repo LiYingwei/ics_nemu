@@ -219,11 +219,11 @@ helper_fun _2byte_opcode_table [256] = {
 /* 0xd8 */	inv, inv, inv, inv,
 /* 0xdc */	inv, inv, inv, inv,
 /* 0xe0 */	inv, inv, inv, inv,
-/* 0xe4 */	in_i2a_b, in_i2a_v, inv, inv,
+/* 0xe4 */	in_i2a_b, in_i2a_v, out_i2a_b, out_i2a_v,
 /* 0xe8 */	inv, inv, inv, inv,
-/* 0xec */	in_d2a_b, in_d2a_v, inv, inv,
+/* 0xec */	in_d2a_b, in_d2a_v, out_d2a_b, out_d2a_v,
 /* 0xf0 */	inv, inv, inv, inv,
-/* 0xf4 */	inv, inv, inv, inv,
+/* 0xf4 */	hlt, inv, inv, inv,
 /* 0xf8 */	inv, inv, inv, inv,
 /* 0xfc */	inv, inv, inv, inv
 };
