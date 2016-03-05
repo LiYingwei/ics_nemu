@@ -24,20 +24,22 @@ SOFTWARE.
 */
 
 #include "trap.h"
-#include <stdlib.h>
-int cmp(const void *a, const void *b)
-{
-    return *(int *)a - *(int *)b;
-}
-int main()
-{
-    int i;
-    int n = 8;
-    int a[] = {5, 2, 7, 4, 1, 3, 8, 6};
-    qsort(a, n, sizeof(int), cmp);
-    for (i = 0; i < n; i++)
-        nemu_assert(a[i] == i + 1);
-    HIT_GOOD_TRAP;
-    return 0;
-}
+
+.globl start
+start:
+	movl $0x10000, %eax
+	movl $0x20000, %ebx
+	
+	movl $5, %ecx
+	
+1:
+	movl $0x11223344, (%eax)
+	add $4, %eax
+	movl $0x55667788, (%ebx)
+	add $4, %ebx
+	sub $1, %ecx
+	test %ecx, %ecx
+    jnz 1b
+	
+	HIT_GOOD_TRAP
 

@@ -1,3 +1,4 @@
+#include <cpu/decode/operand.h>
 #include "cpu/exec/template-start.h"
 
 #define instr mov
@@ -31,6 +32,7 @@ make_helper(concat(mov_moffs2a_, SUFFIX)) {
 #undef instr
 #define instr movsx
 static void do_execute() {
+    if(op_src->type == OP_TYPE_REG) op_src->val = reg_b(op_src->reg);
     DATA_TYPE_S val = (DATA_TYPE_S) ((int8_t)((uint8_t) op_src->val));
     OPERAND_W(op_dest, (DATA_TYPE) val);
     print_asm_template2();
@@ -48,6 +50,7 @@ make_instr_helper(rm2r)
 
 #define instr movzx
 static void do_execute() {
+    if(op_src->type == OP_TYPE_REG) op_src->val = reg_b(op_src->reg);
     uint8_t val = (uint8_t) op_src->val;
     OPERAND_W(op_dest, (DATA_TYPE) val);
     print_asm_template2();
