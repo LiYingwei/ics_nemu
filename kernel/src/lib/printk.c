@@ -12,7 +12,7 @@ printk(const char *ctl, ...) {
 	static char buf[256];
 	void *args = (void **)&ctl + 1;
 	int len = vsnprintf(buf, 256, ctl, args);
-	int i;
+	int i;set_bp();
 	for(i = 0; i < len; i ++) {
 		serial_printc(buf[i]);
 	}
