@@ -1,3 +1,4 @@
+#include <memory/cache2.h>
 #include "common.h"
 #include "memory/cache2.h"
 #include "memory/memory.h"
@@ -129,10 +130,12 @@ void cache2_write(hwaddr_t addr, size_t len, uint32_t data) {
         cache2.set[(index + 1) % SET_NUM].block[hit_index[1]].dirty = false;
     }
 
-    for (i = 0; i < len; i++)
+    for (i = 0; i < len; i++) {
         if (offset + i < BLOCK2_SIZE)
             cache2.set[index].block[hit_index[0]].data[offset + i]
                     = (data >> (i * 8)) & 0xFF;
+        cache2.set[index].block[hit_index[0]].dirty = true;
+    }
 
     if(offset + len > BLOCK2_SIZE) {
         for (i = 0; i < len; i++)
@@ -140,6 +143,7 @@ void cache2_write(hwaddr_t addr, size_t len, uint32_t data) {
                 cache2.set[(index + 1) % SET2_NUM].block[hit_index[1]]
                         .data[i + offset - BLOCK2_SIZE]
                         = (data >> (i * 8)) & 0xFF;
+        cache2.set[(index + 1) % SET2_NUM].block[hit_index[1]]
+                .dirty = true;
     }
-
 }
