@@ -36,6 +36,7 @@ static void timer_sig_handler(int signum) {
 }
 
 void device_update() {
+    Log();
 	if(!device_update_flag) {
 		return;
 	}
