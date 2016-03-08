@@ -9,7 +9,7 @@ void add_irq_handle(int irq, void *handler) {
 }
 
 void
-game_init(void) {
+game_init(void) {set_bp();
 	init_timer();
 
 	add_irq_handle(0, timer_event);
