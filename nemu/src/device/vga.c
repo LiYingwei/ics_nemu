@@ -38,6 +38,7 @@ bool vmem_dirty = false;
 bool line_dirty[CTR_ROW];
 
 void vga_vmem_io_handler(hwaddr_t addr, size_t len, bool is_write) {
+    Log();
 	if(is_write) {
 		int line = (addr - 0xa0000) / CTR_COL;
 		if(line < CTR_ROW) {
@@ -54,7 +55,7 @@ void do_update_screen_graphic_mode() {
 	rect.x = 0;
 	rect.w = CTR_COL * 2;
 	rect.h = 2;
-
+    Log();
 	for(i = 0; i < CTR_ROW; i ++) {
 		if(line_dirty[i]) {
 			for(j = 0; j < CTR_COL; j ++) {
