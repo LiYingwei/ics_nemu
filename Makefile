@@ -52,8 +52,7 @@ clean: clean-cpp
 
 ##### some convinient rules #####
 
-USERPROG := obj/game/game
-#ENTRY := $(game_BIN)
+USERPROG := $(game_BIN)
 ENTRY := $(kernel_BIN)
 #ENTRY := $(USERPROG)
 
