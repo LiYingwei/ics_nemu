@@ -3,6 +3,7 @@
 #include <setjmp.h>
 #include <monitor/watchpoint.h>
 #include <cpu/reg.h>
+#include <device/i8259.h>
 
 /* The assembly code of instructions executed is only output to the screen
  * when the number of instructions executed is less than this value.
@@ -16,6 +17,7 @@ bool DONT_TOUCH_MY_EIP;
 bool CALL_CHANGE_PUSH_LATER = false;
 
 int exec(swaddr_t);
+void raise_intr(uint8_t NO);
 
 char assembly[80];
 char asm_buf[128];
@@ -90,6 +92,12 @@ void cpu_exec(volatile uint32_t n) {
 #endif
 
 		if(nemu_state != RUNNING) { return; }
+
+        if(cpu.INTR & cpu.IF) {
+            uint32_t intr_no = i8259_query_intr();
+            i8259_ack_intr();
+            raise_intr(intr_no);
+        }
 	}
 
 	if(nemu_state == RUNNING) { nemu_state = STOP; }

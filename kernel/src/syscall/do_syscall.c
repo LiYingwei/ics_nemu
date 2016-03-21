@@ -11,15 +11,20 @@ static void sys_brk(TrapFrame *tf) {
 #endif
 	tf->eax = 0;
 }
-
+void serial_printc(char ch);
 static void sys_write(TrapFrame *tf) {
+    int i;
 	int fd = tf->ebx;
 	uint32_t buf = tf->ecx;
 	size_t len = tf->edx;
 	
 	if(fd == 1 || fd == 2) 
 	{
-		asm volatile (".byte 0xd6" : : "a"(2), "c"(buf), "d"(len));
+		//asm volatile (".byte 0xd6" : : "a"(2), "c"(buf), "d"(len));
+        for(i = 0; i < len; i++) {
+            char *output = (char *)(buf + i);
+            serial_printc(*output);
+        }
 	}
 	if((fd == 1 || fd == 2) && (len == 0)) tf->eax = -1;
 	else tf->eax = 0;

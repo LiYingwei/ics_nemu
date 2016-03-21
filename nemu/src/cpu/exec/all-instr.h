@@ -36,6 +36,7 @@
 #include "logic/shrd.h"
 #include "logic/test.h"
 #include "logic/stecc.h"
+#include "logic/bt.h"
 
 #include "control/call.h"
 #include "control/jmp.h"
@@ -55,3 +56,6 @@
 
 #include "system/lgdt.h"
 #include "system/lidt.h"
+#include "system/in.h"
+#include "system/out.h"
+#include "system/hlt.h"

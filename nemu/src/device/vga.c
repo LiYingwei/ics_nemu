@@ -54,7 +54,6 @@ void do_update_screen_graphic_mode() {
 	rect.x = 0;
 	rect.w = CTR_COL * 2;
 	rect.h = 2;
-
 	for(i = 0; i < CTR_ROW; i ++) {
 		if(line_dirty[i]) {
 			for(j = 0; j < CTR_COL; j ++) {

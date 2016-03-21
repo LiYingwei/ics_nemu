@@ -103,7 +103,7 @@ typedef struct {
         };
         uint32_t CR3;
     };
-
+    volatile bool INTR;
 
 } CPU_state;
 
