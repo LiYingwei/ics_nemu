@@ -1,3 +1,4 @@
+#include <string.h>
 #include "common.h"
 
 typedef struct {
@@ -32,7 +33,7 @@ void ide_write(uint8_t *, uint32_t, uint32_t);
 
 /* TODO: implement a simplified file system here. */
 
-typedef struct {
+struct {
 	bool opened;
 	uint32_t offset;
 } Fstate[NR_FILES + 3];
@@ -48,13 +49,14 @@ int fs_open(const char *pathname, int flags) {
 		}
 	}
 	nemu_assert(0);
+    return 0;
 }
 
 int fs_read(int fd, void *buf, int len) {
 	int len_before = len;
 	if(Fstate[fd].offset + len > file_table[fd - 3].size) 
-		len = file_table[fd - 3].dist_offset - Fstate[fd].offset;
-	ide_read(buf, file_table[fd - 3].dist_offset + Fstate[fd].offset, len);
+		len = file_table[fd - 3].disk_offset - Fstate[fd].offset;
+	ide_read(buf, file_table[fd - 3].disk_offset + Fstate[fd].offset, len);
 	Fstate[fd].offset += len;
 	printk("syscall: read( %d, \"%s\", %d) = %d\n", fd, buf, len_before, len);
 	return len;
