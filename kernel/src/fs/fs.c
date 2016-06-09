@@ -55,7 +55,7 @@ int fs_open(const char *pathname, int flags) {
 int fs_read(int fd, void *buf, int len) {
 	//int len_before = len;
 	if(Fstate[fd].offset + len > file_table[fd - 3].size) 
-		len = file_table[fd - 3].disk_offset - Fstate[fd].offset;
+		len = file_table[fd - 3].size - Fstate[fd].offset;
 	ide_read(buf, file_table[fd - 3].disk_offset + Fstate[fd].offset, len);
 	Fstate[fd].offset += len;
 	//printk("syscall: read( %d, \"%s\", %d) = %d\n", fd, buf, len_before, len);
@@ -63,12 +63,12 @@ int fs_read(int fd, void *buf, int len) {
 }
 
 int fs_write(int fd, void *buf, int len) {
-	int len_before = len;
-	if(Fstate[fd].offset + len > file_table[fd - 3].disk_offset)
-		len = file_table[fd - 3].disk_offset - Fstate[fd].offset;
+	//int len_before = len;
+	if(Fstate[fd].offset + len > file_table[fd - 3].size)
+		len = file_table[fd - 3].size - Fstate[fd].offset;
 	ide_write(buf, file_table[fd - 3].disk_offset + Fstate[fd].offset, len);
 	Fstate[fd].offset += len;
-	printk("syscall: write( %d, \"%s\", %d) = %d\n", fd, buf, len_before, len);
+	//printk("syscall: write( %d, \"%s\", %d) = %d\n", fd, buf, len_before, len);
 	return len;
 }
 	
