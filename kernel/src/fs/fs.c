@@ -32,3 +32,68 @@ void ide_write(uint8_t *, uint32_t, uint32_t);
 
 /* TODO: implement a simplified file system here. */
 
+typedef struct {
+	bool opened;
+	uint32_t offset;
+} Fstate[NR_FILES + 3];
+
+int fs_open(const char *pathname, int flags) {
+	int i;
+	for(i = 0; i < NR_FILES; i++) {
+		if(strcmp(pathname,file_table[i].name) == 0) {
+			Fstate[i + 3].opened = true;
+			Fstate[i + 3].offset = 0;
+			printk("syscall: open(\"%s\", %d) = %d\n", pathname, flags, i);
+			return i + 3;
+		}
+	}
+	nemu_assert(0);
+}
+
+int fs_read(int fd, void *buf, int len) {
+	int len_before = len;
+	if(Fstate[fd].offset + len > file_table[fd - 3].size) 
+		len = file_table[fd - 3].dist_offset - Fstate[fd].offset;
+	ide_read(buf, file_table[fd - 3].dist_offset + Fstate[fd].offset, len);
+	Fstate[fd].offset += len;
+	printk("syscall: read( %d, \"%s\", %d) = %d\n", fd, buf, len_before, len);
+	return len;
+}
+
+int fs_write(int fd, void *buf, int len) {
+	int len_before = len;
+	if(Fstate[fd].offset + len > file_table[fd - 3].disk_offset)
+		len = file_table[fd - 3].disk_offset - Fstate[fd].offset;
+	ide_write(buf, file_table[fd - 3].disk_offset + Fstate[fd].offset, len);
+	Fstate[fd].offset += len;
+	printk("syscall: write( %d, \"%s\", %d) = %d\n", fd, buf, len_before, len);
+	return len;
+}
+	
+int fs_lseek(int fd, int offset, int whence) {
+	unsigned new_offset = 0;
+	if(whence == SEEK_SET) new_offset = offset;
+	else if(whence == SEEK_CUR) new_offset = file_table[fd - 3].disk_offset + offset;
+	else if(whence == SEEK_END) new_offset = file_table[fd - 3].size + offset;
+	else panic("unknown whence %d", whence);
+	Fstate[fd].offset = new_offset;
+	return new_offset;
+}
+
+int fs_close(int fd) {
+	Fstate[fd].opened = false;
+	printk("syscall: close(%d) [fn = %s]\n", fd, file_table[fd - 3].name);
+	return 0;
+}
+
+
+
+
+
+
+
+
+
+
+
+
