@@ -2,6 +2,7 @@
 #include "device/video.h"
 #include "device/palette.h"
 #include "../include/hal.h"
+#include "../include/_common.h"
 
 #include <string.h>
 #include <stdlib.h>
@@ -20,8 +21,32 @@ void SDL_BlitSurface(SDL_Surface *src, SDL_Rect *scrrect,
 	 * is saved in ``dstrect'' after all clipping is performed
 	 * (``srcrect'' is not modified).
 	 */
+    SDL_Rect tmp1, tmp2;
+    if(scrrect == 0) {
+        scrrect = &tmp1;
+        scrrect->x = 0;
+        scrrect->y = 0;
+        scrrect->w = (uint16_t) src->w;
+        scrrect->h = (uint16_t) src->h;
+    }
+    if(dstrect == 0) {
+        dstrect = &tmp2;
+        dstrect -> x = 0;
+        dstrect -> y = 0;
+        dstrect -> w = (uint16_t) dst->w;
+        dstrect -> h = (uint16_t) dst->h;
+    }
 
-	assert(0);
+    int w = min(scrrect->w, dstrect->w);
+    int h = min(scrrect->h, dstrect->h);
+
+    int dst_line, src_line;
+    for(dst_line = dstrect->y, src_line = scrrect->y; h--; dst_line++, src_line++) {
+        memcpy(dst + dst_line * dst->w + dstrect->x,
+               src + src_line * src->w + scrrect->x, w);
+    }
+
+	//assert(0);
 }
 
 void SDL_FillRect(SDL_Surface *dst, SDL_Rect *dstrect, uint32_t color) {
