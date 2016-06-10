@@ -1,6 +1,7 @@
 #include "hal.h"
 #include "device/video.h"
 #include "device/palette.h"
+#include "../include/hal.h"
 
 #include <string.h>
 #include <stdlib.h>
@@ -31,8 +32,26 @@ void SDL_FillRect(SDL_Surface *dst, SDL_Rect *dstrect, uint32_t color) {
 	 * in surface ``dst'' with color ``color''. If dstrect is
 	 * NULL, fill the whole surface.
 	 */
+    int x,y,w,h;
+    if(dstrect) {
+        x = dstrect->x;
+        y = dstrect->y;
+        w = dstrect->w;
+        h = dstrect->h;
+    }
+    else {
+        x = 0;
+        y = 0;
+        w = dst->w;
+        h = dst->h;
+    }
+    int dst_line;
+    for(dst_line = y; dst_line < y + h;dst_line ++) {
+        memset(dst + dst_line * dst->w + x, color, w);
+    }
 
-	assert(0);
+
+	//assert(0);
 }
 
 void SDL_UpdateRect(SDL_Surface *screen, int x, int y, int w, int h) {
