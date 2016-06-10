@@ -25,7 +25,7 @@ void SDL_BlitSurface(SDL_Surface *src, SDL_Rect *scrrect,
 }
 
 void SDL_FillRect(SDL_Surface *dst, SDL_Rect *dstrect, uint32_t color) {
-	//assert(dst);
+	assert(dst);
 	assert(color <= 0xff);
 
 	/* TODO: Fill the rectangle area described by ``dstrect''
