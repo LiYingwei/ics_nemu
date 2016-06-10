@@ -40,12 +40,12 @@ void SDL_BlitSurface(SDL_Surface *src, SDL_Rect *scrrect,
     int w = min(scrrect->w, dstrect->w);
     int h = min(scrrect->h, dstrect->h);
 
-    printf("w = %d h = %d\n", w, h);
-    /*int dst_line, src_line;
+    //printf("w = %d h = %d\n", w, h);
+    int dst_line, src_line;
     for(dst_line = dstrect->y, src_line = scrrect->y; h--; dst_line++, src_line++) {
-        memcpy(dst + dst_line * dst->w + dstrect->x,
-               src + src_line * src->w + scrrect->x, w);
-    }*/
+        memcpy(dst->pixels + dst_line * dst->w + dstrect->x,
+               src->pixels + src_line * src->w + scrrect->x, w);
+    }
 
 	//assert(0);
 }
@@ -73,7 +73,7 @@ void SDL_FillRect(SDL_Surface *dst, SDL_Rect *dstrect, uint32_t color) {
     }
     int dst_line;
     for(dst_line = y; dst_line < y + h;dst_line ++) {
-        memset(dst + dst_line * dst->w + x, color, w);
+        memset(dst->pixels + dst_line * dst->w + x, color, w);
     }
 
 
