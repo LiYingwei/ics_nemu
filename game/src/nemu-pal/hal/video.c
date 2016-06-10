@@ -21,7 +21,7 @@ void SDL_BlitSurface(SDL_Surface *src, SDL_Rect *scrrect,
 	 * is saved in ``dstrect'' after all clipping is performed
 	 * (``srcrect'' is not modified).
 	 */
-    /*SDL_Rect tmp1, tmp2;
+    SDL_Rect tmp1, tmp2;
     if(scrrect == 0) {
         scrrect = &tmp1;
         scrrect->x = 0;
@@ -37,7 +37,7 @@ void SDL_BlitSurface(SDL_Surface *src, SDL_Rect *scrrect,
         dstrect -> h = (uint16_t) dst->h;
     }
 
-    int w = min(scrrect->w, dstrect->w);
+    /*int w = min(scrrect->w, dstrect->w);
     int h = min(scrrect->h, dstrect->h);
 
     int dst_line, src_line;
