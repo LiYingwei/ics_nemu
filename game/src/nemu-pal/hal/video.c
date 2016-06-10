@@ -40,12 +40,12 @@ void SDL_BlitSurface(SDL_Surface *src, SDL_Rect *scrrect,
     int w = min(scrrect->w, dstrect->w);
     int h = min(scrrect->h, dstrect->h);
 
-    int dst_line, src_line;
+    printf("w = %d h = %d\n", w, h);
+    /*int dst_line, src_line;
     for(dst_line = dstrect->y, src_line = scrrect->y; h--; dst_line++, src_line++) {
-        printf("%d\n", dst_line);
         memcpy(dst + dst_line * dst->w + dstrect->x,
                src + src_line * src->w + scrrect->x, w);
-    }
+    }*/
 
 	//assert(0);
 }
