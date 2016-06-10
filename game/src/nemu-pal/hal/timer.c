@@ -1,3 +1,4 @@
+#include <stdint.h>
 #include "hal.h"
 
 static volatile uint32_t jiffy = 0;
@@ -31,5 +32,7 @@ uint32_t SDL_GetTicks() {
 
 void SDL_Delay(uint32_t ms) {
 	/* TODO: Return from this function after waiting for `ms' milliseconds. */
-	assert(0);
+    uint32_t target_jiffy = jiffy + ms / (1000 / HZ);
+    while(jiffy < target_jiffy);
+	//assert(0);
 }
