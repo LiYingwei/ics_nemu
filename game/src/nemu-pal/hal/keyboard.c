@@ -86,11 +86,13 @@ process_keys(void (*key_press_callback)(int), void (*key_release_callback)(int))
             key_state[index] = 1;
             key_event[index] = 0;
             printf("gen key press: index = %d\n", index);
+            index = NR_KEYS;
         } else if(state == 1 && event == 2) {
             key_release_callback(keycode_array[index]);
             key_state[index] = 0;
             key_event[index] = 0;
             printf("gen key release: index = %d\n", index);
+            index = NR_KEYS;
         }
     }
 	//assert(0);
