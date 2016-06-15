@@ -72,7 +72,7 @@ void init_ddr3() {
 	memcpy(data, rowbufs[rank][bank].buf + col, BURST_LEN);
 }*/
 
-static void ddr3_write(hwaddr_t addr, void *data, uint8_t *mask) {
+/*static void ddr3_write(hwaddr_t addr, void *data, uint8_t *mask) {
 	Assert(addr < HW_MEM_SIZE, "physical address %x is outside of the physical memory!", addr);
 
 	dram_addr temp;
@@ -83,18 +83,18 @@ static void ddr3_write(hwaddr_t addr, void *data, uint8_t *mask) {
 	uint32_t col = temp.col;
 
 	if(!(rowbufs[rank][bank].valid && rowbufs[rank][bank].row_idx == row) ) {
-		/* read a row into row buffer */
+		// read a row into row buffer
 		memcpy(rowbufs[rank][bank].buf, dram[rank][bank][row], NR_COL);
 		rowbufs[rank][bank].row_idx = row;
 		rowbufs[rank][bank].valid = true;
 	}
 
-	/* burst write */
+	// burst write
 	memcpy_with_mask(rowbufs[rank][bank].buf + col, data, BURST_LEN, mask);
 
-	/* write back to dram */
+	// write back to dram
 	memcpy(dram[rank][bank][row], rowbufs[rank][bank].buf, NR_COL);
-}
+}*/
 
 uint32_t dram_read(hwaddr_t addr, size_t len) {
 	//uint32_t offset = addr & BURST_MASK;
@@ -120,7 +120,7 @@ uint32_t dram_read(hwaddr_t addr, size_t len) {
 }
 
 void dram_write(hwaddr_t addr, size_t len, uint32_t data) {
-	uint32_t offset = addr & BURST_MASK;
+	/*uint32_t offset = addr & BURST_MASK;
 	uint8_t temp[2 * BURST_LEN];
 	uint8_t mask[2 * BURST_LEN];
 	memset(mask, 0, 2 * BURST_LEN);
@@ -131,7 +131,10 @@ void dram_write(hwaddr_t addr, size_t len, uint32_t data) {
 	ddr3_write(addr, temp, mask);
 
 	if(offset + len > BURST_LEN) {
-		/* data cross the burst boundary */
+		// data cross the burst boundary
 		ddr3_write(addr + BURST_LEN, temp + BURST_LEN, mask + BURST_LEN);
-	}
+	}*/
+    if(len == 1) *(hw_mem + addr) = (uint8_t) (data & 0xff);
+    if(len == 2) *(hw_mem + addr) = (uint16_t) (data & 0xffff);
+    if(len == 4) *(hw_mem + addr) = (uint32_t) (data & 0xffff);
 }
