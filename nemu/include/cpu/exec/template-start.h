@@ -35,15 +35,16 @@
 
 #define MSB(n) ((DATA_TYPE)(n) >> ((DATA_BYTE << 3) - 1))
 
-#define EFLAGS_ALU(a, B, S, Cin) ({\
+#define EFLAGS_ALU(a, B, S, CIN) ({\
     long long ans; \
     DATA_TYPE b = B; \
+    bool Cin = CIN ^ S; \
     if(S) b = b ^ ((1 << DATA_BYTE) - 1); \
     ans = a + b + Cin; \
     cpu.ZF = ans == 0 ? 1 : 0; \
     cpu.SF = (bool) ((ans >> (DATA_BYTE - 1)) & 1); \
-    cpu.CF = (bool)((ans >> (DATA_BYTE)) & 1); \
-    cpu.OF = (bool)((bool)( ((a >> (DATA_BYTE - 1)) & 1)  == ((b >> (DATA_BYTE - 1)) & 1) ) \
+    cpu.CF = (bool) ((ans >> (DATA_BYTE)) & 1); \
+    cpu.OF = (bool) ((bool)( ((a >> (DATA_BYTE - 1)) & 1)  == ((b >> (DATA_BYTE - 1)) & 1) ) \
                     && (bool)( ((a >> (DATA_BYTE - 1)) & 1) != ((ans >> (DATA_BYTE - 1)) & 1) )); \
     int i; \
     cpu.PF = 1; \
