@@ -48,9 +48,9 @@
     int i; \
     cpu.PF = 1; \
     for(i = 0; i < DATA_BYTE; i++) if( (ans >> i) & 1 ) cpu.PF ^= 1; \
-    Log("a = %d, b = %d, S = %d, Cin = %d\n", a, B, S, Cin);\
+    /*Log("a = %d, b = %d, S = %d, Cin = %d\n", a, B, S, Cin);\
     Log("ZF = %d, SF = %d, CF = %d, OF = %d\n", cpu.ZF, cpu.SF, cpu.CF, cpu.OF);\
-    Log("Ans = %d\n", (int)ans);\
+    Log("Ans = %d\n", (int)ans);*/\
     (DATA_TYPE) ans; \
 })
 
