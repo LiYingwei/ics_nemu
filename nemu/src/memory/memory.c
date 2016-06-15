@@ -39,7 +39,6 @@ void hwaddr_write(hwaddr_t addr, size_t len, uint32_t data) {
 
 hwaddr_t page_translate(lnaddr_t addr)
 {
-    return addr;
     //if(cpu.paging == 1 || cpu.protect_enable != 1) printf("PE = %d, PG = %d\n", cpu.protect_enable, cpu.paging);
     if(cpu.protect_enable != 1 || cpu.paging !=1) return addr;
     return tlb_translate(addr);
@@ -91,6 +90,7 @@ void lnaddr_write(lnaddr_t addr, size_t len, uint32_t data) {
 
 static lnaddr_t seg_translate(swaddr_t addr, size_t len, uint8_t sreg)
 {
+    return addr;
     if(cpu.protect_enable == 0) return addr;
     /*else {
         printf("PE = %d\n", cpu.protect_enable);
