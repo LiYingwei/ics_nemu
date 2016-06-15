@@ -11,3 +11,7 @@
 #undef OPERAND_W
 
 #undef MSB
+
+#undef MASK
+
+#undef SIGN_SHIFT

@@ -35,7 +35,42 @@
 
 #define MSB(n) ((DATA_TYPE)(n) >> ((DATA_BYTE << 3) - 1))
 
-#define EFLAGS_ALU(a, B, S, CIN) ({\
+#define MASK ((1LL<<DATA_BYTE) - 1)
+
+#define SIGN_SHIFT (DATA_BYTE * 8 - 1)
+
+#define EFLAGS_BASE(op1, op2, cin, patch, updatecf) ({ \
+    uint32_t __cin, __patch;                                                \
+    uint32_t __a, __b, __c, __ch, __as, __bs, __cs, __cc, __p;              \
+    __cin = !!(cin);                                                        \
+    __patch = !!(patch);                                                    \
+    __a = ((uint32_t)(op1)) & MASK;                                         \
+    __b = ((uint32_t)(op2)) & MASK;                                         \
+    if (__cin) { __b = ~__b & MASK; }                                       \
+    __c = (__a + __b + (__cin ^ __patch)) & MASK;                           \
+    __ch = (__a + __b) & MASK;                                              \
+    __cc = (__ch < __a || __ch < __b || __c < __ch);                        \
+    __as = __a >> SIGN_SHIFT;                                               \
+    __bs = __b >> SIGN_SHIFT;                                               \
+    __cs = __c >> SIGN_SHIFT;                                               \
+    __p = __c ^ (__c >> 4);                                                 \
+    __p = __p ^ (__p >> 2);                                                 \
+    __p = (__p ^ (__p >> 1)) & 1;                                           \
+                                                                            \
+    cpu.ZF = (__c == 0);                                                    \
+    cpu.SF =  __cs;                                                         \
+    cpu.OF = (__as == __bs && __as != __cs);                                \
+    if (updatecf) cpu.CF = (__cc ^ __cin);                                 \
+    cpu.PF = (__p ^ 1);                                                    \
+                                                                            \
+    __c;                                                                    \
+})
+
+/* EFLAGS_ALU(a, b, c, p) : same as EFLAGS(), but p is used by ADC and SBB
+                   changes ZF, SF, OF, CF, PF */
+#define EFLAGS_ALU(a, b, c, p) EFLAGS_BASE((a), (b), (c), (p), 1)
+
+/*#define EFLAGS_ALU(a, B, S, CIN) ({\
     long long ans; \
     DATA_TYPE b = B; \
     bool Cin = CIN ^ S; \
@@ -49,11 +84,8 @@
     int i; \
     cpu.PF = 1; \
     for(i = 0; i < 8; i++) if( (ans >> i) & 1 ) cpu.PF ^= 1; \
-    /*Log("a = %d, b = %d, S = %d, Cin = %d\n", a, B, S, Cin);\
-    Log("ZF = %d, SF = %d, CF = %d, OF = %d\n", cpu.ZF, cpu.SF, cpu.CF, cpu.OF);\
-    Log("Ans = %d\n", (int)ans);*/\
     (DATA_TYPE) ans; \
-})
+})*/
 
 /*#define EFLAGS_ALU(a, b, S, Cin) \
 ({ \
