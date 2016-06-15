@@ -7,11 +7,11 @@
 
 #include "nemu.h"
 
-#define TLB_NUM 64
+#define TLB_NUM 1048576
 
 typedef struct {
     bool valid;
-    uint32_t tag :20;
+    //uint32_t tag :20;
     uint32_t data:20;
 }tlb_block;
 

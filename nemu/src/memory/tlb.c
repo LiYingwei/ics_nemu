@@ -1,3 +1,4 @@
+#include <memory/tlb.h>
 #include "common.h"
 #include "memory/memory.h"
 #include "memory/tlb.h"
@@ -12,16 +13,17 @@ void init_tlb() {
 }
 
 hwaddr_t tlb_translate(lnaddr_t addr) {
-    uint32_t tag = addr >> 12;
+    /*uint32_t tag = addr >> 12;
     uint32_t offset = addr & 0xFFF;
     int i;
     for (i = 0; i < TLB_NUM; i++)
         if (tlb.block[i].valid && tlb.block[i].tag == tag)
-            return ((uint32_t) tlb.block[i].data << 12) + offset;
-
-    int index = rand() % TLB_NUM;
+            return ((uint32_t) tlb.block[i].data << 12) + offset;*/
+    int index = addr >> 12;
+    uint32_t offset = addr & 0xFFF;
+    if(tlb.block[index].valid) return ((uint32_t) tlb.block[index].data << 12) + offset;
     tlb.block[index].valid = true;
-    tlb.block[index].tag = tag;
+    //tlb.block[index].tag = tag;
 
     PDE dir_entry;
     dir_entry.val = hwaddr_read(((uint32_t) cpu.page_directory_base << 12) + (addr >> 22) * 4, 4);
