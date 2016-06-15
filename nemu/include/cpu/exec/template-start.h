@@ -35,7 +35,7 @@
 
 #define MSB(n) ((DATA_TYPE)(n) >> ((DATA_BYTE << 3) - 1))
 
-#define MASK ((1LL<<DATA_BYTE) - 1)
+#define MASK ((1<<DATA_BYTE) - 1)
 
 #define SIGN_SHIFT (DATA_BYTE * 8 - 1)
 
