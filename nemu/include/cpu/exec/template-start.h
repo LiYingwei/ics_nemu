@@ -35,7 +35,7 @@
 
 #define MSB(n) ((DATA_TYPE)(n) >> ((DATA_BYTE << 3) - 1))
 
-#define EFLAGS_ALU(a, B, S, Cin) ({\
+/*#define EFLAGS_ALU(a, B, S, Cin) ({\
     long long ans; \
     DATA_TYPE b = B; \
     if(S) b = (DATA_TYPE) (b ^ ((1U << DATA_BYTE) - 1)); \
@@ -46,12 +46,11 @@
     cpu.OF = (bool)((bool)(a >> (DATA_BYTE - 1) == (b >> (DATA_BYTE - 1))) \
                     && (bool)((a >> (DATA_BYTE - 1) != (ans >> (DATA_BYTE - 1)) ))); \
     (DATA_TYPE) ans; \
-})
+})*/
 
-/*#define EFLAGS_ALU(a, b, S, Cin) \
+#define EFLAGS_ALU(a, b, S, Cin) \
 ({ \
     int i; \
-    DATA_TYPE f; \
     bool A[DATA_BYTE * 8], B[DATA_BYTE * 8], F[DATA_BYTE * 8], C[DATA_BYTE * 8 + 1]; \
 \
     C[0] = Cin ^ S; \
@@ -80,7 +79,7 @@
         Sum ^= F[i] << i; \
     } \
     Sum; \
-})*/
+})
 
 #define INSTR_POP() \
 ({ \
