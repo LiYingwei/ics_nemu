@@ -6,18 +6,21 @@
 #define SUFFIX b
 #define DATA_TYPE uint8_t
 #define DATA_TYPE_S int8_t
+#define MASK ((uint32_t) 0xff)
 
 #elif DATA_BYTE == 2
 
 #define SUFFIX w
 #define DATA_TYPE uint16_t
 #define DATA_TYPE_S int16_t
+#define MASK ((uint32_t) 0xffff)
 
 #elif DATA_BYTE == 4
 
 #define SUFFIX l
 #define DATA_TYPE uint32_t
 #define DATA_TYPE_S int32_t
+#define MASK ((uint32_t) 0xffffffff)
 
 #else
 
@@ -34,8 +37,6 @@
 #define OPERAND_W(op, src) concat(write_operand_, SUFFIX) (op, src)
 
 #define MSB(n) ((DATA_TYPE)(n) >> ((DATA_BYTE << 3) - 1))
-
-#define MASK ((1<<DATA_BYTE) - 1)
 
 #define SIGN_SHIFT (DATA_BYTE * 8 - 1)
 
