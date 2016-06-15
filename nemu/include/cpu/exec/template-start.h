@@ -41,10 +41,10 @@
     if(S) b = b ^ ((1 << DATA_BYTE) - 1); \
     ans = a + b + Cin; \
     cpu.ZF = ans == 0 ? 1 : 0; \
-    cpu.SF = (bool) (ans >> (DATA_BYTE - 1)); \
+    cpu.SF = (bool) ((ans >> (DATA_BYTE - 1)) & 1); \
     cpu.CF = (bool)((ans >> (DATA_BYTE)) & 1); \
-    cpu.OF = (bool)((bool)(a >> (DATA_BYTE - 1) == (b >> (DATA_BYTE - 1))) \
-                    && (bool)((a >> (DATA_BYTE - 1) != (ans >> (DATA_BYTE - 1)) ))); \
+    cpu.OF = (bool)((bool)( ((a >> (DATA_BYTE - 1)) & 1)  == ((b >> (DATA_BYTE - 1)) & 1) ) \
+                    && (bool)( ((a >> (DATA_BYTE - 1)) & 1) != ((ans >> (DATA_BYTE - 1)) & 1) )); \
     int i; \
     cpu.PF = 1; \
     for(i = 0; i < 8; i++) if( (ans >> i) & 1 ) cpu.PF ^= 1; \
