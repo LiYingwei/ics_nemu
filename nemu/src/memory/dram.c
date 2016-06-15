@@ -136,5 +136,5 @@ void dram_write(hwaddr_t addr, size_t len, uint32_t data) {
 	}*/
     if(len == 1) *(hw_mem + addr) = (uint8_t) (data & 0xff);
     if(len == 2) *(hw_mem + addr) = (uint16_t) (data & 0xffff);
-    if(len == 4) *(hw_mem + addr) = (uint32_t) (data & 0xffff);
+    if(len == 4) *(hw_mem + addr) = (uint32_t) (data);
 }
