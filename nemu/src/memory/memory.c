@@ -22,7 +22,7 @@ uint32_t hwaddr_read(hwaddr_t addr, size_t len) {
         //Log("map_NO = %d", map_NO);
         return mmio_read(addr, len, map_NO) & (~0u >> ((4 - len) << 3));
     }
-    return cache_read(addr, len) & (~0u >> ((4 - len) << 3));
+    return dram_read(addr, len) & (~0u >> ((4 - len) << 3));
 }
 
 void hwaddr_write(hwaddr_t addr, size_t len, uint32_t data) {
@@ -34,7 +34,7 @@ void hwaddr_write(hwaddr_t addr, size_t len, uint32_t data) {
         mmio_write(addr, len, data, map_NO);
         return;
     }
-    cache_write(addr, len, data);
+    dram_write(addr, len, data);
 }
 
 hwaddr_t page_translate(lnaddr_t addr)
