@@ -38,7 +38,7 @@
 #define EFLAGS_ALU(a, B, S, Cin) ({\
     long long ans; \
     DATA_TYPE b = B; \
-    if(S) b = (DATA_TYPE) (b ^ ((1U << DATA_BYTE) - 1)); \
+    if(S) b = (DATA_TYPE) (b ^ ((1LL << DATA_BYTE) - 1)); \
     ans = a + b + Cin; \
     cpu.ZF = ans == 0 ? 1 : 0; \
     cpu.SF = (bool) (ans >> (DATA_BYTE - 1)); \
