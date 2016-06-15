@@ -54,7 +54,7 @@ hwaddr_t page_translate(lnaddr_t addr)
 }
 
 uint32_t lnaddr_read(lnaddr_t addr, size_t len) {
-    assert(len == 1 || len == 2 || len == 4);
+    //assert(len == 1 || len == 2 || len == 4);
     if ((addr & 0xFFF) + len > 0xFFF + 1) { /*data cross the page boundary*/
         /* this is a special case, you can handle it later. */
         /*hwaddr_t hwaddr1 = page_translate(addr);
@@ -74,7 +74,7 @@ uint32_t lnaddr_read(lnaddr_t addr, size_t len) {
 }
 
 void lnaddr_write(lnaddr_t addr, size_t len, uint32_t data) {
-    assert(len == 1 || len == 2 || len == 4);
+    //assert(len == 1 || len == 2 || len == 4);
     if ((addr & 0xFFF) + len > 0xFFF + 1) { /*data cross the page boundary*/
         /* this is a special case, you can handle it later. */
         int i;
@@ -91,13 +91,13 @@ void lnaddr_write(lnaddr_t addr, size_t len, uint32_t data) {
 static lnaddr_t seg_translate(swaddr_t addr, size_t len, uint8_t sreg)
 {
     return addr;
-    if(cpu.protect_enable == 0) return addr;
+    //if(cpu.protect_enable == 0) return addr;
     /*else {
         printf("PE = %d\n", cpu.protect_enable);
         printf("CR0 = %d\n", cpu.CR0);
     }*/
-    uint16_t SR = seg_w(sreg);
-    Assert((SR >> 3) * 8 < (cpu.GDTR & 0xFFFF), "段选择符索引越界");
+    //uint16_t SR = seg_w(sreg);
+    //Assert((SR >> 3) * 8 < (cpu.GDTR & 0xFFFF), "段选择符索引越界");
     /*uint32_t descriptor_low = lnaddr_read((SR>>3) * 8 + (uint32_t)(cpu.GDTR >> 16), 4);
     uint32_t descriptor_high = lnaddr_read((SR>>3) * 8 + (uint32_t)(cpu.GDTR >> 16) + 4, 4);
     uint32_t base_addr = (descriptor_low >> 16)
@@ -105,7 +105,7 @@ static lnaddr_t seg_translate(swaddr_t addr, size_t len, uint8_t sreg)
                          + (descriptor_high & 0xFF000000);*/
     //uint32_t limit = (descriptor_low & 0xFFFF) + (descriptor_high & 0xF0000);
     //printf("base_addr = 0x%u, addr = 0x%u, rseg = %s\n", base_addr, addr, segsw[sreg]);
-    return cpu.spr[sreg]._32[0] + addr;
+    //return cpu.spr[sreg]._32[0] + addr;
 }
 
 uint32_t swaddr_read(swaddr_t addr, size_t len, uint8_t sreg) {
