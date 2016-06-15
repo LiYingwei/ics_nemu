@@ -6,8 +6,6 @@
 
 uint32_t dram_read(hwaddr_t, size_t);
 void dram_write(hwaddr_t, size_t, uint32_t);
-uint32_t cache_read(hwaddr_t, size_t);
-void cache_write(hwaddr_t, size_t, uint32_t);
 
 /* Memory accessing interfaces */
 
@@ -22,7 +20,7 @@ uint32_t hwaddr_read(hwaddr_t addr, size_t len) {
         //Log("map_NO = %d", map_NO);
         return mmio_read(addr, len, map_NO) & (~0u >> ((4 - len) << 3));
     }
-    return cache_read(addr, len) & (~0u >> ((4 - len) << 3));
+    return dram_read(addr, len) & (~0u >> ((4 - len) << 3));
 }
 
 void hwaddr_write(hwaddr_t addr, size_t len, uint32_t data) {
@@ -34,23 +32,24 @@ void hwaddr_write(hwaddr_t addr, size_t len, uint32_t data) {
         mmio_write(addr, len, data, map_NO);
         return;
     }
-    cache_write(addr, len, data);
+    dram_write(addr, len, data);
 }
 
 hwaddr_t page_translate(lnaddr_t addr)
 {
+    return addr;
     //if(cpu.paging == 1 || cpu.protect_enable != 1) printf("PE = %d, PG = %d\n", cpu.protect_enable, cpu.paging);
     if(cpu.protect_enable != 1 || cpu.paging !=1) return addr;
     return tlb_translate(addr);
-    /*PDE dir_entry;
-    dir_entry.val = hwaddr_read(((uint32_t)cpu.page_directory_base << 12) + (addr >> 22) * 4, 4);
-    Assert(dir_entry.present, "addr = %08x", addr);
-    PTE page_entry;
-    page_entry.val = hwaddr_read(((uint32_t)dir_entry.page_frame << 12) + ((addr >> 12) & 0x3FF) * 4, 4);
-    Assert(page_entry.present, "addr = %08x", addr);
-    hwaddr_t ret = ((uint32_t)page_entry.page_frame << 12) + (addr & 0xFFF);
+    //PDE dir_entry;
+    //dir_entry.val = hwaddr_read(((uint32_t)cpu.page_directory_base << 12) + (addr >> 22) * 4, 4);
+    //Assert(dir_entry.present, "addr = %08x", addr);
+    //PTE page_entry;
+    //page_entry.val = hwaddr_read(((uint32_t)dir_entry.page_frame << 12) + ((addr >> 12) & 0x3FF) * 4, 4);
+    //Assert(page_entry.present, "addr = %08x", addr);
+    //hwaddr_t ret = ((uint32_t)page_entry.page_frame << 12) + (addr & 0xFFF);
     //Log("lnaddr_t: %08X, hwaddr_t: %08X", addr, ret);
-    return ret;*/
+    //return ret;
 }
 
 uint32_t lnaddr_read(lnaddr_t addr, size_t len) {
