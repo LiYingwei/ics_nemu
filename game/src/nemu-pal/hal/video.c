@@ -33,8 +33,8 @@ void SDL_BlitSurface(SDL_Surface *src, SDL_Rect *scrrect,
         dstrect = &tmp2;
         dstrect -> x = 0;
         dstrect -> y = 0;
-        dstrect -> w = (uint16_t) dst->w;
-        dstrect -> h = (uint16_t) dst->h;
+        dstrect -> w = (uint16_t) -1;
+        dstrect -> h = (uint16_t) -1;
     }
 
     int w = min(scrrect->w, dstrect->w);
