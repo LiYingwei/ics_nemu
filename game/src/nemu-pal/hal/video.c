@@ -33,10 +33,15 @@ void SDL_BlitSurface(SDL_Surface *src, SDL_Rect *scrrect,
         dstrect = &tmp2;
         dstrect -> x = 0;
         dstrect -> y = 0;
-        dstrect -> w = (uint16_t) -1;
-        dstrect -> h = (uint16_t) -1;
+        dstrect -> w = (uint16_t) dst->w;
+        dstrect -> h = (uint16_t) dst->h;
     }
-
+	
+	dstrect -> w = dstrect -> h = -1;
+	if (src->w - scrrect->x < scrrect->w) scrrect->w = src->w - scrrect->x;
+    if (src->h - scrrect->y < scrrect->h) scrrect->h = src->h - scrrect->y;
+    if (dst->w - dstrect->x < dstrect->w) dstrect->w = dst->w - dstrect->x;
+    if (dst->h - dstrect->y < dstrect->h) dstrect->h = dst->h - dstrect->y;
     int w = min(scrrect->w, dstrect->w);
     int h = min(scrrect->h, dstrect->h);
 
